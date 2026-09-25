@@ -1,0 +1,6 @@
+node_modules/
+data/
+tmp/
+tests/fixtures/out/
+test-results/
+*.log

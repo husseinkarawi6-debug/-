@@ -1,0 +1,26 @@
+{
+  "name": "neptune",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "NEPTUNE — Business Pulse backend + approved UI",
+  "engines": {
+    "node": ">=22.13"
+  },
+  "scripts": {
+    "start": "node server/index.js",
+    "import": "node server/cli/import.js",
+    "test": "node --test --test-concurrency=1 tests/unit/",
+    "test:e2e": "node tests/e2e/run.js",
+    "fixtures": "node tests/fixtures/make-reports.js"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.128.0",
+    "pdfjs-dist": "^4.10.38",
+    "three": "^0.128.0"
+  },
+  "devDependencies": {
+    "pdfkit": "^0.20.2",
+    "playwright-core": "^1.63.0"
+  }
+}
