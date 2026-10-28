@@ -3,6 +3,14 @@
 import { config, higgsfield } from '@higgsfield/client/v2';
 import fs from 'node:fs';
 import path from 'node:path';
+import util from 'node:util';
+
+// The repo-root .env.local (git-ignored) wins over an inherited HF_CREDENTIALS.
+const envFile = path.resolve(import.meta.dirname, '..', '..', '.env.local');
+if (fs.existsSync(envFile)) {
+  const fileEnv = util.parseEnv(fs.readFileSync(envFile, 'utf8'));
+  if (fileEnv.HF_CREDENTIALS) process.env.HF_CREDENTIALS = fileEnv.HF_CREDENTIALS;
+}
 
 const MODEL = 'kling-video/v4.0/text-to-video';
 const [promptFile, durationArg = '10', resolution = '720p'] = process.argv.slice(2);
