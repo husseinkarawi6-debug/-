@@ -4,3 +4,6 @@ tmp/
 tests/fixtures/out/
 test-results/
 *.log
+
+# rendered videos (contain third-party poem audio; kept out of the repo)
+storyboard/*.mp4
