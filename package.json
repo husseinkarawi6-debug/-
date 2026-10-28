@@ -12,10 +12,12 @@
     "import": "node server/cli/import.js",
     "test": "node --test --test-concurrency=1 tests/unit/",
     "test:e2e": "node tests/e2e/run.js",
-    "fixtures": "node tests/fixtures/make-reports.js"
+    "fixtures": "node tests/fixtures/make-reports.js",
+    "higgsfield:example": "node higgsfield/index.ts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.128.0",
+    "@higgsfield/client": "^0.2.6",
     "pdfjs-dist": "^4.10.38",
     "three": "^0.128.0"
   },

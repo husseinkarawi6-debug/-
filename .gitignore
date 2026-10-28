@@ -7,3 +7,7 @@ test-results/
 
 # rendered videos (contain third-party poem audio; kept out of the repo)
 storyboard/*.mp4
+
+# local secrets (Higgsfield API credentials etc.)
+.env.local
+.env*.local
