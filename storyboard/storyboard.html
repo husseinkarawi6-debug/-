@@ -1,0 +1,963 @@
+<title>خيال الظل: وقفة الحر</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Aref+Ruqaa:wght@400;700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+Arabic:wght@400;500;600&display=swap">
+<style>
+/* Layout: one RTL reading column; a shadow-theatre "stage" hero, then a scrubbable timeline, then shot cards like a storyboard strip. */
+:root {
+  --ink:#0E0B08; --stage:#17110C; --card:#1D1610; --parch:#EADCC0; --muted:#B4A58A; --line:#3A2E22;
+  --amber:#E8A54B; --burg:#B23A4A; --burg-deep:#7E1F2D; --code:#120E0A;
+  --f-display:"Aref Ruqaa","Amiri",serif; --f-verse:"Amiri","Noto Naskh Arabic",serif;
+  --f-body:"IBM Plex Sans Arabic","Segoe UI",Tahoma,sans-serif; --f-mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+  color-scheme: dark;
+}
+@media (prefers-color-scheme: light) { :root:not([data-theme="dark"]) {
+  --ink:#EFE4CC; --stage:#E6D6B6; --card:#F7EFDD; --parch:#1E1711; --muted:#6B5A44; --line:#D3BF98;
+  --amber:#9A5F12; --burg:#8A2433; --burg-deep:#7E1F2D; --code:#FBF6EA; color-scheme: light; } }
+:root[data-theme="light"] { --ink:#EFE4CC; --stage:#E6D6B6; --card:#F7EFDD; --parch:#1E1711; --muted:#6B5A44; --line:#D3BF98;
+  --amber:#9A5F12; --burg:#8A2433; --burg-deep:#7E1F2D; --code:#FBF6EA; color-scheme: light; }
+* { box-sizing:border-box; }
+body { background:var(--ink); color:var(--parch); font-family:var(--f-body); font-size:16px; line-height:1.75; margin:0; }
+.wrap { max-width:880px; margin:0 auto; padding-block:28px 80px; padding-left:max(16px, env(safe-area-inset-left,0px)); padding-right:max(16px, env(safe-area-inset-right,0px)); display:flex; flex-direction:column; gap:44px; }
+h1,h2,h3 { text-wrap:balance; margin:0; }
+h2 { font-family:var(--f-display); font-weight:700; font-size:clamp(28px,6vw,40px); color:var(--amber); line-height:1.3; }
+h3 { font-size:19px; font-weight:600; line-height:1.5; }
+.eyebrow { font-size:13px; letter-spacing:.04em; color:var(--muted); }
+/* hero stage */
+.stage { position:relative; overflow:hidden; border-radius:4px; background:radial-gradient(120% 90% at 30% 35%, color-mix(in srgb,var(--amber) 70%, transparent) 0%, color-mix(in srgb,var(--amber) 22%, transparent) 38%, transparent 70%), var(--stage); padding:36px 28px 30px; display:grid; gap:14px; border:1px solid var(--line); }
+.stage::after { content:""; position:absolute; inset:0; pointer-events:none; background-image:repeating-linear-gradient(0deg, rgba(0,0,0,.05) 0 1px, transparent 1px 3px); mix-blend-mode:multiply; }
+.stage h1 { font-family:var(--f-display); font-size:clamp(40px,10vw,72px); line-height:1.15; color:var(--parch); }
+.stage .verse { font-family:var(--f-verse); font-size:clamp(20px,4.6vw,26px); color:var(--parch); opacity:.92; }
+.stage .verse b { color:var(--burg); font-weight:700; }
+.stage .log { max-width:62ch; color:var(--parch); opacity:.9; }
+.chips { display:flex; flex-wrap:wrap; gap:8px; }
+.chip { font-size:13px; padding:3px 10px; border:1px solid var(--line); border-radius:999px; color:var(--muted); font-variant-numeric:tabular-nums; }
+.prose { max-width:68ch; }
+.prose p { margin:0 0 .8em; }
+.prose ul,.prose ol { margin:.2em 0 1em; padding-inline-start:1.3em; }
+.prose table,.tablewrap table { border-collapse:collapse; font-size:14px; margin:.4em 0 1em; }
+.prose th,.prose td,.tablewrap th,.tablewrap td { border-bottom:1px solid var(--line); padding:6px 10px; text-align:start; vertical-align:top; }
+.prose th,.tablewrap th { color:var(--muted); font-weight:500; }
+.tablewrap,.prose { overflow-x:auto; }
+.num { font-variant-numeric:tabular-nums; white-space:nowrap; }
+.ltr { text-align:left; }
+/* budget */
+.budget { display:grid; gap:10px; }
+.brow { display:grid; grid-template-columns:1fr auto; gap:4px 16px; padding:12px 14px; border:1px solid var(--line); border-radius:4px; background:var(--card); }
+.brow .cost { font-variant-numeric:tabular-nums; font-weight:600; color:var(--amber); }
+.brow small { grid-column:1 / -1; color:var(--muted); }
+.brow.rec { border-color:var(--burg); box-shadow:inset 3px 0 0 var(--burg); }
+.brow.no { opacity:.6; }
+/* timeline */
+.tl-box { overflow-x:auto; }
+.tl-svg { width:100%; min-width:560px; height:auto; display:block; }
+.tl-svg .wv { fill:var(--muted); opacity:.55; }
+.tl-svg .seg { stroke:var(--ink); stroke-width:1; }
+.tl-svg .seg:hover { opacity:.8; }
+.tl-svg .tick { stroke:var(--line); }
+.tl-svg .tl,.tl-svg .tt,.tl-svg .tc { fill:var(--muted); font:12px var(--f-body); text-anchor:middle; }
+.tl-svg .tc { fill:var(--burg); font-weight:600; }
+.tl-svg .climax { fill:var(--burg); opacity:.10; }
+/* shots */
+.shots { display:flex; flex-direction:column; gap:18px; }
+.shot { display:grid; grid-template-columns:116px minmax(0,1fr); gap:16px; padding:14px; background:var(--card); border:1px solid var(--line); border-radius:4px; scroll-margin-top:16px; }
+.swatch { aspect-ratio:9/16; max-width:100%; border-radius:3px; background:linear-gradient(170deg,var(--t2) 0%, var(--t1) 55%, #0B0907 100%); display:flex; flex-direction:column; justify-content:space-between; padding:8px; color:#F3E7CF; font-variant-numeric:tabular-nums; position:relative; overflow:hidden; }
+.swatch::after { content:""; position:absolute; inset:auto 0 0 0; height:40%; background:linear-gradient(transparent, rgba(11,9,7,.85)); }
+.sid { font:600 15px var(--f-mono); letter-spacing:.04em; position:relative; z-index:1; }
+.stime { font:12px var(--f-mono); position:relative; z-index:1; direction:ltr; text-align:right; }
+.stime i { font-style:normal; opacity:.6; padding:0 3px; }
+.sdur { font:12px var(--f-mono); opacity:.8; position:relative; z-index:1; }
+.sbody { min-width:0; display:flex; flex-direction:column; gap:8px; }
+.sline { font-family:var(--f-verse); font-size:22px; line-height:1.6; margin:0; color:var(--amber); }
+.smean { margin:0; color:var(--muted); font-size:14.5px; }
+.svis { margin:0; }
+.meta { margin:4px 0 0; display:grid; gap:6px; font-size:13.5px; }
+.meta div { display:grid; grid-template-columns:88px minmax(0,1fr); gap:10px; }
+.meta dt { color:var(--muted); }
+.meta dd { margin:0; text-align:left; font-family:var(--f-body); color:var(--parch); opacity:.88; min-width:0; overflow-wrap:anywhere; }
+/* prompts */
+details { border:1px solid var(--line); border-radius:4px; background:color-mix(in srgb,var(--card) 70%, transparent); }
+details > summary { cursor:pointer; padding:10px 14px; font-weight:500; list-style:none; display:flex; align-items:center; gap:8px; }
+details > summary::-webkit-details-marker { display:none; }
+details > summary::before { content:"◂"; color:var(--amber); transition:transform .15s; display:inline-block; }
+details[open] > summary::before { transform:rotate(-90deg); }
+details > summary:focus-visible, .copy:focus-visible, a:focus-visible { outline:2px solid var(--amber); outline-offset:2px; }
+details > *:not(summary) { margin:0 14px 14px; }
+.pbox { position:relative; }
+pre { margin:0; background:var(--code); border:1px solid var(--line); border-radius:3px; padding:14px; padding-top:40px; font:13px/1.6 var(--f-mono); white-space:pre-wrap; overflow-wrap:anywhere; max-height:420px; overflow:auto; color:var(--parch); text-align:left; }
+.copy { position:absolute; top:8px; left:8px; z-index:1; font:500 13px var(--f-body); padding:4px 12px; border-radius:3px; border:1px solid var(--burg); background:var(--burg-deep); color:#F6E9D2; cursor:pointer; }
+.copy.ok { background:transparent; color:var(--amber); border-color:var(--amber); }
+.pnote { color:var(--muted); font-size:13px; margin-top:0 !important; }
+.route { display:flex; flex-direction:column; gap:12px; }
+.route.primary h3 { color:var(--amber); }
+.refs { list-style:none; padding:0; margin:0; display:grid; gap:10px; }
+.refs li { display:grid; gap:2px; padding:10px 12px; border:1px solid var(--line); border-radius:4px; background:var(--card); font-size:14px; min-width:0; }
+.refs .path { font:12px var(--f-mono); color:var(--muted); overflow-wrap:anywhere; text-align:left; }
+.pending { color:var(--muted); }
+nav.toc { display:flex; flex-wrap:wrap; gap:8px 16px; font-size:14px; }
+nav.toc a { color:var(--amber); text-decoration:none; border-bottom:1px solid transparent; }
+nav.toc a:hover { border-bottom-color:var(--amber); }
+section { display:flex; flex-direction:column; gap:14px; }
+@media (max-width:560px) {
+  .shot { grid-template-columns:72px minmax(0,1fr); gap:12px; padding:12px; }
+  .sid { font-size:13px; } .stime,.sdur { font-size:10.5px; } .stime { display:flex; flex-direction:column; align-items:flex-end; } .stime i { display:none; }
+  .meta div { grid-template-columns:1fr; gap:0; }
+  .sline { font-size:20px; }
+  .stage { padding:28px 18px 24px; }
+}
+@media (prefers-reduced-motion: reduce) { * { transition:none !important; } }
+</style>
+<div class="wrap" dir="rtl" lang="ar">
+  <header class="stage">
+    <span class="eyebrow">ستوري بورد لفيديو بالذكاء الاصطناعي · 29.57 ثانية · 9:16</span>
+    <h1>خيالُ الظلّ: وقفةُ الحُرّ</h1>
+    <p class="verse">أَهوَنُ مِن وَقفَةِ <b>الحُرِّ</b> · يَرجو نَوالاً بِبابِ نَحسِ</p>
+    <p class="log">رجلٌ واحد لا يُرى وجهه أبداً، دميةُ ظلٍّ سوداء على ستارة خيال الظلّ، ثيابه من جلدٍ مصبوغ شفّاف تتبدّل مع كل مكانٍ وكل شطر. يحتمل في ثلاثين ثانية ستَّ عشرةَ مشقّة، من كلّاب الحلّاق إلى حبل السفينة. ثم يقف بأفضل ثيابه على بساطتها أمام باب لئيم، فيرفع يده ولا يطرق، ويمضي نحو الضوء، ويُصفق اللئيمُ كوّته، وتسقط قطعته في التراب لا يلتقطها أحد.</p>
+    <div class="chips"><span class="chip">21 لقطة</span><span class="chip">12 شطراً</span><span class="chip">خيال الظل + رسوم العشرينات</span><span class="chip">الوجه لا يظهر أبداً</span><span class="chip">الثياب تتغير مع كل مكان</span></div>
+  </header>
+
+  <nav class="toc" aria-label="أقسام الصفحة"><a href="#budget">الرصيد والمسار</a><a href="#timeline">الخط الزمني</a><a href="#shots">اللقطات</a><a href="#blocks">كتل الأسلوب والشخصية</a><a href="#routes">أوامر التوليد</a><a href="#post">المونتاج والخط</a><a href="#kit">الملفات</a><a href="#vision">رؤية المخرج</a></nav>
+
+  <section id="budget">
+    <h2>رصيدك 114.75 كريدت</h2>
+    <p class="prose">الأسعار من Higgsfield نفسه لفيديو كامل (حوالي 30 ثانية) بدون صوت مُولَّد. لم يُصرف أي كريدت بعد.</p>
+    <div class="budget">
+      <div class="brow rec"><span><b>Kling 4.0</b> · دفعة واحدة · 720p</span><span class="cost">67.5</span><small>الموصى به: جودة سينمائية، ويبقى حوالي 47 كريدت لإعادة جزء لا يعجبك.</small></div>
+      <div class="brow"><span><b>Wan 3.0</b> · دفعة واحدة · 720p · يأخذ الصوت مرجعاً</span><span class="cost">52.5</span><small>الأرخص بجودة جيدة، ويكفي الرصيد لمحاولتين كاملتين.</small></div>
+      <div class="brow"><span><b>Kling 4.0</b> · دفعة واحدة · 1080p</span><span class="cost">97.5</span><small>أعلى جودة ممكنة برصيدك، لكن بمحاولة واحدة فقط.</small></div>
+      <div class="brow"><span><b>Seedance 2.0 Fast</b> · 3 أجزاء · 720p</span><span class="cost">77.5</span><small>يأخذ الصوت والصور مرجعاً؛ أوامره كاملة في قسم «أوامر التوليد».</small></div>
+      <div class="brow"><span><b>Seedance 2.0 Mini</b> · 3 أجزاء · 720p</span><span class="cost">31</span><small>للتجربة السريعة قبل النسخة النهائية.</small></div>
+      <div class="brow no"><span>Seedance 2.5 دفعة واحدة 720p / 1080p</span><span class="cost">210 / 480</span><small>لا يكفيها الرصيد الحالي.</small></div>
+    </div>
+  </section>
+
+  <section id="timeline">
+    <h2>الخط الزمني</h2>
+    <p class="prose">الموجة هي صوت القصيدة، والمربعات الملونة هي اللقطات بلون جوّ كل مشهد، والأرقام تحتها أرقام الأشطر. اضغط على أي لقطة لتنتقل إليها.</p>
+    <div class="tl-box"><svg viewBox="0 0 1000 150" class="tl-svg" role="img" aria-label="الخط الزمني للصوت واللقطات"><rect x="24.3" y="16" width="186.0" height="70" class="climax"/><text x="117.3" y="28" class="tc">الذروة</text><rect x="996.5" y="51.2" width="2.8" height="1.5" rx="1.2" class="wv"/><rect x="992.4" y="44.8" width="2.8" height="14.4" rx="1.2" class="wv"/><rect x="988.2" y="42.4" width="2.8" height="19.2" rx="1.2" class="wv"/><rect x="984.0" y="36.0" width="2.8" height="31.9" rx="1.2" class="wv"/><rect x="979.9" y="42.7" width="2.8" height="18.6" rx="1.2" class="wv"/><rect x="975.7" y="38.3" width="2.8" height="27.5" rx="1.2" class="wv"/><rect x="971.5" y="37.4" width="2.8" height="29.1" rx="1.2" class="wv"/><rect x="967.4" y="35.3" width="2.8" height="33.5" rx="1.2" class="wv"/><rect x="963.2" y="44.0" width="2.8" height="16.1" rx="1.2" class="wv"/><rect x="959.0" y="45.6" width="2.8" height="12.7" rx="1.2" class="wv"/><rect x="954.9" y="45.7" width="2.8" height="12.7" rx="1.2" class="wv"/><rect x="950.7" y="41.1" width="2.8" height="21.8" rx="1.2" class="wv"/><rect x="946.5" y="40.4" width="2.8" height="23.2" rx="1.2" class="wv"/><rect x="942.4" y="45.3" width="2.8" height="13.5" rx="1.2" class="wv"/><rect x="938.2" y="41.4" width="2.8" height="21.2" rx="1.2" class="wv"/><rect x="934.0" y="43.0" width="2.8" height="17.9" rx="1.2" class="wv"/><rect x="929.9" y="37.5" width="2.8" height="29.0" rx="1.2" class="wv"/><rect x="925.7" y="41.2" width="2.8" height="21.6" rx="1.2" class="wv"/><rect x="921.5" y="44.7" width="2.8" height="14.5" rx="1.2" class="wv"/><rect x="917.4" y="47.7" width="2.8" height="8.5" rx="1.2" class="wv"/><rect x="913.2" y="48.4" width="2.8" height="7.1" rx="1.2" class="wv"/><rect x="909.0" y="47.4" width="2.8" height="9.1" rx="1.2" class="wv"/><rect x="904.9" y="41.9" width="2.8" height="20.2" rx="1.2" class="wv"/><rect x="900.7" y="41.3" width="2.8" height="21.4" rx="1.2" class="wv"/><rect x="896.5" y="41.4" width="2.8" height="21.1" rx="1.2" class="wv"/><rect x="892.4" y="37.8" width="2.8" height="28.5" rx="1.2" class="wv"/><rect x="888.2" y="42.6" width="2.8" height="18.9" rx="1.2" class="wv"/><rect x="884.0" y="36.7" width="2.8" height="30.7" rx="1.2" class="wv"/><rect x="879.9" y="35.8" width="2.8" height="32.3" rx="1.2" class="wv"/><rect x="875.7" y="41.6" width="2.8" height="20.8" rx="1.2" class="wv"/><rect x="871.5" y="44.4" width="2.8" height="15.2" rx="1.2" class="wv"/><rect x="867.4" y="39.7" width="2.8" height="24.5" rx="1.2" class="wv"/><rect x="863.2" y="43.2" width="2.8" height="17.5" rx="1.2" class="wv"/><rect x="859.0" y="42.3" width="2.8" height="19.4" rx="1.2" class="wv"/><rect x="854.9" y="40.5" width="2.8" height="23.1" rx="1.2" class="wv"/><rect x="850.7" y="41.6" width="2.8" height="20.7" rx="1.2" class="wv"/><rect x="846.5" y="34.2" width="2.8" height="35.6" rx="1.2" class="wv"/><rect x="842.4" y="43.3" width="2.8" height="17.4" rx="1.2" class="wv"/><rect x="838.2" y="41.9" width="2.8" height="20.1" rx="1.2" class="wv"/><rect x="834.0" y="43.3" width="2.8" height="17.4" rx="1.2" class="wv"/><rect x="829.9" y="47.2" width="2.8" height="9.6" rx="1.2" class="wv"/><rect x="825.7" y="45.8" width="2.8" height="12.4" rx="1.2" class="wv"/><rect x="821.5" y="45.1" width="2.8" height="13.8" rx="1.2" class="wv"/><rect x="817.4" y="36.0" width="2.8" height="32.1" rx="1.2" class="wv"/><rect x="813.2" y="41.7" width="2.8" height="20.7" rx="1.2" class="wv"/><rect x="809.0" y="42.8" width="2.8" height="18.3" rx="1.2" class="wv"/><rect x="804.9" y="43.0" width="2.8" height="17.9" rx="1.2" class="wv"/><rect x="800.7" y="45.3" width="2.8" height="13.3" rx="1.2" class="wv"/><rect x="796.5" y="43.7" width="2.8" height="16.6" rx="1.2" class="wv"/><rect x="792.4" y="41.6" width="2.8" height="20.7" rx="1.2" class="wv"/><rect x="788.2" y="44.9" width="2.8" height="14.3" rx="1.2" class="wv"/><rect x="784.0" y="47.2" width="2.8" height="9.7" rx="1.2" class="wv"/><rect x="779.9" y="33.9" width="2.8" height="36.2" rx="1.2" class="wv"/><rect x="775.7" y="44.2" width="2.8" height="15.6" rx="1.2" class="wv"/><rect x="771.5" y="41.1" width="2.8" height="21.8" rx="1.2" class="wv"/><rect x="767.4" y="44.3" width="2.8" height="15.4" rx="1.2" class="wv"/><rect x="763.2" y="46.5" width="2.8" height="11.1" rx="1.2" class="wv"/><rect x="759.0" y="42.1" width="2.8" height="19.8" rx="1.2" class="wv"/><rect x="754.9" y="47.2" width="2.8" height="9.6" rx="1.2" class="wv"/><rect x="750.7" y="41.6" width="2.8" height="20.8" rx="1.2" class="wv"/><rect x="746.5" y="42.1" width="2.8" height="19.7" rx="1.2" class="wv"/><rect x="742.4" y="40.2" width="2.8" height="23.7" rx="1.2" class="wv"/><rect x="738.2" y="40.1" width="2.8" height="23.8" rx="1.2" class="wv"/><rect x="734.0" y="42.9" width="2.8" height="18.3" rx="1.2" class="wv"/><rect x="729.9" y="42.2" width="2.8" height="19.6" rx="1.2" class="wv"/><rect x="725.7" y="36.8" width="2.8" height="30.4" rx="1.2" class="wv"/><rect x="721.5" y="43.8" width="2.8" height="16.4" rx="1.2" class="wv"/><rect x="717.4" y="39.0" width="2.8" height="25.9" rx="1.2" class="wv"/><rect x="713.2" y="45.1" width="2.8" height="13.8" rx="1.2" class="wv"/><rect x="709.0" y="42.4" width="2.8" height="19.3" rx="1.2" class="wv"/><rect x="704.9" y="34.0" width="2.8" height="35.9" rx="1.2" class="wv"/><rect x="700.7" y="42.8" width="2.8" height="18.3" rx="1.2" class="wv"/><rect x="696.5" y="44.0" width="2.8" height="15.9" rx="1.2" class="wv"/><rect x="692.4" y="38.7" width="2.8" height="26.6" rx="1.2" class="wv"/><rect x="688.2" y="46.8" width="2.8" height="10.3" rx="1.2" class="wv"/><rect x="684.0" y="35.7" width="2.8" height="32.7" rx="1.2" class="wv"/><rect x="679.9" y="45.4" width="2.8" height="13.2" rx="1.2" class="wv"/><rect x="675.7" y="46.8" width="2.8" height="10.4" rx="1.2" class="wv"/><rect x="671.5" y="46.2" width="2.8" height="11.7" rx="1.2" class="wv"/><rect x="667.4" y="37.5" width="2.8" height="28.9" rx="1.2" class="wv"/><rect x="663.2" y="41.6" width="2.8" height="20.9" rx="1.2" class="wv"/><rect x="659.0" y="40.8" width="2.8" height="22.4" rx="1.2" class="wv"/><rect x="654.9" y="39.1" width="2.8" height="25.9" rx="1.2" class="wv"/><rect x="650.7" y="41.8" width="2.8" height="20.4" rx="1.2" class="wv"/><rect x="646.5" y="45.1" width="2.8" height="13.8" rx="1.2" class="wv"/><rect x="642.4" y="44.2" width="2.8" height="15.6" rx="1.2" class="wv"/><rect x="638.2" y="44.7" width="2.8" height="14.5" rx="1.2" class="wv"/><rect x="634.0" y="46.7" width="2.8" height="10.6" rx="1.2" class="wv"/><rect x="629.9" y="38.3" width="2.8" height="27.4" rx="1.2" class="wv"/><rect x="625.7" y="39.6" width="2.8" height="24.8" rx="1.2" class="wv"/><rect x="621.5" y="45.6" width="2.8" height="12.8" rx="1.2" class="wv"/><rect x="617.4" y="39.9" width="2.8" height="24.2" rx="1.2" class="wv"/><rect x="613.2" y="38.8" width="2.8" height="26.4" rx="1.2" class="wv"/><rect x="609.0" y="46.8" width="2.8" height="10.3" rx="1.2" class="wv"/><rect x="604.9" y="42.6" width="2.8" height="18.8" rx="1.2" class="wv"/><rect x="600.7" y="45.8" width="2.8" height="12.5" rx="1.2" class="wv"/><rect x="596.5" y="44.4" width="2.8" height="15.3" rx="1.2" class="wv"/><rect x="592.4" y="37.6" width="2.8" height="28.8" rx="1.2" class="wv"/><rect x="588.2" y="35.2" width="2.8" height="33.6" rx="1.2" class="wv"/><rect x="584.0" y="43.1" width="2.8" height="17.8" rx="1.2" class="wv"/><rect x="579.9" y="44.1" width="2.8" height="15.8" rx="1.2" class="wv"/><rect x="575.7" y="41.2" width="2.8" height="21.7" rx="1.2" class="wv"/><rect x="571.5" y="39.3" width="2.8" height="25.3" rx="1.2" class="wv"/><rect x="567.4" y="46.5" width="2.8" height="11.0" rx="1.2" class="wv"/><rect x="563.2" y="35.9" width="2.8" height="32.1" rx="1.2" class="wv"/><rect x="559.0" y="43.1" width="2.8" height="17.8" rx="1.2" class="wv"/><rect x="554.9" y="44.9" width="2.8" height="14.2" rx="1.2" class="wv"/><rect x="550.7" y="40.4" width="2.8" height="23.1" rx="1.2" class="wv"/><rect x="546.5" y="37.4" width="2.8" height="29.2" rx="1.2" class="wv"/><rect x="542.4" y="42.6" width="2.8" height="18.8" rx="1.2" class="wv"/><rect x="538.2" y="40.1" width="2.8" height="23.8" rx="1.2" class="wv"/><rect x="534.0" y="40.7" width="2.8" height="22.7" rx="1.2" class="wv"/><rect x="529.9" y="36.2" width="2.8" height="31.6" rx="1.2" class="wv"/><rect x="525.7" y="44.1" width="2.8" height="15.8" rx="1.2" class="wv"/><rect x="521.5" y="46.4" width="2.8" height="11.3" rx="1.2" class="wv"/><rect x="517.4" y="47.4" width="2.8" height="9.1" rx="1.2" class="wv"/><rect x="513.2" y="46.6" width="2.8" height="10.8" rx="1.2" class="wv"/><rect x="509.0" y="39.8" width="2.8" height="24.3" rx="1.2" class="wv"/><rect x="504.9" y="39.5" width="2.8" height="25.1" rx="1.2" class="wv"/><rect x="500.7" y="38.2" width="2.8" height="27.6" rx="1.2" class="wv"/><rect x="496.5" y="43.2" width="2.8" height="17.5" rx="1.2" class="wv"/><rect x="492.4" y="41.0" width="2.8" height="22.1" rx="1.2" class="wv"/><rect x="488.2" y="41.1" width="2.8" height="21.7" rx="1.2" class="wv"/><rect x="484.0" y="41.9" width="2.8" height="20.2" rx="1.2" class="wv"/><rect x="479.9" y="46.6" width="2.8" height="10.7" rx="1.2" class="wv"/><rect x="475.7" y="45.0" width="2.8" height="14.0" rx="1.2" class="wv"/><rect x="471.5" y="42.7" width="2.8" height="18.6" rx="1.2" class="wv"/><rect x="467.4" y="38.2" width="2.8" height="27.7" rx="1.2" class="wv"/><rect x="463.2" y="43.5" width="2.8" height="17.1" rx="1.2" class="wv"/><rect x="459.0" y="46.6" width="2.8" height="10.7" rx="1.2" class="wv"/><rect x="454.9" y="37.9" width="2.8" height="28.1" rx="1.2" class="wv"/><rect x="450.7" y="37.2" width="2.8" height="29.7" rx="1.2" class="wv"/><rect x="446.5" y="45.7" width="2.8" height="12.7" rx="1.2" class="wv"/><rect x="442.4" y="46.3" width="2.8" height="11.4" rx="1.2" class="wv"/><rect x="438.2" y="47.3" width="2.8" height="9.4" rx="1.2" class="wv"/><rect x="434.0" y="42.8" width="2.8" height="18.3" rx="1.2" class="wv"/><rect x="429.9" y="33.9" width="2.8" height="36.2" rx="1.2" class="wv"/><rect x="425.7" y="43.7" width="2.8" height="16.6" rx="1.2" class="wv"/><rect x="421.5" y="42.5" width="2.8" height="19.0" rx="1.2" class="wv"/><rect x="417.4" y="35.3" width="2.8" height="33.4" rx="1.2" class="wv"/><rect x="413.2" y="32.8" width="2.8" height="38.4" rx="1.2" class="wv"/><rect x="409.0" y="36.7" width="2.8" height="30.5" rx="1.2" class="wv"/><rect x="404.9" y="39.4" width="2.8" height="25.3" rx="1.2" class="wv"/><rect x="400.7" y="45.9" width="2.8" height="12.3" rx="1.2" class="wv"/><rect x="396.5" y="42.5" width="2.8" height="19.1" rx="1.2" class="wv"/><rect x="392.4" y="42.0" width="2.8" height="19.9" rx="1.2" class="wv"/><rect x="388.2" y="43.1" width="2.8" height="17.8" rx="1.2" class="wv"/><rect x="384.0" y="43.2" width="2.8" height="17.5" rx="1.2" class="wv"/><rect x="379.9" y="44.0" width="2.8" height="16.1" rx="1.2" class="wv"/><rect x="375.7" y="37.0" width="2.8" height="29.9" rx="1.2" class="wv"/><rect x="371.5" y="41.6" width="2.8" height="20.7" rx="1.2" class="wv"/><rect x="367.4" y="37.9" width="2.8" height="28.1" rx="1.2" class="wv"/><rect x="363.2" y="41.7" width="2.8" height="20.5" rx="1.2" class="wv"/><rect x="359.0" y="45.7" width="2.8" height="12.5" rx="1.2" class="wv"/><rect x="354.9" y="42.3" width="2.8" height="19.4" rx="1.2" class="wv"/><rect x="350.7" y="37.7" width="2.8" height="28.6" rx="1.2" class="wv"/><rect x="346.5" y="44.0" width="2.8" height="16.0" rx="1.2" class="wv"/><rect x="342.4" y="44.9" width="2.8" height="14.3" rx="1.2" class="wv"/><rect x="338.2" y="44.7" width="2.8" height="14.7" rx="1.2" class="wv"/><rect x="334.0" y="43.3" width="2.8" height="17.4" rx="1.2" class="wv"/><rect x="329.9" y="44.0" width="2.8" height="15.9" rx="1.2" class="wv"/><rect x="325.7" y="41.6" width="2.8" height="20.7" rx="1.2" class="wv"/><rect x="321.5" y="42.7" width="2.8" height="18.6" rx="1.2" class="wv"/><rect x="317.4" y="44.4" width="2.8" height="15.2" rx="1.2" class="wv"/><rect x="313.2" y="39.7" width="2.8" height="24.5" rx="1.2" class="wv"/><rect x="309.0" y="43.1" width="2.8" height="17.9" rx="1.2" class="wv"/><rect x="304.9" y="43.4" width="2.8" height="17.2" rx="1.2" class="wv"/><rect x="300.7" y="41.3" width="2.8" height="21.5" rx="1.2" class="wv"/><rect x="296.5" y="44.9" width="2.8" height="14.3" rx="1.2" class="wv"/><rect x="292.4" y="41.6" width="2.8" height="20.8" rx="1.2" class="wv"/><rect x="288.2" y="46.2" width="2.8" height="11.5" rx="1.2" class="wv"/><rect x="284.0" y="45.8" width="2.8" height="12.5" rx="1.2" class="wv"/><rect x="279.9" y="44.4" width="2.8" height="15.3" rx="1.2" class="wv"/><rect x="275.7" y="38.9" width="2.8" height="26.2" rx="1.2" class="wv"/><rect x="271.5" y="42.5" width="2.8" height="18.9" rx="1.2" class="wv"/><rect x="267.4" y="37.5" width="2.8" height="29.0" rx="1.2" class="wv"/><rect x="263.2" y="29.0" width="2.8" height="46.0" rx="1.2" class="wv"/><rect x="259.0" y="36.0" width="2.8" height="32.1" rx="1.2" class="wv"/><rect x="254.8" y="38.6" width="2.8" height="26.8" rx="1.2" class="wv"/><rect x="250.7" y="37.3" width="2.8" height="29.3" rx="1.2" class="wv"/><rect x="246.5" y="43.1" width="2.8" height="17.8" rx="1.2" class="wv"/><rect x="242.3" y="40.2" width="2.8" height="23.6" rx="1.2" class="wv"/><rect x="238.2" y="39.1" width="2.8" height="25.9" rx="1.2" class="wv"/><rect x="234.0" y="44.4" width="2.8" height="15.1" rx="1.2" class="wv"/><rect x="229.8" y="39.9" width="2.8" height="24.3" rx="1.2" class="wv"/><rect x="225.7" y="35.9" width="2.8" height="32.2" rx="1.2" class="wv"/><rect x="221.5" y="36.3" width="2.8" height="31.4" rx="1.2" class="wv"/><rect x="217.3" y="34.0" width="2.8" height="36.1" rx="1.2" class="wv"/><rect x="213.2" y="41.6" width="2.8" height="20.8" rx="1.2" class="wv"/><rect x="209.0" y="44.3" width="2.8" height="15.4" rx="1.2" class="wv"/><rect x="204.8" y="43.4" width="2.8" height="17.3" rx="1.2" class="wv"/><rect x="200.7" y="45.0" width="2.8" height="14.0" rx="1.2" class="wv"/><rect x="196.5" y="34.5" width="2.8" height="35.1" rx="1.2" class="wv"/><rect x="192.3" y="40.8" width="2.8" height="22.5" rx="1.2" class="wv"/><rect x="188.2" y="41.9" width="2.8" height="20.1" rx="1.2" class="wv"/><rect x="184.0" y="41.8" width="2.8" height="20.5" rx="1.2" class="wv"/><rect x="179.8" y="42.1" width="2.8" height="19.8" rx="1.2" class="wv"/><rect x="175.7" y="44.9" width="2.8" height="14.3" rx="1.2" class="wv"/><rect x="171.5" y="45.1" width="2.8" height="13.7" rx="1.2" class="wv"/><rect x="167.3" y="42.8" width="2.8" height="18.4" rx="1.2" class="wv"/><rect x="163.2" y="43.2" width="2.8" height="17.6" rx="1.2" class="wv"/><rect x="159.0" y="36.1" width="2.8" height="31.8" rx="1.2" class="wv"/><rect x="154.8" y="43.2" width="2.8" height="17.7" rx="1.2" class="wv"/><rect x="150.7" y="36.8" width="2.8" height="30.4" rx="1.2" class="wv"/><rect x="146.5" y="42.0" width="2.8" height="19.9" rx="1.2" class="wv"/><rect x="142.3" y="42.0" width="2.8" height="20.0" rx="1.2" class="wv"/><rect x="138.2" y="40.8" width="2.8" height="22.3" rx="1.2" class="wv"/><rect x="134.0" y="34.2" width="2.8" height="35.6" rx="1.2" class="wv"/><rect x="129.8" y="44.2" width="2.8" height="15.6" rx="1.2" class="wv"/><rect x="125.7" y="43.0" width="2.8" height="18.0" rx="1.2" class="wv"/><rect x="121.5" y="44.2" width="2.8" height="15.5" rx="1.2" class="wv"/><rect x="117.3" y="44.6" width="2.8" height="14.7" rx="1.2" class="wv"/><rect x="113.2" y="46.4" width="2.8" height="11.1" rx="1.2" class="wv"/><rect x="109.0" y="42.0" width="2.8" height="20.1" rx="1.2" class="wv"/><rect x="104.8" y="45.3" width="2.8" height="13.3" rx="1.2" class="wv"/><rect x="100.7" y="42.8" width="2.8" height="18.4" rx="1.2" class="wv"/><rect x="96.5" y="42.0" width="2.8" height="20.0" rx="1.2" class="wv"/><rect x="92.3" y="40.5" width="2.8" height="22.9" rx="1.2" class="wv"/><rect x="88.2" y="41.0" width="2.8" height="22.1" rx="1.2" class="wv"/><rect x="84.0" y="32.4" width="2.8" height="39.1" rx="1.2" class="wv"/><rect x="79.8" y="43.7" width="2.8" height="16.7" rx="1.2" class="wv"/><rect x="75.7" y="44.8" width="2.8" height="14.4" rx="1.2" class="wv"/><rect x="71.5" y="44.1" width="2.8" height="15.9" rx="1.2" class="wv"/><rect x="67.3" y="46.5" width="2.8" height="11.0" rx="1.2" class="wv"/><rect x="63.2" y="44.9" width="2.8" height="14.3" rx="1.2" class="wv"/><rect x="59.0" y="45.2" width="2.8" height="13.6" rx="1.2" class="wv"/><rect x="54.9" y="39.4" width="2.8" height="25.3" rx="1.2" class="wv"/><rect x="50.7" y="33.1" width="2.8" height="37.7" rx="1.2" class="wv"/><rect x="46.5" y="42.8" width="2.8" height="18.4" rx="1.2" class="wv"/><rect x="42.4" y="45.7" width="2.8" height="12.6" rx="1.2" class="wv"/><rect x="38.2" y="43.6" width="2.8" height="16.8" rx="1.2" class="wv"/><rect x="34.0" y="43.4" width="2.8" height="17.2" rx="1.2" class="wv"/><rect x="29.9" y="43.3" width="2.8" height="17.3" rx="1.2" class="wv"/><rect x="25.7" y="44.8" width="2.8" height="14.4" rx="1.2" class="wv"/><rect x="21.5" y="47.1" width="2.8" height="9.7" rx="1.2" class="wv"/><rect x="17.4" y="46.9" width="2.8" height="10.1" rx="1.2" class="wv"/><rect x="13.2" y="47.8" width="2.8" height="8.4" rx="1.2" class="wv"/><rect x="9.0" y="46.3" width="2.8" height="11.4" rx="1.2" class="wv"/><rect x="4.8" y="50.3" width="2.8" height="3.3" rx="1.2" class="wv"/><rect x="0.7" y="51.2" width="2.8" height="1.5" rx="1.2" class="wv"/><a href="#S01"><rect x="966.2" y="86" width="32.6" height="26" fill="#2E4A63" class="seg"><title>S01 · 0.00–1.00</title></rect></a><a href="#S02"><rect x="920.5" y="86" width="44.5" height="26" fill="#1E3247" class="seg"><title>S02 · 1.00–2.35</title></rect></a><a href="#S03"><rect x="876.6" y="86" width="42.8" height="26" fill="#3E4752" class="seg"><title>S03 · 2.35–3.65</title></rect></a><a href="#S04"><rect x="834.3" y="86" width="41.1" height="26" fill="#B5562E" class="seg"><title>S04 · 3.65–4.90</title></rect></a><a href="#S05"><rect x="786.9" y="86" width="46.1" height="26" fill="#3C5A78" class="seg"><title>S05 · 4.90–6.30</title></rect></a><a href="#S06"><rect x="751.4" y="86" width="34.3" height="26" fill="#9FB2C4" class="seg"><title>S06 · 6.30–7.35</title></rect></a><a href="#S07"><rect x="675.3" y="86" width="74.9" height="26" fill="#3B2A1A" class="seg"><title>S07 · 7.35–9.60</title></rect></a><a href="#S08"><rect x="611.1" y="86" width="63.1" height="26" fill="#1C2A40" class="seg"><title>S08 · 9.60–11.50</title></rect></a><a href="#S09"><rect x="570.5" y="86" width="39.4" height="26" fill="#C8A15A" class="seg"><title>S09 · 11.50–12.70</title></rect></a><a href="#S10"><rect x="519.8" y="86" width="49.5" height="26" fill="#D9BF8C" class="seg"><title>S10 · 12.70–14.20</title></rect></a><a href="#S11"><rect x="480.9" y="86" width="37.7" height="26" fill="#A1401F" class="seg"><title>S11 · 14.20–15.35</title></rect></a><a href="#S12"><rect x="442.0" y="86" width="37.7" height="26" fill="#5E5146" class="seg"><title>S12 · 15.35–16.50</title></rect></a><a href="#S13"><rect x="362.5" y="86" width="78.3" height="26" fill="#A88A5C" class="seg"><title>S13 · 16.50–18.85</title></rect></a><a href="#S14"><rect x="325.3" y="86" width="36.0" height="26" fill="#C08A3E" class="seg"><title>S14 · 18.85–19.95</title></rect></a><a href="#S15"><rect x="288.1" y="86" width="36.0" height="26" fill="#B4683A" class="seg"><title>S15 · 19.95–21.05</title></rect></a><a href="#S16"><rect x="210.3" y="86" width="76.6" height="26" fill="#2F5B52" class="seg"><title>S16 · 21.05–23.35</title></rect></a><a href="#S17"><rect x="163.0" y="86" width="46.1" height="26" fill="#D4A04E" class="seg"><title>S17 · 23.35–24.75</title></rect></a><a href="#S18"><rect x="120.7" y="86" width="41.1" height="26" fill="#C08A3E" class="seg"><title>S18 · 24.75–26.00</title></rect></a><a href="#S19"><rect x="70.0" y="86" width="49.5" height="26" fill="#B98A45" class="seg"><title>S19 · 26.00–27.50</title></rect></a><a href="#S20"><rect x="24.3" y="86" width="44.5" height="26" fill="#E0B66A" class="seg"><title>S20 · 27.50–28.85</title></rect></a><a href="#S21"><rect x="0.0" y="86" width="23.1" height="26" fill="#C9CCCF" class="seg"><title>S21 · 28.85–29.57</title></rect></a><line x1="1000.0" y1="78" x2="1000.0" y2="120" class="tick"/><text x="960.3" y="136" class="tl">1</text><line x1="920.5" y1="78" x2="920.5" y2="120" class="tick"/><text x="877.4" y="136" class="tl">2</text><line x1="834.3" y1="78" x2="834.3" y2="120" class="tick"/><text x="792.9" y="136" class="tl">3</text><line x1="751.4" y1="78" x2="751.4" y2="120" class="tick"/><text x="713.4" y="136" class="tl">4</text><line x1="675.3" y1="78" x2="675.3" y2="120" class="tick"/><text x="643.2" y="136" class="tl">5</text><line x1="611.1" y1="78" x2="611.1" y2="120" class="tick"/><text x="565.4" y="136" class="tl">6</text><line x1="519.8" y1="78" x2="519.8" y2="120" class="tick"/><text x="480.9" y="136" class="tl">7</text><line x1="442.0" y1="78" x2="442.0" y2="120" class="tick"/><text x="402.3" y="136" class="tl">8</text><line x1="362.5" y1="78" x2="362.5" y2="120" class="tick"/><text x="325.3" y="136" class="tl">9</text><line x1="288.1" y1="78" x2="288.1" y2="120" class="tick"/><text x="249.2" y="136" class="tl">10</text><line x1="210.3" y1="78" x2="210.3" y2="120" class="tick"/><text x="165.5" y="136" class="tl">11</text><line x1="120.7" y1="78" x2="120.7" y2="120" class="tick"/><text x="72.5" y="136" class="tl">12</text><text x="1000.0" y="10" class="tt">0ث</text><text x="830.9" y="10" class="tt">5ث</text><text x="661.8" y="10" class="tt">10ث</text><text x="492.7" y="10" class="tt">15ث</text><text x="323.6" y="10" class="tt">20ث</text><text x="154.5" y="10" class="tt">25ث</text></svg></div>
+    <div class="tablewrap"><table><thead><tr><th>الشطر</th><th>الزمن (ث)</th><th>النص</th></tr></thead><tbody><tr><td class="num">1</td><td class="num">0.00–2.35</td><td style="font-family:var(--f-verse);font-size:17px">لِقَلعُ ضِرسٍ وَضَربُ حَبسٍ</td></tr><tr><td class="num">2</td><td class="num">2.35–4.90</td><td style="font-family:var(--f-verse);font-size:17px">وَنَزعُ نَفسٍ وَرَدُّ أَمسِ</td></tr><tr><td class="num">3</td><td class="num">4.90–7.35</td><td style="font-family:var(--f-verse);font-size:17px">وَقَرُّ بَردٍ وَقَودُ فَردِ</td></tr><tr><td class="num">4</td><td class="num">7.35–9.60</td><td style="font-family:var(--f-verse);font-size:17px">وَدَبغُ جِلدٍ بِغَيرِ شَمسِ</td></tr><tr><td class="num">5</td><td class="num">9.60–11.50</td><td style="font-family:var(--f-verse);font-size:17px">وَأَكلُ ضَبٍّ وَصَيدُ دُبٍّ</td></tr><tr><td class="num">6</td><td class="num">11.50–14.20</td><td style="font-family:var(--f-verse);font-size:17px">وَصَرفُ حَبٍّ بِأَرضِ خَرسِ</td></tr><tr><td class="num">7</td><td class="num">14.20–16.50</td><td style="font-family:var(--f-verse);font-size:17px">وَنَفخُ نارٍ وَحَملُ عارٍ</td></tr><tr><td class="num">8</td><td class="num">16.50–18.85</td><td style="font-family:var(--f-verse);font-size:17px">وَبَيعُ دارٍ بِرُبعِ فِلسِ</td></tr><tr><td class="num">9</td><td class="num">18.85–21.05</td><td style="font-family:var(--f-verse);font-size:17px">وَبَيعُ خُفٍّ وَعَدمُ إِلفٍ</td></tr><tr><td class="num">10</td><td class="num">21.05–23.35</td><td style="font-family:var(--f-verse);font-size:17px">وَضَربُ إِلفٍ بِحَبلِ قَلسِ</td></tr><tr><td class="num">11</td><td class="num">23.35–26.00</td><td style="font-family:var(--f-verse);font-size:17px">أَهوَنُ مِن وَقفَةِ الحُرِّ</td></tr><tr><td class="num">12</td><td class="num">26.00–28.85</td><td style="font-family:var(--f-verse);font-size:17px">يَرجو نَوالاً بِبابِ نَحسِ</td></tr><tr><td class="num">—</td><td class="num">28.85–29.57</td><td>ذيل موسيقي بلا صوت</td></tr></tbody></table></div>
+  </section>
+
+  <section id="shots">
+    <h2>اللقطات</h2>
+    <p class="prose">كل لقطة: الشطر، ومعناه، وما نراه، ثم التفاصيل التقنية والأمر الإنجليزي الجاهز للنسخ. التوقيت مقيس من الصوت بفرق ربع ثانية تقريباً.</p>
+    <div class="shots">
+<article class="shot" id="S01" style="--t1:#2E4A63;--t2:#E8A54B">
+  <div class="swatch" aria-hidden="true"><span class="sid">S01</span><span class="stime"><span>0.00</span><i>←</i><span>1.00</span></span><span class="sdur">1.00 ث</span></div>
+  <div class="sbody">
+    <p class="sline">لِقَلعُ ضِرسٍ</p>
+    <p class="smean">قلعُ الضرس قديماً كان بكلّاب الحلّاق الجرّاح دون تخدير، وهو أوّل ألمٍ جسديّ حادّ في القائمة. واللام في أوّل البيت لامُ التوكيد، والأفصح نطقها «لَقَلعُ».</p>
+    <p class="svis">دكّانُ حلّاقٍ جرّاح تحت قوسٍ على هيئة حدوة الفرس، بلونٍ أزرق ليلي وبقعةِ ضوءٍ كهرمانية من سراج زيت. البطل جالسٌ بجانبيّته على كرسيٍّ منخفض، ورأسه مائلٌ إلى الخلف، ويده تقبض على حافّة الكرسي. ذراعُ الحلّاق الورقية تعبر أمام فكّه فتحجب فمه، وعلى الجدار خلفه يُطبق ظلّ كلّابٍ حديديّ ضخم ثم يرتدّ بقوّة عند «ضرس». تنتهي اللقطة على الضرس المقلوع بين فكّي الكلّاب، شكلاً أسود صغيراً نظيفاً في منتصف الإطار أمام السراج، بلا أيّ دم.</p>
+    <details class="tech"><summary>التفاصيل التقنية (الثياب، الكاميرا، التزامن)</summary>
+    <dl class="meta">
+      <div><dt>الثياب</dt><dd dir="ltr">Plain cream cotton thobe, sleeves pushed up, bare-headed so the curls are free, a thin burgundy cord tied at one cuff: an ordinary man of the old souq at a barber-surgeon&#x27;s stall. Outline: a straight ankle-length column of translucent cream hide. The first trace of the dignity thread.</dd></div>
+      <div><dt>الكاميرا</dt><dd dir="ltr">Medium side-profile shot, locked-off, with a slight multiplane push-in. The pincers&#x27; wall shadow is the only fast motion. Ends with the extracted molar&#x27;s small black shape centred in frame against the lamp glow.</dd></div>
+      <div><dt>التزامن</dt><dd dir="ltr">The pincer shadow yanks back on the sibilant of ضرس at 0.93; cut at 1.00.</dd></div>
+      <div><dt>إخفاء الوجه</dt><dd dir="ltr">Strict side profile against the lamp-lit screen; the head is opaque black card with no eye hole. The barber&#x27;s forearm crosses in front of the jaw, so the mouth is never visible and never opens on screen; the pincers act only as a shadow on the wall. Only the curl crown, the beard edge and the hairline glasses arm read.</dd></div>
+      <div><dt>الانتقال</dt><dd dir="ltr">Hard cut at 1.00 as «وَضَربُ» begins. Optional graphic match built in CapCut, not in the prompt: a black keyhole-shaped mask grows from the molar&#x27;s position and opens onto S02 in 4 frames. No spin, no comic motion.</dd></div>
+    </dl></details>
+    <details class="prompt"><summary>أمر اللقطة (إنجليزي)</summary>
+      <div class="pbox"><button class="copy" data-target="p-S01">نسخ</button><pre id="p-S01" dir="ltr">Flat 2D shadow-theatre cut-out animation, Arabic khayal al-zill staging: opaque black card figure, garments of translucent dyed hide glowing like stained glass (each one flat panel that is itself the body shape, no skin showing through), backlit parchment layers, multiplane depth, film grain; steel-blue tint with one amber oil-lamp hotspot. A barber-surgeon&#x27;s stall under a horseshoe arch. THE MAN (broad shoulders; a big crown of thick wavy-curly hair cut as fine paper tendrils; a short beard cut as a jagged edge along the jaw; a hairline glasses temple arm glinting from ear to brow, no ring drawn on the head) sits on a low stool in strict side profile, head tilted back, gripping the stool. He wears a plain cream cotton thobe of glowing translucent hide, sleeves pushed up, with a thin burgundy cord tied at one cuff. The barber&#x27;s cut-out forearm crosses in front of his jaw and hides his mouth; on the wall behind, the enlarged shadow of huge iron pincers closes and jerks back; the pulled molar ends as a clean small black shape held in the pincer jaws at frame centre against the lamp. Medium side shot, locked-off, slight push-in. His head and face are solid opaque black with no eyes, no eye hole and no features; his lips stay closed and still. Exactly one man in the flesh, fully clothed; the barber is only a cut-out forearm. No blood. Keep the lower 40% of the frame calm and dark, key action in the upper 60%. No on-screen text. Solemn, tragic, never comic; flat 2D, not 3D.</pre></div>
+    </details>
+  </div>
+</article>
+<article class="shot" id="S02" style="--t1:#1E3247;--t2:#4D6E8F">
+  <div class="swatch" aria-hidden="true"><span class="sid">S02</span><span class="stime"><span>1.00</span><i>←</i><span>2.35</span></span><span class="sdur">1.35 ث</span></div>
+  <div class="sbody">
+    <p class="sline">وَضَربُ حَبسٍ</p>
+    <p class="smean">«ضَربُ حبسٍ» يُقرأ على وجهين: الضربُ داخل الحبس، أو أن يُضرَب عليه الحبسُ أي يُفرَض عليه، كقوله تعالى: ﴿ضُرِبَتْ عَلَيْهِمُ الذِّلَّةُ﴾. بنينا الصورة على الوجه الثاني: حبسٌ يُفرض عليه، فننتقل من ألم الجسد إلى فقدان الحرّية دون أن نعرض ضرباً.</p>
+    <p class="svis">زنزانةٌ حجرية زرقاء باردة، وضوءُ نافذةٍ عالية مقضبة يرسم خطوطاً على الأرض. البطل جاثٍ وظهره للكاميرا، مطأطئ الرأس، بثوب خيشٍ رماديّ ممزّق الحاشية مغلقٍ عند العنق، وقيدٍ وسلسلةٍ قصيرة في معصميه، والخيط العنّابي ما يزال معقوداً تحت القيد. على الجدار يمرّ ظلّ سجّانٍ طويل تتأرجح عند حزامه حلقةُ مفاتيح حديدية ثقيلة. وعند «حبس» يُصفق الباب الحديدي وتكتسح ظلال القضبان الإطار كلّه.</p>
+    <details class="tech"><summary>التفاصيل التقنية (الثياب، الكاميرا، التزامن)</summary>
+    <dl class="meta">
+      <div><dt>الثياب</dt><dd dir="ltr">Grey-brown sackcloth prisoner&#x27;s tunic with a ragged, torn hem, closed at the neck, iron cuffs and a short chain at the wrists, barefoot, the burgundy cord still knotted beneath one cuff: the garb of a cell, the opposite of a free man&#x27;s dress. Outline: a shapeless sack with a jagged hem.</dd></div>
+      <div><dt>الكاميرا</dt><dd dir="ltr">Wide from behind, slightly high, locked-off; one sharp jolt on the slam while the bar shadows sweep right to left.</dd></div>
+      <div><dt>التزامن</dt><dd dir="ltr">The jailer&#x27;s shadow crosses the wall from about 1.3; the door slams on the sibilant of حبس at 1.98; the frame is nearly black by 2.30; cut at 2.35.</dd></div>
+      <div><dt>إخفاء الوجه</dt><dd dir="ltr">Back to camera, kneeling, head bowed; only the curl outline and the glasses temple arm behind his ear show against the barred light. Back-view rule: the beard is not named, so the model has no reason to turn his head. The jailer exists only as a cast shadow.</dd></div>
+      <div><dt>الانتقال</dt><dd dir="ltr">The bar shadows close the frame to near-black; the last bright shaft between the bars narrows into the slit of a high window: a light-shape bridge into S03 (cold blue to silver).</dd></div>
+    </dl></details>
+    <details class="prompt"><summary>أمر اللقطة (إنجليزي)</summary>
+      <div class="pbox"><button class="copy" data-target="p-S02">نسخ</button><pre id="p-S02" dir="ltr">Flat 2D shadow-theatre cut-out animation, Arabic khayal al-zill staging: opaque black card figure, garments of translucent dyed hide glowing like stained glass (each one flat panel that is itself the body shape, no skin showing through), backlit parchment layers, multiplane depth, film grain; cold night-blue tint. A stone prison cell; light through a high barred window stripes the floor. THE MAN (broad shoulders; a big crown of thick wavy-curly hair cut as fine paper tendrils; a hairline glasses temple arm glinting behind his ear) is already kneeling with his back to the camera, head bowed, in a grey-brown sackcloth prisoner&#x27;s tunic of translucent hide with a ragged torn hem, closed at the neck, iron cuffs and a short chain at his wrists, a thin burgundy cord still knotted under one cuff; his clothing is clearly different from the previous shot. On the wall the long shadow of a jailer passes, a heavy ring of iron keys swinging at his belt; the iron door slams and the bar shadows sweep across the whole frame. Wide from behind, slightly high, one jolt on the slam. His face is never seen; his head is a solid black silhouette. Exactly one man in the flesh, fully clothed; the jailer is only a cast shadow with no curls. No blood. Keep the lower 40% of the frame calm and dark, key action in the upper 60%. No on-screen text. Solemn, tragic, never comic; flat 2D, not 3D.</pre></div>
+    </details>
+  </div>
+</article>
+<article class="shot" id="S03" style="--t1:#3E4752;--t2:#B9C2CC">
+  <div class="swatch" aria-hidden="true"><span class="sid">S03</span><span class="stime"><span>2.35</span><i>←</i><span>3.65</span></span><span class="sdur">1.30 ث</span></div>
+  <div class="sbody">
+    <p class="sline">وَنَزعُ نَفسٍ</p>
+    <p class="smean">نزعُ النَّفْس هو سكرات الموت وخروج الروح، لا خروج النَّفَس. إنّه أقصى ما يُتصوّر من الألم.</p>
+    <p class="svis">حجرةٌ عارية بضوءٍ فضّيّ، فيها سراجُ زيتٍ على الأرض خلف ظهره ونافذةٌ ضيّقة ساطعة أمامه. يجثو جانبيّاً على حصيرة بثوب نومٍ كتّانيّ أبيض مغلق الياقة. طائرٌ صغير من نورٍ شاحب، وهو صورةٌ عربية قديمة للروح، قد خرج نصفه من صدره على خيطٍ رفيع متوهّج مشدود، وعند «نفس» ينفلت ويطير من النافذة ويذوب في الوهج.</p>
+    <details class="tech"><summary>التفاصيل التقنية (الثياب، الكاميرا، التزامن)</summary>
+    <dl class="meta">
+      <div><dt>الثياب</dt><dd dir="ltr">Loose white linen night-thobe, collar closed, bare-headed: the soft, shapeless garment of a sickbed. Outline: a loose, sagging drape of pale silver-white translucent hide.</dd></div>
+      <div><dt>الكاميرا</dt><dd dir="ltr">Medium-wide strict side profile, level horizon, a slow drift toward the window following the light-bird.</dd></div>
+      <div><dt>التزامن</dt><dd dir="ltr">The shot opens with the thread already taut, so the pull of نزع (2.89) is under way; the bird breaks free on the sibilant of نفس at 3.41; cut at 3.65 as it melts into the glare.</dd></div>
+      <div><dt>إخفاء الوجه</dt><dd dir="ltr">Profile in total backlight from the window. The lamp sits behind his back and only rims his curls, so the face plane is never lit.</dd></div>
+      <div><dt>الانتقال</dt><dd dir="ltr">Match on a bright disc at 3.65: the light-bird vanishes into the window glare, and the glare becomes the huge sinking sun of S04 (a CapCut crossfade on the bright disc).</dd></div>
+    </dl></details>
+    <details class="prompt"><summary>أمر اللقطة (إنجليزي)</summary>
+      <div class="pbox"><button class="copy" data-target="p-S03">نسخ</button><pre id="p-S03" dir="ltr">Flat 2D shadow-theatre cut-out animation, Arabic khayal al-zill staging: opaque black card figure, garments of translucent dyed hide glowing like stained glass (each one flat panel that is itself the body shape, no skin showing through), backlit parchment layers, multiplane depth, film grain; blue-grey night tint with one small amber oil lamp. A bare chamber: the lamp on the floor behind him, a narrow bright window ahead. THE MAN (broad shoulders; a big crown of thick wavy-curly hair cut as fine paper tendrils; a short beard cut as a jagged edge along the jaw; a hairline glasses temple arm glinting from ear to brow, no ring drawn on the head) kneels on a reed mat in strict side profile, back bent, in a loose white linen night-thobe of glowing translucent hide, collar closed; his clothing is clearly different from the previous shot. A small bird made of pale light, already half drawn out of his chest on a taut glowing thread, slips free and flies out through the window into the glare. Slow drift toward the window. His head and face stay solid opaque black with no eyes, no eye hole and no features; his lips stay closed and still. Exactly one man in the flesh, fully clothed. Keep the lower 40% of the frame calm and dark, key action in the upper 60%. No on-screen text. Solemn, tragic, never comic; flat 2D, not 3D.</pre></div>
+    </details>
+  </div>
+</article>
+<article class="shot" id="S04" style="--t1:#B5562E;--t2:#2A2F45">
+  <div class="swatch" aria-hidden="true"><span class="sid">S04</span><span class="stime"><span>3.65</span><i>←</i><span>4.90</span></span><span class="sdur">1.25 ث</span></div>
+  <div class="sbody">
+    <p class="sline">وَرَدُّ أَمسِ</p>
+    <p class="smean">محاولةُ إعادة الأمس، وهي محال. هذا عناء العبث وطلب ما لا يكون.</p>
+    <p class="svis">يصير وهجُ النافذة قرصَ شمسٍ ورقيّ هائلاً يغرق خلف أسطحٍ طينية وقبابٍ بعيدة عند الغروب. البطل على حافّة السطح بثوبٍ رمليّ يشدّه حزامٌ منسوج وعباءةٍ صوفية داكنة، مائلٌ بجسده كلّه إلى الخلف يشدّ حبلاً التفّ حول الشمس ليجرّها إلى أعلى. عند «أمس» تنزلق الشمس تحت الأفق رغم ذلك فيرتخي الحبل، ويهبط الظلام الأزرق على الأسطح.</p>
+    <details class="tech"><summary>التفاصيل التقنية (الثياب، الكاميرا، التزامن)</summary>
+    <dl class="meta">
+      <div><dt>الثياب</dt><dd dir="ltr">A pale sand day-thobe cinched with a woven belted sash, a dark umber wool aba thrown over the shoulders against the evening chill. Outline: the sash nips the column at the waist and the cloak&#x27;s wide shoulders flare. A different place and hour from the sickbed. (In Plan B this image is folded into P1 Shot 2; generate S04 as a Plan C patch to keep this outfit.)</dd></div>
+      <div><dt>الكاميرا</dt><dd dir="ltr">Wide side-on, slightly low, locked-off. He leans back on the rope in the foreground layer; the sun sits on the far parchment plane.</dd></div>
+      <div><dt>التزامن</dt><dd dir="ltr">3.65 is an estimated word onset (وَرَدُّ), not a measured beat: snap the cut to the actual consonant onset in the waveform (±0.2 s). The sun drops and the rope goes slack on the sibilant of أمس at 4.48; the snow wipe completes at 4.90.</dd></div>
+      <div><dt>إخفاء الوجه</dt><dd dir="ltr">Pure side profile leaning back against the sunset disc: a black cut-out head with backlit curls.</dd></div>
+      <div><dt>الانتقال</dt><dd dir="ltr">The amber drains to blue-black, then a gust of snow wipes across into the blizzard (built in CapCut if the clip does not supply it): dark to white, a blue colour bridge.</dd></div>
+    </dl></details>
+    <details class="prompt"><summary>أمر اللقطة (إنجليزي)</summary>
+      <div class="pbox"><button class="copy" data-target="p-S04">نسخ</button><pre id="p-S04" dir="ltr">Flat 2D shadow-theatre cut-out animation, Arabic khayal al-zill staging: opaque black card figure, garments of translucent dyed hide glowing like stained glass (each one flat panel that is itself the body shape, no skin showing through), backlit parchment layers, multiplane depth, film grain; red-orange dusk tint draining to blue. A flat mud-brick rooftop above sleeping domes; a huge cut-paper sun disc sinks behind the far horizon layer. THE MAN (broad shoulders; a big crown of thick wavy-curly hair cut as fine paper tendrils; a short beard cut as a jagged edge along the jaw; a hairline glasses temple arm glinting from ear to brow, no ring drawn on the head) wears a pale sand day-thobe of translucent hide cinched with a woven sash and a dark umber wool aba over his shoulders; his clothing is clearly different from the previous shot. In side profile he is already leaning back with his whole body, heels braced, hauling a thick rope looped around the sinking sun. The sun slides below the horizon anyway and the rope goes slack; blue darkness falls over the roofs. Wide side shot, slightly low, locked-off. His head and face are solid opaque black with no eyes, no eye hole and no features; his lips stay closed and still. Exactly one man in the flesh, fully clothed. Keep the lower 40% of the frame calm and dark, key action in the upper 60%. No on-screen text. Solemn, tragic, never comic; flat 2D, not 3D.</pre></div>
+    </details>
+  </div>
+</article>
+<article class="shot" id="S05" style="--t1:#3C5A78;--t2:#DCE3EA">
+  <div class="swatch" aria-hidden="true"><span class="sid">S05</span><span class="stime"><span>4.90</span><i>←</i><span>6.30</span></span><span class="sdur">1.40 ث</span></div>
+  <div class="sbody">
+    <p class="sline">وَقَرُّ بَردٍ</p>
+    <p class="smean">القُرّ هو البرد الشديد القارس الذي لا يجد الفقيرُ ما يقيه منه.</p>
+    <p class="svis">عاصفةٌ ثلجية زرقاء ليلاً. لقطةٌ متوسّطة من الخلف: البطل منحنٍ بفروةٍ ضخمة بلون المَغْرة الترابي ذات حافّةٍ صوفية مشعّثة، وشماغٍ صوفيّ رماديّ ملفوف حول رأسه وفكّه تنفجر الخصلات من أطرافه، ويداه تحت إبطيه. يتكدّس الثلج على كتفيه وشعره، وبخارُ أنفاسه يتصاعد مضاءً بحافّة فانوسٍ بعيد أمامه، ورقائق الثلج في الطبقة الأمامية تمرّ مسرعة أمام العدسة.</p>
+    <details class="tech"><summary>التفاصيل التقنية (الثياب، الكاميرا، التزامن)</summary>
+    <dl class="meta">
+      <div><dt>الثياب</dt><dd dir="ltr">Bulky ochre sheepskin farwa coat with a thick fleece-fringed outline, a grey wool shemagh wound around head and jaw with the curls bursting out front and back, wrapped wool leggings, felt boots: a poor traveller&#x27;s winter gear. Outline: a heavy bell shape with a shaggy fringe.</dd></div>
+      <div><dt>الكاميرا</dt><dd dir="ltr">Medium shot from behind, a slow push-in with a fast foreground snow layer (multiplane) and slight wind sway.</dd></div>
+      <div><dt>التزامن</dt><dd dir="ltr">He shivers on بَرد at about 5.6; the whiteout lands exactly on the audio pause at about 6.3.</dd></div>
+      <div><dt>إخفاء الوجه</dt><dd dir="ltr">From behind, the wool wrap around head and jaw, the only light ahead of him; the face is never in frame.</dd></div>
+      <div><dt>الانتقال</dt><dd dir="ltr">A gust whites out the frame on the audio pause; the camera continues as a pull-back into S06 (hidden cut).</dd></div>
+    </dl></details>
+    <details class="prompt"><summary>أمر اللقطة (إنجليزي)</summary>
+      <div class="pbox"><button class="copy" data-target="p-S05">نسخ</button><pre id="p-S05" dir="ltr">Flat 2D shadow-theatre cut-out animation, Arabic khayal al-zill staging: opaque black card figure, garments of translucent dyed hide glowing like stained glass (each one flat panel that is itself the body shape, no skin showing through), backlit parchment layers, multiplane depth, film grain; night-blue tint, parchment-white snow. A howling blizzard on an open plain. Medium shot from behind: THE MAN (broad shoulders; a big crown of thick wavy-curly hair cut as fine paper tendrils, bursting out of a grey wool head-wrap; a hairline glasses temple arm glinting behind his ear) stands hunched in a bulky ochre sheepskin farwa coat of translucent hide with a thick fleece-fringed outline, the wrap wound around his head and jaw, hands tucked under his arms; his clothing is clearly different from the previous shot. Snow piles on his curls and shoulders; his breath steams, rim-lit by a distant lantern ahead. A fast foreground layer of snowflakes streams past the camera. Slow push-in from behind with slight wind sway; snow drifts smoothly while he shivers on twos; a gust whites out the frame at the end. His face is never seen, solid black. Exactly one man in the flesh, fully clothed. Keep the lower 40% of the frame calm and dark, key action in the upper 60%. No on-screen text. Solemn, tragic, never comic; flat 2D, not 3D.</pre></div>
+    </details>
+  </div>
+</article>
+<article class="shot" id="S06" style="--t1:#9FB2C4;--t2:#2B3D52">
+  <div class="swatch" aria-hidden="true"><span class="sid">S06</span><span class="stime"><span>6.30</span><i>←</i><span>7.35</span></span><span class="sdur">1.05 ث</span></div>
+  <div class="sbody">
+    <p class="sline">وَقَودُ فَردِ</p>
+    <p class="smean">أن يقود المرء دابّةً واحدة عنيدة وحده في البرّية، بلا رفيقٍ ولا قافلة. وفي روايةٍ «قَوْدُ قِرْدٍ»، وهي حرفة القرّاد الوضيعة الذي يقود القرد ويرقّصه للناس، فيقود البطل بيده الأخرى قرداً صغيراً بمقود، إشارةً إلى الروايتين معاً.</p>
+    <p class="svis">ينجلي البياض عن لقطةٍ بعيدة جدّاً لسهلٍ أبيض لا نهاية له تحت سماءٍ داكنة، والأفق تحت منتصف الإطار بقليل. البطل صغيرٌ جدّاً يقود جملاً واحداً عنيداً من خطامه، مائلاً في وجه الريح، والحبل مشدود والجمل يتمنّع. وفي يده الأخرى يقود قرداً صغيراً يرتجف بمقودٍ قصير يهرول خلفه في الثلج. لا قافلة ولا أحد.</p>
+    <details class="tech"><summary>التفاصيل التقنية (الثياب، الكاميرا، التزامن)</summary>
+    <dl class="meta">
+      <div><dt>الثياب</dt><dd dir="ltr">The same ochre fleece-fringed farwa and wound wool head-wrap as S05 (same blizzard), snow-crusted.</dd></div>
+      <div><dt>الكاميرا</dt><dd dir="ltr">Extreme wide, side-on, the figures small on a horizon just below frame centre, vast sky above, empty dark snow in the lower 40%. Slow lateral tracking through three paper planes. Production note (not for the prompt): drop the monkey if the shot overloads.</dd></div>
+      <div><dt>التزامن</dt><dd dir="ltr">The reveal comes out of the audio pause at 6.3; the camel balks and the halter snaps taut on فَرد at about 7.0; cut at 7.35 on the start of L4.</dd></div>
+      <div><dt>إخفاء الوجه</dt><dd dir="ltr">A tiny profile figure in an extreme wide shot, head wrapped; only the curl edge and the halter arm read.</dd></div>
+      <div><dt>الانتقال</dt><dd dir="ltr">Hard cut from cold blue-white to warm umber, extreme wide to medium: both angle and size change.</dd></div>
+    </dl></details>
+    <details class="prompt"><summary>أمر اللقطة (إنجليزي)</summary>
+      <div class="pbox"><button class="copy" data-target="p-S06">نسخ</button><pre id="p-S06" dir="ltr">Flat 2D shadow-theatre cut-out animation, Arabic khayal al-zill staging: opaque black card figures, garments of translucent dyed hide glowing like stained glass (each one flat panel that is itself the body shape, no skin showing through), backlit parchment layers, multiplane depth, film grain; pale night-blue tint. Extreme wide side view of an endless white snow plain under a dark sky; the figures small on the horizon just below frame centre, the lower part of the frame empty dark snow. THE MAN (broad shoulders; wavy-curly paper-cut hair spilling from a wound wool head-wrap) in the same bulky ochre fleece-fringed sheepskin coat leans into the wind, leading a single stubborn camel by its halter rope; the rope pulls taut and the camel balks. In his other hand he leads a small shivering monkey on a short leash, trotting behind him in the snow. No caravan, no other figures. Slow lateral tracking through three paper planes, snow drifting across the foreground. His head is a tiny solid black silhouette with no features. Exactly one man in the flesh, fully clothed. No on-screen text. Solemn, tragic, never comic; flat 2D, not 3D.</pre></div>
+    </details>
+  </div>
+</article>
+<article class="shot" id="S07" style="--t1:#3B2A1A;--t2:#6B4E2E">
+  <div class="swatch" aria-hidden="true"><span class="sid">S07</span><span class="stime"><span>7.35</span><i>←</i><span>9.60</span></span><span class="sdur">2.25 ث</span></div>
+  <div class="sbody">
+    <p class="sline">وَدَبغُ جِلدٍ بِغَيرِ شَمسِ</p>
+    <p class="smean">الدباغة حرفةٌ شاقّة كريهة الرائحة. يُنقع الجلد ثم يُنشر في الشمس ليجفّ، فإن غابت الشمس بقي رطباً وأنتن وفسد، وضاع الجهد. تعبٌ بلا ثمرة.</p>
+    <p class="svis">ساحةُ مدبغة فيها أحواضٌ حجرية تحت سماءٍ سوداء مثقلة، بلونٍ بنّيّ ترابي. البطل بمريلةٍ جلدية داكنة ذات أحزمة متقاطعة، أحدها عنّابي، يرفع جلداً ثقيلاً يقطر على إطارٍ خشبيّ بين جلودٍ معلّقة كأعلامٍ مهزومة، وخطوطُ رائحةٍ متموّجة على طريقة الرسوم القديمة تتصاعد من الأحواض. ثم يُميل رأسه إلى الخلف في جانبيّةٍ تامّة، فتصعد الكاميرا عنه إلى السماء ويخرج رأسه من أسفل الإطار. عند «شَـ» تُطبق غيمةٌ سوداء مقصوصة على آخر شريحة من الشمس كما يُغلق باب، وعند السين الأخيرة يموت الضوء.</p>
+    <details class="tech"><summary>التفاصيل التقنية (الثياب، الكاميرا، التزامن)</summary>
+    <dl class="meta">
+      <div><dt>الثياب</dt><dd dir="ltr">Heavy dark-umber leather tanner&#x27;s apron with crossed straps, one strap dyed burgundy, over a short undyed work tunic, sleeves rolled to the elbow, a cloth band tied across the brow with the curls spilling over. Outline: a stiff apron slab with strap lines.</dd></div>
+      <div><dt>الكاميرا</dt><dd dir="ltr">Medium side profile, then one slow tilt up off him to the sky (his head leaves the bottom of the frame), ending locked-off on the cloud.</dd></div>
+      <div><dt>التزامن</dt><dd dir="ltr">He heaves the hide onto the frame on جلد at about 8.2; the head tips back and the tilt starts at about 8.5; the cloud closes on the &#x27;sh&#x27; of شمس at 9.01 and the light dies on the final &#x27;s&#x27; at 9.30; hold dark to 9.60.</dd></div>
+      <div><dt>إخفاء الوجه</dt><dd dir="ltr">Strict side profile against a pale overcast sky. When he tips his head back he stays a flat black card shape in strict profile, and the camera leaves him for the sky; the upturned face plane is never the subject and never lit.</dd></div>
+      <div><dt>الانتقال</dt><dd dir="ltr">Hard cut, dark to dark, into the mountain night with a tiny warm fire as the accent.</dd></div>
+    </dl></details>
+    <details class="prompt"><summary>أمر اللقطة (إنجليزي)</summary>
+      <div class="pbox"><button class="copy" data-target="p-S07">نسخ</button><pre id="p-S07" dir="ltr">Flat 2D shadow-theatre cut-out animation, Arabic khayal al-zill staging: opaque black card figure, garments of translucent dyed hide glowing like stained glass (each one flat panel that is itself the body shape, no skin showing through), backlit parchment layers, multiplane depth, film grain; muddy umber-sepia tint under a heavy black-clouded sky. A tannery yard with stone vats and wooden drying frames; hides hang limp like defeated flags; wavy old-cartoon stink-lines rise from the vats. THE MAN (broad shoulders; a big crown of thick wavy-curly hair cut as fine paper tendrils, spilling over a cloth band tied across his brow; a short beard cut as a jagged edge along the jaw; a hairline glasses temple arm glinting from ear to brow, no ring drawn on the head) wears a heavy dark-umber leather tanner&#x27;s apron with crossed straps, one strap burgundy, over a short undyed work tunic, sleeves rolled; his clothing is clearly different from the previous shot. In side profile he heaves a heavy dripping hide onto a frame, then tips his head back in strict profile, still a flat black card shape; the camera tilts up off him to the sky, his head leaving the bottom of the frame, where a black cut-out cloud closes over the last sliver of sun like a door shutting; the light dies. His head and face are solid opaque black with no eyes, no eye hole and no features; his lips stay closed and still. Exactly one man in the flesh, fully clothed. Keep the lower 40% of the frame calm and dark, key action in the upper 60%. No on-screen text. Solemn, tragic, never comic; flat 2D, not 3D.</pre></div>
+    </details>
+  </div>
+</article>
+<article class="shot" id="S08" style="--t1:#1C2A40;--t2:#E8A54B">
+  <div class="swatch" aria-hidden="true"><span class="sid">S08</span><span class="stime"><span>9.60</span><i>←</i><span>11.50</span></span><span class="sdur">1.90 ث</span></div>
+  <div class="sbody">
+    <p class="sline">وَأَكلُ ضَبٍّ وَصَيدُ دُبٍّ</p>
+    <p class="smean">الضبّ زاحفٌ صحراويّ يؤكل عند الجوع وتعافه نفوسٌ كثيرة، فأكلُه مرارةُ الاضطرار، والبطل يأكله فعلاً لأنّ القصيدة تعدّد محناً احتُملت لا محناً رُفضت. وصيد الدبّ مخاطرةٌ بالنفس أمام وحشٍ ضارٍ نادرٍ في بلاد العرب لا يُرى إلّا في جبالها. من الاشمئزاز إلى خطر الموت في حركةٍ واحدة.</p>
+    <p class="svis">معسكرُ صيّادٍ ليلاً في وادٍ صخريّ، وعلى الحافّة صنوبرٌ تحت قمرٍ كبير. الكاميرا خلفه مباشرة، والنار الصغيرة أمامه تجعل جسده ظلّاً. يُنزل عن فمه، المختفي خلف رأسه، سيخاً عليه ضبٌّ مشويّ ممتلئ بذيلٍ غليظ تطوّقه حلقاتُ حراشف شوكية، وقد نقصت منه قضمة، وترتجف كتفاه اشمئزازاً ورأسه ما يزال نحو النار. على الوقفة الصوتية تتراجع الكاميرا وترتفع في حركةٍ واحدة: خلف النار ينتصب على الحافّة دبٌّ هائل على قائمتيه، ظلّاً أسود يحجب القمر ويملأ الإطار، فيقبض البطل على رمحه الطويل الذي يبدو بجانب الدبّ كعود أسنان.</p>
+    <details class="tech"><summary>التفاصيل التقنية (الثياب، الكاميرا، التزامن)</summary>
+    <dl class="meta">
+      <div><dt>الثياب</dt><dd dir="ltr">Hunter&#x27;s gear: an ochre dishdasha hitched up at a wide leather belt, a short fur-trimmed hide vest, a head-cloth bound with a faded burgundy cord (curls bursting out above and behind), leather leggings, sandals, a long spear planted beside him. Outline: a hitched hem, a bristling fur vest edge, a long spear line.</dd></div>
+      <div><dt>الكاميرا</dt><dd dir="ltr">Medium shot from directly behind him at fire level, his head and shoulders blocking the fire in the middle of the frame; on the pause, one continuous pull-back and tilt up that reveals the bear rearing on the ridge beyond the fire. He stays small in the foreground layer.</dd></div>
+      <div><dt>التزامن</dt><dd dir="ltr">Opens on the lowered skewer and the heave of the shoulders on ضبّ at about 10.05; the pull-back begins on the pause at 10.3; the bear rears exactly on the sibilant of صيد at 10.93; hold to 11.50. In the edit, 10.30 can also serve as a hard cut if Plan C generates the two halves separately.</dd></div>
+      <div><dt>إخفاء الوجه</dt><dd dir="ltr">The camera stays directly behind him, so the bite happens hidden behind his head; no mouth is ever visible. Disgust shows only in the heaving shoulders; his head stays turned toward the fire. During the reveal he stays back to camera.</dd></div>
+      <div><dt>الانتقال</dt><dd dir="ltr">Hard cut from blue night to bleached ochre noon: from behind at fire level to a low side angle, night to day.</dd></div>
+    </dl></details>
+    <details class="prompt"><summary>أمر اللقطة (إنجليزي)</summary>
+      <div class="pbox"><button class="copy" data-target="p-S08">نسخ</button><pre id="p-S08" dir="ltr">Flat 2D shadow-theatre cut-out animation, Arabic khayal al-zill staging: opaque black card figures, garments of translucent dyed hide glowing like stained glass (each one flat panel that is itself the body shape, no skin showing through), backlit parchment layers, multiplane depth, film grain; amber firelight inside a deep blue mountain night. A hunter&#x27;s camp in a rocky gorge, pines on the ridge, a huge moon. Camera directly behind him at fire level: THE MAN (broad shoulders; a big crown of thick wavy-curly hair cut as fine paper tendrils, bursting from a head-cloth bound with a faded burgundy cord; a hairline glasses temple arm glinting behind his ear) crouches facing a tiny campfire, his body a black silhouette against its glow, the fire and his shoulders in the middle of the frame. He wears an ochre dishdasha hitched up at a wide leather belt and a short fur-trimmed hide vest; his clothing is clearly different from the previous shot. He lowers from his mouth, hidden behind his own head, a skewered roasted lizard with a stubby body and a thick tail ringed with spiky scales, one bite missing; his shoulders heave with disgust and his head stays turned to the fire. Then one continuous pull-back and tilt up: beyond the fire a colossal bear rears on its hind legs, a black silhouette blotting out the moon; he grips his long spear, which looks like a toothpick beside it. Menacing, not comic. He stays back to camera; his face is never seen, solid black. Exactly one man in the flesh, fully clothed. No blood. Keep the lower 40% of the frame calm and dark, key action in the upper 60%. No on-screen text. Solemn, tragic, never comic; flat 2D, not 3D.</pre></div>
+    </details>
+  </div>
+</article>
+<article class="shot" id="S09" style="--t1:#C8A15A;--t2:#E9D7A8">
+  <div class="swatch" aria-hidden="true"><span class="sid">S09</span><span class="stime"><span>11.50</span><i>←</i><span>12.70</span></span><span class="sdur">1.20 ث</span></div>
+  <div class="sbody">
+    <p class="sline">وَصَرفُ حَبٍّ</p>
+    <p class="smean">صرفُ الحَبّ هو إنفاق البذر ونثره، وهو كلّ ما يملكه الفلّاح من رزقٍ ورجاء.</p>
+    <p class="svis">حقلٌ أجرد محروق تحت سماءٍ بيضاء لاهبة. بزاويةٍ منخفضة جانبية يبدو البطل ظلّاً أمام السماء في أعلى الإطار، بثوب فلّاحٍ قصير بلون القشّ وعمامةٍ من القشّ وكيس بذرٍ على صدره. يخطو وينثر الحَبّ بقوسٍ عريض عند «صرف»، فترتطم الحبوب بالأرض اليابسة وترتدّ عنها كالحصى.</p>
+    <details class="tech"><summary>التفاصيل التقنية (الثياب، الكاميرا، التزامن)</summary>
+    <dl class="meta">
+      <div><dt>الثياب</dt><dd dir="ltr">Straw-yellow coarse knee-length farmer&#x27;s tunic over loose trousers, a rope belt, a cloth seed sack slung across the chest, a straw head-wrap with the curls spilling out, bare feet. Outline: a short tunic, a bulging sack, a wound wrap.</dd></div>
+      <div><dt>الكاميرا</dt><dd dir="ltr">Low-angle side profile against the white-hot sky, his figure in the upper part of the frame, with lateral tracking at his stride. The throw arc fans across the frame.</dd></div>
+      <div><dt>التزامن</dt><dd dir="ltr">The throw arc opens on the sibilant of صرف at 12.04; the grains bounce until the pause at 12.70.</dd></div>
+      <div><dt>إخفاء الوجه</dt><dd dir="ltr">Low-angle profile against a blazing sky: a pure black silhouette; the straw wrap shades the head.</dd></div>
+      <div><dt>الانتقال</dt><dd dir="ltr">Hard cut on the pause to a raised low angle across the cracks (size and angle both change).</dd></div>
+    </dl></details>
+    <details class="prompt"><summary>أمر اللقطة (إنجليزي)</summary>
+      <div class="pbox"><button class="copy" data-target="p-S09">نسخ</button><pre id="p-S09" dir="ltr">Flat 2D shadow-theatre cut-out animation, Arabic khayal al-zill staging: opaque black card figure, garments of translucent dyed hide glowing like stained glass (each one flat panel that is itself the body shape, no skin showing through), backlit parchment layers, multiplane depth, film grain; bleached ochre and parchment under a white-hot sky. A sun-baked barren field of cracked earth to the horizon. Low-angle side profile, his figure against the sky in the upper part of the frame: THE MAN (broad shoulders; a big crown of thick wavy-curly hair cut as fine paper tendrils, spilling from a straw head-wrap; a short beard cut as a jagged edge along the jaw; a hairline glasses temple arm glinting from ear to brow, no ring drawn on the head) wears a straw-yellow coarse knee-length farmer&#x27;s tunic of translucent hide, a rope belt and a cloth seed sack across his chest, bare feet; his clothing is clearly different from the previous shot. He strides and casts grain in one wide fanning arc; the grains hit the hard ground and bounce like pebbles. Lateral tracking with his stride. His head and face are solid opaque black with no eyes, no eye hole and no features; his lips stay closed and still. Exactly one man in the flesh, fully clothed. Keep the lower 40% of the frame calm and dark, key action in the upper 60%. No on-screen text. Solemn, tragic, never comic; flat 2D, not 3D.</pre></div>
+    </details>
+  </div>
+</article>
+<article class="shot" id="S10" style="--t1:#D9BF8C;--t2:#8C6B3A">
+  <div class="swatch" aria-hidden="true"><span class="sid">S10</span><span class="stime"><span>12.70</span><i>←</i><span>14.20</span></span><span class="sdur">1.50 ث</span></div>
+  <div class="sbody">
+    <p class="sline">بِأَرضِ خَرسِ</p>
+    <p class="smean">الأرض الخرساء هي التي لا تصلح للزرع، لا «تُجيب» البذرة ولا تنطق بنبتة. إنّه جهدٌ يضيع في العدم ونفقةٌ بلا عائد.</p>
+    <p class="svis">لقطةٌ منخفضة بارتفاع الركبة فوق ترابٍ متشقّق، والشقوق في منتصف الإطار مرسومةٌ شفاهاً مُطبقة مخيطة. في العمق يقف البطل صغيراً متّكئاً على معوله ينتظر خلال الوقفة الصوتية. على جدارٍ طينيّ متهدّم عند حافّة الحقل تذبل نباتاتٌ خضراء متدلّية، صدى نبتة البوتس في غرفتك، فتصير خيوطاً يابسة ثم غباراً. عند «خرس» ينطبق آخر شقٍّ مفتوح في منتصف الإطار ويُخاط. لا شيء ينبت.</p>
+    <details class="tech"><summary>التفاصيل التقنية (الثياب، الكاميرا، التزامن)</summary>
+    <dl class="meta">
+      <div><dt>الثياب</dt><dd dir="ltr">The same straw-yellow farmer&#x27;s tunic, rope belt and straw head-wrap as S09 (same field), now leaning on a wooden hoe.</dd></div>
+      <div><dt>الكاميرا</dt><dd dir="ltr">Raised low angle (camera at knee height) across the cracks, multiplane: crack-mouths across the middle of the frame, his small silhouette in the far layer; a slow push across the cracks; the last crack-mouth seals at frame centre.</dd></div>
+      <div><dt>التزامن</dt><dd dir="ltr">His waiting fills the pause at 12.7; the vines crumble at about 13.3; the last crack-mouth seals on the sibilant of خرس at 13.86; cut at 14.20.</dd></div>
+      <div><dt>إخفاء الوجه</dt><dd dir="ltr">A small, distant silhouette leaning on the hoe: just a black shape.</dd></div>
+      <div><dt>الانتقال</dt><dd dir="ltr">Hard cut from dry ochre to red-amber fire (wide to medium, eye level to floor level behind him).</dd></div>
+    </dl></details>
+    <details class="prompt"><summary>أمر اللقطة (إنجليزي)</summary>
+      <div class="pbox"><button class="copy" data-target="p-S10">نسخ</button><pre id="p-S10" dir="ltr">Flat 2D shadow-theatre cut-out animation, Arabic khayal al-zill staging: opaque black card figure, garments of translucent dyed hide glowing like stained glass (each one flat panel that is itself the body shape, no skin showing through), backlit parchment layers, multiplane depth, film grain; bleached ochre fading to dusty sepia. Camera raised to knee height, looking across cracked barren earth: across the middle of the frame the cracks are drawn as tightly closed lips stitched shut. Far behind, small, THE MAN (broad shoulders; wavy-curly paper-cut hair spilling from a straw head-wrap) in the same straw-yellow farmer&#x27;s tunic leans on a wooden hoe, waiting, head bowed. On a ruined mud wall at the field&#x27;s edge, trailing green vines wither into dry tendrils and crumble to dust. Slow push across the cracks; the last open crack-mouth at frame centre presses shut with a stitch. Nothing grows. Heat haze drawn as wavy lines. His head is a small solid black silhouette with no features. Exactly one man in the flesh, fully clothed. Keep the lower 40% of the frame calm and dark, key action in the upper 60%. No on-screen text. Solemn, tragic, never comic; flat 2D, not 3D.</pre></div>
+    </details>
+  </div>
+</article>
+<article class="shot" id="S11" style="--t1:#A1401F;--t2:#E8A54B">
+  <div class="swatch" aria-hidden="true"><span class="sid">S11</span><span class="stime"><span>14.20</span><i>←</i><span>15.35</span></span><span class="sdur">1.15 ث</span></div>
+  <div class="sbody">
+    <p class="sline">وَنَفخُ نارٍ</p>
+    <p class="smean">النفخ في النار لإيقادها عملٌ مُضنٍ يملأ العين والصدر دخاناً، وهو من أدنى الخدمة.</p>
+    <p class="svis">مطبخٌ من الطين وموقدٌ فخّاريّ بلونٍ أحمر كهرماني. الكاميرا خلفه مباشرة على مستوى الأرض، ورأسه وكتفاه السوداء تحجب الموقد: يجثو بثوبٍ رماديّ ملطّخ بالسخام وينفخ على الجمر مرّتين، فتتدحرج سحب دخانٍ ملتفّة ضخمة على طريقة الرسوم القديمة وتعود عليه. لا يرسم وهج الجمر إلّا حافّةً رفيعة حول خصلاته الخارجية، ثم يملأ الدخانُ الإطار.</p>
+    <details class="tech"><summary>التفاصيل التقنية (الثياب، الكاميرا، التزامن)</summary>
+    <dl class="meta">
+      <div><dt>الثياب</dt><dd dir="ltr">Soot-grey plain short tunic, smeared with black, sleeves rolled, kneeling barefoot: the garb of a menial kitchen servant. Outline: a plain short tunic with ragged soot-dark edges. (In Plan B this image is folded into P2 Shot 3; generate S11 as a Plan C patch to keep this outfit.)</dd></div>
+      <div><dt>الكاميرا</dt><dd dir="ltr">Camera directly behind him at floor level, his black head and shoulders blocking the hearth, locked-off; the smoke rolls toward the lens and fills the frame by the end.</dd></div>
+      <div><dt>التزامن</dt><dd dir="ltr">Two blows ride نفخ at about 14.4 and نار at about 15.0; the smoke engulfs the frame at about 15.3.</dd></div>
+      <div><dt>إخفاء الوجه</dt><dd dir="ltr">Camera directly behind him at floor level; his own head blocks the hearth, so only a thin rim of glow touches the outer curls and no light ever falls on his cheek or face. Then the smoke covers everything.</dd></div>
+      <div><dt>الانتقال</dt><dd dir="ltr">Smoke wipe: the frame-filling smoke clears into the dusk souq alley (a crossfade on the smoke in CapCut if needed).</dd></div>
+    </dl></details>
+    <details class="prompt"><summary>أمر اللقطة (إنجليزي)</summary>
+      <div class="pbox"><button class="copy" data-target="p-S11">نسخ</button><pre id="p-S11" dir="ltr">Flat 2D shadow-theatre cut-out animation, Arabic khayal al-zill staging: opaque black card figure, garments of translucent dyed hide glowing like stained glass (each one flat panel that is itself the body shape, no skin showing through), backlit parchment layers, multiplane depth, film grain; red-amber firelight tint. A low mud-brick kitchen with a clay hearth. Camera directly behind him at floor level, his black head and shoulders blocking the hearth: THE MAN (broad shoulders; a big crown of thick wavy-curly hair cut as fine paper tendrils; a hairline glasses temple arm glinting behind his ear) kneels facing the hearth in a soot-grey plain short tunic of translucent hide smeared with black, sleeves rolled; his clothing is clearly different from the previous shot. He blows on the embers twice; huge curling smoke clouds billow up and roll back over him; only a thin rim of glow touches his outer curls, and no light falls on his cheek or face. The smoke rolls toward the camera and fills the frame. His face is turned to the fire, away from the camera, solid black. Exactly one man in the flesh, fully clothed. Keep the lower 40% of the frame calm and dark, key action in the upper 60%. No on-screen text. Solemn, tragic, never comic; flat 2D, not 3D.</pre></div>
+    </details>
+  </div>
+</article>
+<article class="shot" id="S12" style="--t1:#5E5146;--t2:#2B241E">
+  <div class="swatch" aria-hidden="true"><span class="sid">S12</span><span class="stime"><span>15.35</span><i>←</i><span>16.50</span></span><span class="sdur">1.15 ث</span></div>
+  <div class="sbody">
+    <p class="sline">وَحَملُ عارٍ</p>
+    <p class="smean">حملُ العار هو احتمال الفضيحة والمذمّة، وهو في مجتمع الشرف موتٌ اجتماعي.</p>
+    <p class="svis">ينقشع الدخان عن زقاق سوقٍ ضيّق عند الغسق بأبوابٍ مقوّسة. البطل يمشي منحنياً حتى يكاد ينطوي، وقد سحب عباءته الداكنة فوق رأسه كالقلنسوة، وهي إيماءة «التقنّع» العربية عند الخزي. عند حافّة القلنسوة تظهر شريحةٌ من بطانةٍ عنّابية: الكرامة ما تزال تحتها. على الجدران تنبثق ظلالُ أيدٍ تشير إليه، وظلالٌ صغيرة مقنّعة بلا ملامح ولا خصلات تدير له ظهورها في المداخل، وظلّه هو يُجرّ خلفه على الأرض كحجرٍ ثقيل.</p>
+    <details class="tech"><summary>التفاصيل التقنية (الثياب، الكاميرا، التزامن)</summary>
+    <dl class="meta">
+      <div><dt>الثياب</dt><dd dir="ltr">A long charcoal wool aba drawn up over the head like a hood (the classical gesture of shame, taqannu&#x27;), a sliver of burgundy lining at the hood edge, over a plain grey thobe. Outline: a hooded, bent, cowled shape.</dd></div>
+      <div><dt>الكاميرا</dt><dd dir="ltr">Side-on tracking at walking pace, slightly high, his figure in the upper part of the frame; multiplane: foreground awnings and lanterns slide past fast.</dd></div>
+      <div><dt>التزامن</dt><dd dir="ltr">15.35 is an estimated word onset (وَحَملُ), not a measured beat: snap the cut to the actual consonant onset (±0.2 s). The pointing shadow-hands spring up on حمل at about 15.6 and on عار at about 16.1; the doorway wipe at 16.50.</dd></div>
+      <div><dt>إخفاء الوجه</dt><dd dir="ltr">The aba is drawn over the head like a hood, the head bowed, the dusk light behind him; only a few curls escape at the hood&#x27;s front edge. The doorway figures are faceless hooded shadows with no curls.</dd></div>
+      <div><dt>الانتقال</dt><dd dir="ltr">He passes a dark carved doorway; a wipe through its black door-frame carries us to the carved house door of S13 (the door motif).</dd></div>
+    </dl></details>
+    <details class="prompt"><summary>أمر اللقطة (إنجليزي)</summary>
+      <div class="pbox"><button class="copy" data-target="p-S12">نسخ</button><pre id="p-S12" dir="ltr">Flat 2D shadow-theatre cut-out animation, Arabic khayal al-zill staging: opaque black card figure, garments of translucent dyed hide glowing like stained glass (each one flat panel that is itself the body shape, no skin showing through), backlit parchment layers, multiplane depth, film grain; dull dusk umber-grey tint. A narrow souq alley of arches and shuttered stalls. Side tracking shot at walking pace, slightly high, his figure in the upper part of the frame: THE MAN (broad shoulders; a few wavy curls escaping at the hood&#x27;s front edge) walks bent nearly double, a long charcoal wool aba of translucent hide drawn up over his head like a hood, a sliver of burgundy lining at its edge, over a plain grey thobe; his clothing is clearly different from the previous shot. Shadows of pointing hands spring up on the walls around him; small faceless hooded shadow figures with no curls turn their backs in the doorways; his own shadow drags behind him on the ground like a heavy stone. Foreground awnings slide past fast. His face is hidden inside the hood in solid black, no features. Exactly one man in the flesh, fully clothed; everyone else is a faceless shadow. Keep the lower 40% of the frame calm and dark, key action in the upper 60%. No on-screen text. Solemn, tragic, never comic; flat 2D, not 3D.</pre></div>
+    </details>
+  </div>
+</article>
+<article class="shot" id="S13" style="--t1:#A88A5C;--t2:#D9BF8C">
+  <div class="swatch" aria-hidden="true"><span class="sid">S13</span><span class="stime"><span>16.50</span><i>←</i><span>18.85</span></span><span class="sdur">2.35 ث</span></div>
+  <div class="sbody">
+    <p class="sline">وَبَيعُ دارٍ بِرُبعِ فِلسِ</p>
+    <p class="smean">الدار مأوى الرجل وإرث آبائه وأمانه. والفَلس أصغر قطعة نحاس، وربعه لا شيء تقريباً. بيعُها بربع فلس هو الإفلاس التامّ والغَبن وخسارة العمر بثمنٍ بخس.</p>
+    <p class="svis">أمام باب بيته الخشبيّ المنقوش المرصّع بالنحاس، لقطةٌ من فوق الكتف على مستوى اليدين في منتصف الإطار. يده، في كُمّ بشتٍ باهتٍ كان فاخراً بحاشيةٍ عنّابية مهترئة، تضع مفتاح البيت الحديديّ الكبير المزخرف في يدٍ مكتنزة مثقلة بالخواتم، أكبرها خاتمٌ من العقيق الأحمر. لا نرى من المشتري إلّا يده. تقترب الكاميرا: الأصابع المكتنزة تكسر فلساً نحاسياً صغيراً أربع قطع، فيسقط ربعه في كفّه المفتوحة مع لمعةٍ عند «فلس»، وخلفه ينغلق باب داره ببطء. هذه اليد نفسها ستعود في الذروة.</p>
+    <details class="tech"><summary>التفاصيل التقنية (الثياب، الكاميرا، التزامن)</summary>
+    <dl class="meta">
+      <div><dt>الثياب</dt><dd dir="ltr">A once-fine merchant&#x27;s long cream thobe with an embroidered placket under a faded brown bisht with frayed, dulled burgundy trim: a man of means brought low. Outline: a wide open cloak over a long column, its trim edge ragged.</dd></div>
+      <div><dt>الكاميرا</dt><dd dir="ltr">Medium over-the-shoulder toward the door at hand height, hands in the middle of the frame, then a slow push-in ending on his open palm in close-up. The carved door closes in the soft far plane.</dd></div>
+      <div><dt>التزامن</dt><dd dir="ltr">The key is handed over on دار at about 17.1; the coin snaps at about 17.9; the quarter lands with a glint on the sibilant of فلس at 18.45; the door is shut by 18.85.</dd></div>
+      <div><dt>إخفاء الوجه</dt><dd dir="ltr">Over the shoulder from behind, then hands and sleeves only; the head is a black mass at the frame edge. The buyer is only a ringed hand.</dd></div>
+      <div><dt>الانتقال</dt><dd dir="ltr">Hard cut from the open palm to the hands and bare feet on the market step: a hand-to-hand rhyme.</dd></div>
+    </dl></details>
+    <details class="prompt"><summary>أمر اللقطة (إنجليزي)</summary>
+      <div class="pbox"><button class="copy" data-target="p-S13">نسخ</button><pre id="p-S13" dir="ltr">Flat 2D shadow-theatre cut-out animation, Arabic khayal al-zill staging: opaque black card figures, garments of translucent dyed hide glowing like stained glass (each one flat panel that is itself the body shape, no skin showing through), backlit parchment layers, multiplane depth, film grain; warm faded sepia with copper glints. A tall carved wooden house door studded with brass, lit warm from inside. Over the shoulder from behind at hand height, hands in the middle of the frame: THE MAN (broad shoulders; a big crown of thick wavy-curly hair cut as fine paper tendrils; a hairline glasses temple arm glinting behind his ear) wears a once-fine long cream merchant&#x27;s thobe and a faded brown bisht of translucent hide with frayed burgundy trim; his clothing is clearly different from the previous shot. He lays a big ornate iron house key into a plump hand heavy with rings, with a large carnelian signet ring, reaching in from the frame edge. Slow push-in: the plump fingers snap a tiny copper coin into four pieces and drop one quarter into his open palm with a glint; behind him the carved door swings shut. Only hands, sleeves and the door; the buyer is never seen. His face is solid black, never visible. Exactly one man in the flesh, fully clothed. Keep the lower 40% of the frame calm and dark, key action in the upper 60%. No on-screen text, no numbers. Solemn, tragic, never comic; flat 2D, not 3D.</pre></div>
+    </details>
+  </div>
+</article>
+<article class="shot" id="S14" style="--t1:#C08A3E;--t2:#E3B970">
+  <div class="swatch" aria-hidden="true"><span class="sid">S14</span><span class="stime"><span>18.85</span><i>←</i><span>19.95</span></span><span class="sdur">1.10 ث</span></div>
+  <div class="sbody">
+    <p class="sline">وَبَيعُ خُفٍّ</p>
+    <p class="smean">بيعُ الخُفّ، وهو الحذاء الجلدي، كنايةٌ عن الفقر المدقع: أن يمشي المرء حافياً على الرمضاء والشوك.</p>
+    <p class="svis">درجاتُ سوقٍ حجرية في شمسٍ حادّة. البطل جالسٌ على درجة، والإطار من صدره إلى قدميه: قدماه الحافيتان على الحجارة الساخنة في منتصف الإطار تحت سروالٍ مغبرّ وطرف عباءةٍ مرقّعة، وخطوط الحرّ المتموّجة تتراقص فوقها. يده تناول آخر خفٍّ جلديّ بالٍ ليد تاجرٍ نحيلة عارية بلا خواتم، فتعطيه اليد رغيفاً مستديراً.</p>
+    <details class="tech"><summary>التفاصيل التقنية (الثياب، الكاميرا، التزامن)</summary>
+    <dl class="meta">
+      <div><dt>الثياب</dt><dd dir="ltr">A patched brown traveller&#x27;s cloak, dusty sirwal trousers, barefoot, his last worn leather khuff boot in his hand: a destitute wayfarer. Outline: a ragged patchwork cloak hem over baggy trousers.</dd></div>
+      <div><dt>الكاميرا</dt><dd dir="ltr">Medium-close side shot framed from the chest down, hands and bare feet both in the middle band of the frame, locked-off.</dd></div>
+      <div><dt>التزامن</dt><dd dir="ltr">The boot changes hands on خفّ at about 19.4; cut on the pause at 19.95.</dd></div>
+      <div><dt>إخفاء الوجه</dt><dd dir="ltr">Framed entirely below the shoulders: only hands, feet and the cloak hem.</dd></div>
+      <div><dt>الانتقال</dt><dd dir="ltr">Hard cut on the pause from the medium-close of hands and feet to a wide shot of a long wall.</dd></div>
+    </dl></details>
+    <details class="prompt"><summary>أمر اللقطة (إنجليزي)</summary>
+      <div class="pbox"><button class="copy" data-target="p-S14">نسخ</button><pre id="p-S14" dir="ltr">Flat 2D shadow-theatre cut-out animation, Arabic khayal al-zill staging: opaque black card hands and feet, garments of translucent dyed hide glowing like stained glass (each one flat panel that is itself the body shape, no skin showing through), backlit parchment layers, multiplane depth, film grain; hot ochre-sepia tint. Worn stone market steps in harsh sun. Medium-close side shot framed from the chest down: THE MAN sits on a step in a patched brown traveller&#x27;s cloak of translucent hide and dusty sirwal trousers; his clothing is clearly different from the previous shot. His bare feet rest on hot cobblestones shimmering with wavy heat lines in the middle band of the frame. His black silhouetted hand gives his last worn leather boot to a thin bare trader&#x27;s hand with no rings, which gives back one flat round loaf. Only hands, feet and the cloak hem are visible; no faces at all. Exactly one man in the flesh, fully clothed. Keep the bottom of the frame calm and dark. No on-screen text. Solemn, tragic, never comic; flat 2D, not 3D.</pre></div>
+    </details>
+  </div>
+</article>
+<article class="shot" id="S15" style="--t1:#B4683A;--t2:#2F5B52">
+  <div class="swatch" aria-hidden="true"><span class="sid">S15</span><span class="stime"><span>19.95</span><i>←</i><span>21.05</span></span><span class="sdur">1.10 ث</span></div>
+  <div class="sbody">
+    <p class="sline">وَعَدمُ إِلفٍ</p>
+    <p class="smean">عدمُ الإلف هو فقدُ الصديق المؤنس والأليف: وحشة الغربة والوحدة.</p>
+    <p class="svis">جدارٌ طينيّ طويل عند الغروب، على جصّه بقعٌ باهتة تشبه سواحل خريطةٍ قديمة بلا أيّ كتابة، صدى خريطة غرفتك ورمزٌ للتيه. ظِلّان يمشيان في أعلى الجدار جنباً إلى جنب: ظلّه بتاج خصلاته وعباءته المرقّعة وصُرّةٍ على عصا، وظلّ رفيقه الأنحل بعمامةٍ ملفوفة عالية بلا خصلات وقربة ماءٍ على كتفه. على الوقفة الصوتية يتوقّف ظلّ الرفيق ويتفتّت رملاً تذروه الريح، ويمضي ظلّه وحيداً. ومع دخول الوتر العالي عند 20.7 تهبّ ريحٌ رملية في المكان الفارغ بجانبه.</p>
+    <details class="tech"><summary>التفاصيل التقنية (الثياب، الكاميرا، التزامن)</summary>
+    <dl class="meta">
+      <div><dt>الثياب</dt><dd dir="ltr">The same patched brown traveller&#x27;s cloak and sirwal as S14 (same road), barefoot, a small bundle on a staff.</dd></div>
+      <div><dt>الكاميرا</dt><dd dir="ltr">Wide, side-on to the wall, slow lateral tracking alongside the shadows in the upper part of the frame. His small black back silhouette sits at the frame edge.</dd></div>
+      <div><dt>التزامن</dt><dd dir="ltr">The companion&#x27;s shadow stops on the pause at 19.95 and crumbles over إلف at about 20.4; the gust and the empty space land on the music lift at 20.7; cut at 21.05.</dd></div>
+      <div><dt>إخفاء الوجه</dt><dd dir="ltr">He is shown mainly as a cast shadow on the wall, plus a small black back silhouette at the frame edge. The companion&#x27;s shadow is deliberately different (slighter, tall turban, no curls, water skin) so the model does not duplicate him.</dd></div>
+      <div><dt>الانتقال</dt><dd dir="ltr">The blowing sand swirls across the frame and turns to sea spray: a wipe into the sea-green night harbour (built in CapCut with a mask if needed).</dd></div>
+    </dl></details>
+    <details class="prompt"><summary>أمر اللقطة (إنجليزي)</summary>
+      <div class="pbox"><button class="copy" data-target="p-S15">نسخ</button><pre id="p-S15" dir="ltr">Flat 2D shadow-theatre cut-out animation, Arabic khayal al-zill staging: cast shadows on a backlit wall, garments of translucent dyed hide (each one flat panel that is itself the body shape, no skin showing through), multiplane depth, film grain; sunset ochre with blowing sand. A long sun-baked mud-brick wall whose plaster bears faint stains shaped like the coastlines of an old map, with no labels, no letters, no writing. Two long walking shadows move side by side across the upper part of the wall: the man&#x27;s (a big crown of curly hair, a patched traveller&#x27;s cloak, a bundle on a staff) and a companion&#x27;s shadow, slighter, in a tall wound turban with no curls, a water skin on its shoulder. THE MAN himself is only a small dark back silhouette at the frame edge. The companion&#x27;s shadow stops, crumbles into sand and blows away; the man&#x27;s shadow walks on alone; wind sweeps sand through the empty space beside it. Slow lateral tracking. His face is never seen. Exactly one man in the flesh, fully clothed; the companion exists only as a cast shadow. Keep the lower 40% of the frame calm and dark, key action in the upper 60%. No on-screen text, no letters on the wall. Solemn, tragic, never comic; flat 2D, not 3D.</pre></div>
+    </details>
+  </div>
+</article>
+<article class="shot" id="S16" style="--t1:#2F5B52;--t2:#0B0907">
+  <div class="swatch" aria-hidden="true"><span class="sid">S16</span><span class="stime"><span>21.05</span><i>←</i><span>23.35</span></span><span class="sdur">2.30 ث</span></div>
+  <div class="sbody">
+    <p class="sline">وَضَربُ إِلفٍ بِحَبلِ قَلسِ</p>
+    <p class="smean">في أكثر المصادر «إِلفٍ»: ضربُ الأليف، ويُقرأ أيضاً «أَلفٍ» أي ألفُ ضربة، جناساً مع «إِلفٍ» في الصدر، وعليها بنينا الصورة: بعد فقد الأليف يأتي الألف. والقَلس حبل السفن الغليظ المجدول من ليف النخل، والضرب به أقسى وأشدّ. نعرض الضرب رمزاً: حبلٌ هائل يضرب الشراع مرّةً بعد مرّة، وظلّه يمرّ على ظهر الرجل المنحني تحت حمله.</p>
+    <p class="svis">رصيفُ ميناءٍ ليليّ في عاصفة بلونٍ أخضر بحري. لقطةٌ منخفضة من الخلف: البطل حمّالُ ميناء منحنٍ تحت لفّةٍ ثقيلة من حبال السفن يحملها على كتفيه كما يحمل الحمّال حمله، بصدريةٍ خشنة خضراء مغلقة حتى العنق فوق قميصٍ خشن، وعصابةٍ عنّابية على رأسه. طرفُ حبلٍ هائل مجدول من ليف النخل ينتصب في العاصفة كأفعى بحر ويضرب الشراع المنتفخ مرّةً بعد مرّة، وظلّه المتأرجح يكتسح الشراع ويمرّ على ظهره المنحني، فيغوص تحت حمله أكثر مع كل ضربة، ويرتجف الشراع وتتطاير النوارس. تتقدّم الكاميرا، وعند «قلس»، أقوى ضربةٍ صوتية، يطقطق الحبل مشدوداً ويومض الإطار كلّه أبيض.</p>
+    <details class="tech"><summary>التفاصيل التقنية (الثياب، الكاميرا، التزامن)</summary>
+    <dl class="meta">
+      <div><dt>الثياب</dt><dd dir="ltr">Dock porter&#x27;s sea-green rough-spun vest closed to the collar over a coarse undershirt, rolled sirwal trousers, a rope belt, a burgundy head-rag tied at the back with the curls spilling out, a heavy coil of hawser carried across his shoulders: a harbour labourer. Outline: a boxy closed vest under a round coil, a knotted rag tail. The burgundy grows here.</dd></div>
+      <div><dt>الكاميرا</dt><dd dir="ltr">Low-angle medium-wide from behind, a slow push-in toward the sail, then a quick final push onto the twisted palm-fibre rope ending on a white flash.</dd></div>
+      <div><dt>التزامن</dt><dd dir="ltr">The hawser rears and its shadow sweeps on the beat pulses of ضرب إلف (21.05–22.2) and on بحبل at about 22.4; the snap and white flash land exactly on the sibilant of قلس at 23.07, the strongest hit.</dd></div>
+      <div><dt>إخفاء الوجه</dt><dd dir="ltr">Back to camera, head bowed under the load, black against the moonlit sail; in the final push only the rope, the burgundy head-rag tail and a black shoulder edge are in frame.</dd></div>
+      <div><dt>الانتقال</dt><dd dir="ltr">A white flash from 23.07 held to 23.35, fading up into the amber courtyard of the climax; guaranteed in post with a white layer of 4–6 frames.</dd></div>
+    </dl></details>
+    <details class="prompt"><summary>أمر اللقطة (إنجليزي)</summary>
+      <div class="pbox"><button class="copy" data-target="p-S16">نسخ</button><pre id="p-S16" dir="ltr">Flat 2D shadow-theatre cut-out animation, Arabic khayal al-zill staging: opaque black card figure, garments of translucent dyed hide glowing like stained glass (each one flat panel that is itself the body shape, no skin showing through), backlit parchment layers, multiplane depth, film grain; sea-green night tint with ink-black. A harbour quay at night in a gale, a huge billowing sail glowing behind. Low angle from behind: THE MAN (broad shoulders; a big crown of thick wavy-curly hair cut as fine paper tendrils, spilling from a burgundy head-rag tied at the back) stands bent under a heavy coil of hawser carried across his shoulders like a porter&#x27;s load, in a sea-green rough-spun porter&#x27;s vest of translucent hide closed to the collar over a coarse undershirt, rolled sirwal trousers and a rope belt; his clothing is clearly different from the previous shot. The loose end of a giant hawser of twisted palm fibre rears in the gale like a sea serpent and slams against the billowing sail again and again; its swinging shadow sweeps across the sail and across his bent back, and with each swing he sinks a little lower under his load. The sail shudders and gulls scatter. Slow push-in, then a quick push onto the rope as it snaps taut, and the whole frame flashes pure white. His face is never seen. Exactly one man in the flesh, fully clothed. No blood, no injury. Keep the lower 40% of the frame calm and dark, key action in the upper 60%. No on-screen text, no numerals. Solemn, tragic, never comic; flat 2D, not 3D.</pre></div>
+    </details>
+  </div>
+</article>
+<article class="shot" id="S17" style="--t1:#D4A04E;--t2:#F0D49A">
+  <div class="swatch" aria-hidden="true"><span class="sid">S17</span><span class="stime"><span>23.35</span><i>←</i><span>24.75</span></span><span class="sdur">1.40 ث</span></div>
+  <div class="sbody">
+    <p class="sline">أَهوَنُ مِن</p>
+    <p class="smean">كلّ ما سبق «أهونُ»، أي أخفّ على النفس. هنا تنقلب القصيدة من القائمة إلى الحكم، وتبدأ الذروة.</p>
+    <p class="svis">من البياض تتكشّف ساحةٌ واسعة خالية مرصوفة بالحجر في فجرٍ ذهبيّ كهرماني، وأعمدةٌ في المقدّمة تنزلق ببطء. وعلى الأعمدة في المقدّمة تمرّ ظلالٌ صغيرة لمحنه السابقة، الكلّاب والقضبان والجلد والدبّ والحبل، وتتلاشى ضئيلةً أمام ظلّ الباب: كلّها أهون. في آخر الساحة بابٌ شاهق مفرط الزخرفة، من خشبٍ أسود ميّت مرصّع بمساميرَ نحاسية، وعليه مطرقةٌ حلقية ثقيلة، وهو أعلى من الرجل أضعافاً. يقف البطل أمامه صغيراً، ظهره للكاميرا، بأفضل ما يملك على بساطته: ثوبٌ أبيض نظيف مكويّ بعناية، وبشته الأسود الوحيد القديم بحاشيةٍ ذهبية رفيعة باهتة مرتوقة بعناية وبطانةٍ عنّابية متوهّجة، ونعلٌ بسيط، ورأسه مكشوف بتاج خصلاته.</p>
+    <details class="tech"><summary>التفاصيل التقنية (الثياب، الكاميرا، التزامن)</summary>
+    <dl class="meta">
+      <div><dt>الثياب</dt><dd dir="ltr">His best but plain: a clean, carefully pressed white ankle-length thobe and his one old black bisht, its thin gold trim worn and neatly mended, its deep burgundy lining glowing through the translucent hide, simple sandals, no headdress so the curl crown is bare. A free man&#x27;s dignity without wealth: he has sold his house and his boots, yet he has kept his bearing. Outline: a wide-shouldered flared open cloak over a straight white column.</dd></div>
+      <div><dt>الكاميرا</dt><dd dir="ltr">Extreme wide, high and symmetrical; a slow, grand multiplane push-in between foreground pillars that drift past faster than the door, noticeably slower than everything before.</dd></div>
+      <div><dt>التزامن</dt><dd dir="ltr">The image fades up out of the white flash as «أهونُ» begins at 23.35; the ordeal shadows slide past through «أهونُ مِن»; cut at 24.75 (an estimated word onset of وَقفَةِ: snap to the waveform, ±0.2 s).</dd></div>
+      <div><dt>إخفاء الوجه</dt><dd dir="ltr">Back to camera and tiny in the frame.</dd></div>
+      <div><dt>الانتقال</dt><dd dir="ltr">A measured cut at 24.75 to a low over-the-shoulder angle (size and angle both change). In Plan B it is one continuous push into the S18 framing.</dd></div>
+    </dl></details>
+    <details class="prompt"><summary>أمر اللقطة (إنجليزي)</summary>
+      <div class="pbox"><button class="copy" data-target="p-S17">نسخ</button><pre id="p-S17" dir="ltr">Flat 2D shadow-theatre cut-out animation, Arabic khayal al-zill staging: opaque black card figure, garments of translucent dyed hide glowing like stained glass (each one flat panel that is itself the body shape, no skin showing through), backlit parchment layers, multiplane depth, film grain; golden amber dawn on parchment flagstones. Out of pure white, a vast empty flagstone courtyard appears. Extreme wide, high and symmetrical, a slow grand push-in between foreground pillars that drift past faster than the far wall. On the foreground pillars, small flat cast shadows of his earlier ordeals slide past and fade one after another: iron pincers, prison bars, a hanging hide, a rearing bear, a coiled ship&#x27;s rope, each tiny beside the door&#x27;s shadow. At the far end a towering over-ornate door of dead ink-black wood studded with brass, a heavy ring knocker, many times taller than a man. THE MAN (broad shoulders; a big crown of thick wavy-curly hair cut as fine paper tendrils, bare to the sky; a hairline glasses temple arm glinting behind his ear) stands small before it, back to the camera, in his best but plain clothes: a clean, carefully pressed white thobe and his one old black bisht, its thin gold trim worn and neatly mended, its deep burgundy lining glowing through, simple sandals; his clothing is clearly different from the previous shot. Solemn and still. His face is never seen, solid black. Exactly one man in the flesh, fully clothed. Keep the lower 40% of the frame calm and dark, key action in the upper 60%. No on-screen text. Solemn, tragic, never comic; flat 2D, not 3D.</pre></div>
+    </details>
+  </div>
+</article>
+<article class="shot" id="S18" style="--t1:#C08A3E;--t2:#0B0907">
+  <div class="swatch" aria-hidden="true"><span class="sid">S18</span><span class="stime"><span>24.75</span><i>←</i><span>26.00</span></span><span class="sdur">1.25 ث</span></div>
+  <div class="sbody">
+    <p class="sline">وَقفَةِ الحُرِّ</p>
+    <p class="smean">«وقفةُ الحرّ» وقوفُ الرجل الكريم الأبيّ منتظراً. والشاعر لم يجعل الأشدّ هو الرفض، بل مجرّد الوقفة: لحظة الانتظار بالباب هي الذلّ نفسه.</p>
+    <p class="svis">لقطةٌ منخفضة من خلف كتفه نحو الباب، وضوءُ سراجٍ قويّ فوق الباب يرمي ظلّه نحوه. مع اقتراب الكاميرا يطول الباب في الإطار، ويزحف ظلّه الضخم على البلاط فيبتلع ظلّ الرجل حتى يتقلّص ويكاد يختفي. الرجل واقفٌ لا يتحرّك، لكنّ رأسه ينخفض قليلاً وكتفيه يهبطان، وهي أوّل مرّة ينحني فيها بلا أيّ عمل: الوقفة وحدها تُذلّه. لم يطرق بعد. تنتهي اللقطة مائلةً قليلاً إلى الأعلى على المطرقة النحاسية.</p>
+    <details class="tech"><summary>التفاصيل التقنية (الثياب، الكاميرا، التزامن)</summary>
+    <dl class="meta">
+      <div><dt>الثياب</dt><dd dir="ltr">The same best-but-plain dress as S17: pressed white thobe, his one old black bisht with mended gold trim and glowing burgundy lining.</dd></div>
+      <div><dt>الكاميرا</dt><dd dir="ltr">Low-angle over-the-shoulder, a slow push-in with a slight dolly-zoom feel so the door seems to grow taller; ends tilted up on the brass ring knocker.</dd></div>
+      <div><dt>التزامن</dt><dd dir="ltr">24.75 is an estimated word onset (وَقفَةِ), not a measured beat: snap to the actual consonant onset (±0.2 s). His shadow shrinks through «وقفةِ» and nearly vanishes on «الحُرِّ» at about 25.6 while his head sinks; the knocker fills the top of the frame at 26.0.</dd></div>
+      <div><dt>إخفاء الوجه</dt><dd dir="ltr">The back of his head (curls, temple-arm glint behind the ear) and shoulder fill the foreground; the door is ahead. His head sinks forward, away from the camera.</dd></div>
+      <div><dt>الانتقال</dt><dd dir="ltr">Cut at 26.00 to a close-up of his hand at knocker height (size change).</dd></div>
+    </dl></details>
+    <details class="prompt"><summary>أمر اللقطة (إنجليزي)</summary>
+      <div class="pbox"><button class="copy" data-target="p-S18">نسخ</button><pre id="p-S18" dir="ltr">Flat 2D shadow-theatre cut-out animation, Arabic khayal al-zill staging: opaque black card figure, garments of translucent dyed hide glowing like stained glass (each one flat panel that is itself the body shape, no skin showing through), backlit parchment layers, multiplane depth, film grain; amber dawn and ink-black. Low-angle over-the-shoulder shot from behind THE MAN (broad shoulders; a big crown of thick wavy-curly hair cut as fine paper tendrils; a hairline glasses temple arm glinting behind his ear) in a clean white thobe and his old black bisht with mended gold trim and glowing burgundy lining. He faces a towering dead-black door studded with brass; a hard lamp-glow above the door throws the door&#x27;s shadow toward him. Slow push-in: the door grows taller in the frame and its huge shadow creeps across the flagstones and swallows his shadow until it shrinks to almost nothing, while he stands still, his head slowly sinks a few degrees and his shoulders drop, the first time he bows without any labour. The shot ends tilted slightly up on the heavy brass ring knocker. His face is never seen, solid black. Exactly one man in the flesh, fully clothed. Keep the lower 40% of the frame calm and dark, key action in the upper 60%. No on-screen text. Solemn, tragic, never comic; flat 2D, not 3D.</pre></div>
+    </details>
+  </div>
+</article>
+<article class="shot" id="S19" style="--t1:#B98A45;--t2:#7E1F2D">
+  <div class="swatch" aria-hidden="true"><span class="sid">S19</span><span class="stime"><span>26.00</span><i>←</i><span>27.50</span></span><span class="sdur">1.50 ث</span></div>
+  <div class="sbody">
+    <p class="sline">يَرجو نَوالاً</p>
+    <p class="smean">يرجو عطاءً ومِنّةً من غيره. هذه هي اللحظة التي يوشك فيها الحرّ أن يسأل، والرجاء نفسه انكسار.</p>
+    <p class="svis">لقطةٌ قريبة جانبية على مستوى اليد في منتصف الإطار. يده في كُمّ البشت ذي البطانة العنّابية مرفوعةٌ أصلاً على بُعد إصبعٍ من المطرقة النحاسية، ترتجف ولا تلمسها أبداً. فجأةً ينفتح شبّاكٌ صغير في الباب على ظلام، وتخرج منه اليد المكتنزة ذاتها بخاتم العقيق الأحمر التي اشترت الدار، تدلّي قطعة نقدٍ صغيرة واحدة على خيط تتأرجح أمامه. تنقبض يده وتنزل ببطء خارج الإطار.</p>
+    <details class="tech"><summary>التفاصيل التقنية (الثياب، الكاميرا، التزامن)</summary>
+    <dl class="meta">
+      <div><dt>الثياب</dt><dd dir="ltr">The same best-but-plain dress: the wide sleeve of his old black bisht with mended gold trim and glowing burgundy lining over a white thobe cuff dominates the frame.</dd></div>
+      <div><dt>الكاميرا</dt><dd dir="ltr">Close side profile at hand height in the middle of the frame, locked-off, then a slight push-in on the swinging coin; ends as his hand lowers out of frame.</dd></div>
+      <div><dt>التزامن</dt><dd dir="ltr">The hand is already raised at 26.0 and trembles through يرجو; the hatch snaps open and the coin drops into view on نوالاً at about 26.9; the hand lowers from about 27.2; cut at 27.50 (an estimated word onset of بِبابِ: snap to the waveform, ±0.2 s).</dd></div>
+      <div><dt>إخفاء الوجه</dt><dd dir="ltr">Hands and sleeve only; no head in frame. The wretch behind the door is never seen.</dd></div>
+      <div><dt>الانتقال</dt><dd dir="ltr">Cut at 27.50 to the reverse angle from inside the dark doorway; he is already six paces away. The turn is never shown on screen.</dd></div>
+    </dl></details>
+    <details class="prompt"><summary>أمر اللقطة (إنجليزي)</summary>
+      <div class="pbox"><button class="copy" data-target="p-S19">نسخ</button><pre id="p-S19" dir="ltr">Flat 2D shadow-theatre cut-out animation, Arabic khayal al-zill staging: opaque black card hands, garments of translucent dyed hide glowing like stained glass (each one flat panel that is itself the body shape, no skin showing through), backlit parchment, film grain; amber and ink-black. Close-up side profile at hand height in the middle of the frame: the black silhouetted hand of THE MAN, in the wide sleeve of his old black bisht with mended gold trim and a glowing burgundy lining over a white thobe cuff, is already raised a finger&#x27;s width from a heavy brass ring knocker on a dead-black door; it trembles and never touches it. A small hatch in the door snaps open onto darkness; a plump hand heavy with rings, with a large carnelian signet ring, pokes out and dangles one tiny coin on a string in front of him. His hand closes and slowly lowers out of frame. Locked-off, then a slight push-in on the coin. Only hands are visible; nobody&#x27;s face is seen. Exactly one man in the flesh. Keep the lower 40% of the frame calm and dark, key action in the upper 60%. No on-screen text. Solemn, tragic, never comic; flat 2D, not 3D.</pre></div>
+    </details>
+  </div>
+</article>
+<article class="shot" id="S20" style="--t1:#E0B66A;--t2:#0B0907">
+  <div class="swatch" aria-hidden="true"><span class="sid">S20</span><span class="stime"><span>27.50</span><i>←</i><span>28.85</span></span><span class="sdur">1.35 ث</span></div>
+  <div class="sbody">
+    <p class="sline">بِبابِ نَحسِ</p>
+    <p class="smean">«بباب نحس» أي بباب الشقيّ الوضيع اللئيم البخيل الذي لا خير فيه، والنحس ضدّ السعد. وكلمة «نِحِس» في العامية العراقية ما زالت تعني الخسيس الدنيء. والحكم: عزّة النفس فوق كلّ ألمٍ جسديّ وماديّ.</p>
+    <p class="svis">لقطةٌ معاكسة من داخل ظلام الباب عبر الشبّاك المفتوح. في المقدّمة اليد المكتنزة ذات الخاتم ما تزال تدلّي القطعة. ومنذ أوّل إطار يكون البطل قد ابتعد ستّ خطوات عن الباب، صغيراً في الإطار يمشي مبتعداً عن الكاميرا، ولا نرى إلّا ظهره: تاج خصلاته وكتفيه وبشته المتأرجح ببطانته العنّابية المتوهّجة، ولا يلتفت. وقد طلعت شمس الفجر فوق سور الساحة أمامه، فامتدّ ظلّه الطويل خلفه على البلاط حتى غطّى الباب. ومع سيره نحو الضوء يرتفع رأسه وتستقيم كتفاه حتى ينتصب تماماً مرفوع الذقن. عند «نحس» تُفلت اليد القطعة فتسقط في التراب ولا يلتقطها أحد، ويُصفق الشبّاك، فتنغلق حوافّ الإطار السوداء على شكل قوسٍ حتى لا يبقى إلّا شقٌّ من ضوء فيه هيئته الصغيرة.</p>
+    <details class="tech"><summary>التفاصيل التقنية (الثياب، الكاميرا، التزامن)</summary>
+    <dl class="meta">
+      <div><dt>الثياب</dt><dd dir="ltr">The same best-but-plain dress. The swing of the old bisht reveals its burgundy lining in full: the strongest burgundy moment of the film.</dd></div>
+      <div><dt>الكاميرا</dt><dd dir="ltr">Reverse angle from inside the dark interior through the hatch (frame-in-frame), locked-off. At the slam the black frame edges close into a horseshoe-arch slit; the arch mask is guaranteed in post.</dd></div>
+      <div><dt>التزامن</dt><dd dir="ltr">He is already walking away at 27.5 (snap the cut to the onset of بِبابِ); he is fully upright by about 28.2; the coin drops and the hatch slams on the sibilant of نحس at 28.54; the arch slit holds to 28.85.</dd></div>
+      <div><dt>إخفاء الوجه</dt><dd dir="ltr">Back to camera from the very first frame: he is already six paces away and mid-stride, never looks back, and never faces the hatch-side camera. Back-view rule: the beard is not named. CapCut: trim any frame in which he faces the hatch; if the take opens with a turn, start the clip after he is at least 3 paces away.</dd></div>
+      <div><dt>الانتقال</dt><dd dir="ltr">The remaining slit of white light widens and opens into the tall glowing window of the present-day room in the tail (S21), in the same cut-out style. CapCut fallback without AI: hold this last frame and dissolve to white.</dd></div>
+    </dl></details>
+    <details class="prompt"><summary>أمر اللقطة (إنجليزي)</summary>
+      <div class="pbox"><button class="copy" data-target="p-S20">نسخ</button><pre id="p-S20" dir="ltr">Flat 2D shadow-theatre cut-out animation, Arabic khayal al-zill staging: opaque black card figures, garments of translucent dyed hide glowing like stained glass (each one flat panel that is itself the body shape, no skin showing through), backlit parchment, film grain; ink-black interior framing blazing amber-white daylight. Reverse angle from inside the dark interior, looking out through the open hatch. In the dark foreground a plump ringed hand with a large carnelian signet ring still dangles one coin on a string. From the very first frame THE MAN is already six paces away from the door, small in the frame and mid-stride, walking away from the camera. We see only his back: the crown of curls, broad shoulders and the swinging old black bisht whose burgundy lining glows. He never looks back. The dawn sun has cleared the courtyard wall ahead of him, so his long shadow already stretches back across the flagstones and covers the door. As he walks into the light his head rises and his shoulders square until he is fully upright, chin level. The ringed hand lets the coin drop into the dust, unclaimed, and the hatch slams; the dark frame edges close into an arch-shaped slit of light. Locked-off. He stays back to camera; his face is never visible. Exactly one man in the flesh, fully clothed. Keep the lower 40% of the frame calm and dark, key action in the upper 60%. No on-screen text. Solemn, tragic, never comic; flat 2D, not 3D.</pre></div>
+    </details>
+  </div>
+</article>
+<article class="shot" id="S21" style="--t1:#C9CCCF;--t2:#7E1F2D">
+  <div class="swatch" aria-hidden="true"><span class="sid">S21</span><span class="stime"><span>28.85</span><i>←</i><span>29.57</span></span><span class="sdur">0.72 ث</span></div>
+  <div class="sbody">
+    <p class="sline">(ذيلٌ موسيقيّ بلا إلقاء)</p>
+    <p class="smean">الخاتمة: الحرّ الذي اختار كرامته هو أنت اليوم. الرجل نفسه في زماننا، بثيابك أنت، وظهره لنا، ورأسه المنحني يرتفع من جديد حتى يستقيم.</p>
+    <p class="svis">يتّسع شقّ الضوء الذي خُتمت به اللقطة السابقة فيصير نافذةً عالية مضيئة، ونحن ما نزال في مسرح الظلّ نفسه بلا أيّ صورةٍ فوتوغرافية: غرفةٌ من زماننا مقصوصةٌ من ورقٍ أسود، فيها أغصان نبتةٍ متسلّقة تتدلّى من رفٍّ عالٍ، ولوحٌ خشبيّ من شرائح متوازية على الجدار، وطيفٌ باهت لخريطةٍ قديمة للعالم بلا أيّ حرف. يقف أمام النافذة وظهره إلينا، بثيابه هو كما في صوره: كنزةٌ عنّابية رفيعة الحياكة بياقةٍ عالية، وبنطالٌ أسود عالي الخصر بثنيات، وكلاهما من جلدٍ مصبوغ شفّاف كسائر ثيابه في الفيلم. رأسه منحنٍ، ثم يرتفع ببطء حتى يستقيم ويستوي الذقن، والضوء يتحوّل من كهرمانيّ دافئ إلى فضّيّ ناعم. عنّابيّ الكنزة آخر نغمةٍ للكرامة في الفيلم، ووجهه لا يظهر أبداً.</p>
+    <details class="tech"><summary>التفاصيل التقنية (الثياب، الكاميرا، التزامن)</summary>
+    <dl class="meta">
+      <div><dt>الثياب</dt><dd dir="ltr">Present day, his own clothes from his photos: a burgundy fine-knit turtleneck and black high-waisted pleated trousers with a small side-buckle tab at the waistband. Each is one flat panel of translucent dyed hide like every garment in the film: the knit cut as fine vertical ribs, the pleats as thin lines of light. The burgundy of the turtleneck (~10–12% of the frame) is the film&#x27;s final note of dignity and the only saturated colour in the tail.</dd></div>
+      <div><dt>الكاميرا</dt><dd dir="ltr">Medium-wide from directly behind, locked-off with a tiny push-in; he stands slightly off-centre before the tall window, head and shoulders in the upper 60%, the dark trousers and floor in the calm lower 40%. The shot opens on S20&#x27;s slit of light widening into the window; if the trimmed 0.72 s starts after the window is already open, build that opening in post with an arch mask widening over 28.85–28.95. PRIMARY: its own short job (Kling 4.0, or Seedance 2.0 / 2.5 t2v, 4–5 s, 9:16, text-only, no audio), trimmed to 0.72 s from its best moment, ideally the frames where the bowed head lands upright; if the rise lasts longer, speed that section 150–200%. ALTERNATIVE: the last second of the Plan A 30 s job. CapCut fallback without AI: hold the last frame of S20&#x27;s light slit and dissolve to white.</dd></div>
+      <div><dt>التزامن</dt><dd dir="ltr">S20&#x27;s slit of light opens into the window over the first frames (28.85–28.95); the head lift rides the music decay 28.90–29.45 and lands upright, chin level, on the last note; hold to 29.57.</dd></div>
+      <div><dt>إخفاء الوجه</dt><dd dir="ltr">Back to camera for the whole shot: only the curl crown, broad shoulders and the glasses temple arm glinting behind his ear are seen; head and hair are opaque black card against the glowing window; his face is never visible and he never turns his head, not even to profile. Back-view rule: the beard is not named. No photograph and no real person: everything is flat cut-out. Reject any take in which he turns toward the camera, or an eye, mouth or facial feature appears.</dd></div>
+      <div><dt>الانتقال</dt><dd dir="ltr">End: hold the last frame (head upright, chin level). Optional 4-frame fade to black at 29.57. Typography in post: nothing, or the attribution «تُنسب إلى الإمام الشافعي».</dd></div>
+    </dl></details>
+    <details class="prompt"><summary>أمر اللقطة (إنجليزي)</summary>
+      <div class="pbox"><button class="copy" data-target="p-S21">نسخ</button><pre id="p-S21" dir="ltr">Flat 2D shadow-theatre cut-out animation, Arabic khayal al-zill staging: opaque black card figures, garments of translucent dyed hide glowing like stained glass (each one flat panel that is itself the body shape, no skin showing through), backlit parchment layers, multiplane depth, film grain. The shot opens on a narrow arch-shaped slit of white light that widens into a tall glowing window. A present-day room rendered as black cut-out silhouettes: trailing pothos vines hanging from a high shelf, a slatted wooden panel on the wall, and the faint outline of an antique world map on the wall with no lettering. Medium-wide, camera directly behind him: THE MAN (broad shoulders; a big crown of thick wavy-curly hair cut as fine paper tendrils; a hairline glasses temple arm glinting behind his ear) stands before the window, back to camera, in his own modern clothes: a burgundy fine-knit turtleneck and black high-waisted pleated trousers, each one flat panel of translucent dyed hide, the burgundy glowing deep and warm. His head is bowed; it rises slowly until he stands fully upright, chin level, then he holds. The light shifts from warm amber to soft silver. Locked-off, a tiny push-in. He stays back to camera; his face is never visible, solid black, and he never turns toward the camera. Exactly one man in the flesh, fully clothed. Keep the lower 40% of the frame calm and dark, key action in the upper 60%. No on-screen text, no letters on the map. Solemn, tragic, never comic; flat 2D, not 3D, not a photograph.</pre></div>
+    </details>
+  </div>
+</article></div>
+  </section>
+
+  <section id="blocks">
+    <h2>كتل الأسلوب والشخصية</h2>
+    <p class="prose">إذا ولّدت كل لقطة وحدها: الصق كتلة الأسلوب، ثم كتلة الشخصية كما هي، ثم أمر اللقطة.</p>
+    <details class="prompt big"><summary>كتلة الأسلوب (Style bible)</summary>
+<div class="pbox"><button class="copy" data-target="b-style">نسخ</button><pre id="b-style" dir="ltr">GLOBAL STYLE: SHADOW-THEATRE CINEMA (paste first in every prompt). Flat 2D hand-cut silhouette animation in the tradition of 1920s cut-out films, staged like Arabic khayal al-zill shadow theatre and filmed with a 1930s multiplane camera. The figure&#x27;s head, hair, beard, face and hands are opaque black card with intricate filigree scissor-cut edges. Every garment is translucent dyed hide that glows like stained glass in a muted colour, with its own distinct outline, so each costume reads clearly. Each garment is one flat translucent dyed-hide panel that is itself the figure&#x27;s body shape; no body, skin or limbs ever show through it. Figures stand before glowing backlit layers of translucent parchment, wax and sand on glass. Deep parallax: foreground layers drift fast, the midground slower, the background almost still, with soft haze between layers. The camera glides between the cut-out layers. Figures are seen in side profile, from behind, over the shoulder, or as hands and cast shadows. Hard backlight only, noir chiaroscuro, long cast shadows on walls and floors, velvety ink-black against amber-sepia parchment, every shadow a hard-edged flat shape. Each scene is tinted like a silent-era nitrate print: night-blue for prison and cold, umber for labour, ochre for desert and drought, red-amber for fire, sea-green for the harbour, warm lamp-amber for the finale. Garment colours stay muted within the scene tint. The only saturated accent is deep burgundy on his clothing, under a tenth of the frame until the finale. Fine 35mm grain, subtle gate weave, gentle flicker, soft vignette, slight halation on bright edges. Figures animated on twos with a slightly stepped, hand-cranked cadence, while snow, smoke, sand and dust drift smoothly. Exaggeration lives only in the scale of objects and animals (giant pincers, a colossal bear, a serpent-like hawser), never in comic motion. Keep the lower 40% of every frame calm and dark; all key action in the upper 60%. No borders, no ornament with letters. Flat 2D, not 3D, not CGI, not photoreal.
+
+STYLE LOCK (repeat at the end of every prompt): flat black cut-out silhouettes with translucent dyed-hide garments on glowing parchment; solemn, tragic, never comic; flat 2D, not 3D.
+
+SAFETY TAIL (append after the style lock in every Plan C job): Exactly one man in the flesh; he is fully clothed, his garment covering chest and back. No blood, no wound, no injury; hardship shown only through shadows and objects. The man never speaks; his lips and jaw stay still. No on-screen text, subtitles, letters or numbers.</pre></div></details>
+    <details class="prompt big"><summary>كتلة الشخصية (Identity block)</summary>
+<div class="pbox"><button class="copy" data-target="b-ident">نسخ</button><pre id="b-ident" dir="ltr">IDENTITY BLOCK (paste verbatim into every prompt; it never names clothing):
+THE MAN, identical in every shot: broad-shouldered athletic build; a big crown of thick dark wavy-curly hair cut as fine paper tendrils, always readable in his outline; a short dark beard cut as a jagged edge along the jaw; thin wire glasses seen edge-on: only the straight hairline temple arm glints from ear to brow, plus a tiny sliver of rim just in front of the brow line; no circle or ring is ever drawn on the head, and nothing bright sits where an eye would be. His head and face are solid opaque black with no eyes, no eye hole and no features; he is seen only in side profile against light, from behind, or as hands and a cast shadow; he never turns toward the camera; his lips stay closed and still under the beard and his jaw never moves; the voice is an off-screen narrator.
+
+RULES THAT TRAVEL WITH THE BLOCK:
+- HEAD COUNT: Exactly one man in the flesh. Other people appear only as faceless cut-out hands or as cast shadows that look clearly different from him, never with a curly crown. The recurring other person is a plump hand heavy with rings and a large carnelian signet ring (the wretch: the buyer of his house and the hand at the hatch). The companion in L9 is a slighter cast shadow in a tall wound turban with no curls, a water skin on its shoulder. The boot trader is a thin bare hand with no rings. The jailer is only a long cast shadow with a ring of keys. The barber is only a cut-out forearm.
+- FACE RULE (state twice in every prompt): his face always falls in solid black shadow; he never turns toward the camera; his mouth is never visible and never opens; the recitation is an off-screen narrator.
+- BACK-VIEW RULE: in back or over-the-shoulder shots, name only back-visible markers (the curl crown, broad shoulders, the glasses temple arm glinting behind his ear). Never name the beard in a back view, so the model has no reason to turn his head.
+- SHORT FORMS for single-shot prompts: profile = &#x27;THE MAN (broad shoulders; a big crown of thick wavy-curly hair cut as fine paper tendrils; a short beard cut as a jagged edge along the jaw; a hairline glasses temple arm glinting from ear to brow, no ring drawn on the head)&#x27;; back view = &#x27;THE MAN (broad shoulders; a big crown of thick wavy-curly hair cut as fine paper tendrils; a hairline glasses temple arm glinting behind his ear)&#x27;.
+- POSTURE AS IDENTITY: in each hardship his head bows and his back bends. At the final door his head slowly sinks while he waits; when he turns away, and in the closing shot, he rises fully upright, chin level.
+- WARDROBE RULE: his clothes change completely at every change of place, to fit the place and the line, and are written inside each shot, never here. Each garment is one flat panel of translucent dyed hide with its own colour and outline, itself the body shape, with no body or skin showing through; it is clearly visible and different from the previous shot. He is always fully clothed, chest and back covered.
+- Do not state an age.</pre></div></details>
+    <details class="prompt big"><summary>قائمة الممنوعات (Negative list)</summary>
+<div class="pbox"><button class="copy" data-target="b-neg">نسخ</button><pre id="b-neg" dir="ltr">on-screen text, letters, subtitles, captions, calligraphy, Arabic script, pseudo-glyphs, numbers, digits, tally marks, map labels, logo, watermark, signature, decorative border, visible face, eyes, eye holes, eye highlights, glasses drawn as rings over the eyes, facial features, mouth, open mouth, lips, lip movement, talking, frontal view, three-quarter face, face turned to camera, upturned lit face, extra people, duplicate man, second curly-haired figure, crowd faces, 3D render, CGI, Pixar style, plastic shading, smooth gradients, volumetric light, photorealistic skin, rubber-hose limbs, pie-cut eyes, white cartoon gloves, big cartoon eyes, slapstick, bouncy comedic motion, cute, storybook, saturated rainbow colours, teal-orange grade, HDR, neon, VHS, glitch, light leaks, blood, wounds, gore, injury, rope touching the man, nudity, bare torso, sheer see-through fabric, body visible through clothing, same outfit in every scene, rich gold-encrusted costume at the door. NOTE: Seedance has no negative-prompt field. These items already sit as positive constraints and a safety tail inside every master prompt and in the Plan C recipe; this list is for platforms that do have a negative field, or for checking takes by eye.</pre></div></details>
+    <details><summary>لوحة الألوان عبر الفيلم</summary><div class="prose ltr" dir="ltr"><p>Ink-black #0B0907 is constant. Deep burgundy #7E1F2D is the single saturated accent: the colour of dignity (karama), present from the first shot and growing to its peak at the door; its final note is his own burgundy turtleneck in the present-day tail.
+• 0.00–1.00 (molar, barber's stall): steel night-blue #2E4A63 with one amber oil-lamp hotspot #E8A54B. Cream thobe. Burgundy: a thin cord at the cuff (~1%). The molar is a clean black shape; no red anywhere near the mouth.
+• 1.00–2.35 (prison): pure cold blue, barred light shafts. Grey-brown sackcloth. Burgundy: the same cord still knotted beneath the iron cuff.
+• 2.35–3.65 (soul drawn out): blue-grey night, one amber lamp, the light-bird pale silver-white.
+• 3.65–4.90 (bringing back yesterday): red-orange sunset over sepia rooftops, draining to blue-black on «أمس» at 4.48.
+• 4.90–7.35 (cold, the lone beast): the coldest point: night-blue and parchment-white snow. Ochre fleece coat.
+• 7.35–9.60 (tannery): muddy umber #3B2A1A under a black sky. Burgundy: one apron strap. The light dies on «شمس» (9.01–9.30).
+• 9.60–11.50 (lizard, bear): a small amber campfire in a deep blue night, then the bear as pure ink-black against the moon. Burgundy: a faded cord on the head-cloth.
+• 11.50–14.20 (barren land): bleached ochre #D9BF8C / #C8A15A, the brightest and most lifeless stretch; the last green withers to dust.
+• 14.20–16.50 (fire, shame): red-amber embers, then dusk umber-grey in the alley. Burgundy: a sliver of lining hidden under the shame-hood.
+• 16.50–18.85 (house sold): warm faded sepia; the only glints are the copper quarter-coin and the wretch's carnelian ring. Burgundy: frayed bisht trim (~4%).
+• 18.85–21.05 (boot, companion): hot ochre to sunset. At 20.7, with the high strings, the frame starts cooling toward sea-green.
+• 21.05–23.35 (hawser): sea-green harbour night #2F5B52 with ink-black. Burgundy: the porter's head-rag (~6%). Full white flash at 23.07.
+• 23.35–28.85 (climax): golden dawn amber on parchment flagstones. The door is dead ink-black with dull brass, lit by a hard lamp-glow above it; from 27.5 the risen sun ahead of him has cleared the courtyard wall and the light direction flips, so his shadow falls back across the door. Burgundy at full strength in the lining of his one old bisht (~10–12%); its gold trim is worn and dull, never bright. The light ahead whitens as he walks into it.
+• 28.85–29.57 (tail): still flat cut-out, no photograph. The slit of light that ends S20 opens into a tall glowing window in a present-day room of black cut-out silhouettes (pothos vines trailing from a high shelf, a slatted wooden wall panel, the faint outline of an antique world map with no lettering). Warm amber turning to soft silver light. Seen from behind, he wears his own clothes from his photos: a burgundy fine-knit turtleneck and black high-waisted pleated trousers. The burgundy of the turtleneck (~10–12%) is the film's final note of dignity and the only saturated colour in the tail; the typography carries no glow.
+Temperature arc: blue → umber/ochre → fire-red → sea-green → gold → silver.</p></div></details>
+  </section>
+
+  <section id="routes">
+    <h2>أوامر التوليد</h2>
+    <p class="pending">أوامر Kling 4.0 وWan 3.0 قيد الكتابة الآن، وستُضاف هنا في التحديث القادم على نفس الرابط.</p>
+    <section class="route"><h3>Seedance 2.0 · ثلاثة أجزاء</h3>
+      <p class="prose">الإعدادات المكتوبة داخلها افترضت جودة std 1080p. برصيدك الحالي استخدم <b>mode: fast · 720p</b> (77.5 كريدت للثلاثة) أو Mini للتجربة.</p>
+      <details class="prompt big"><summary>Seedance 2.0 · الجزء 1 (0.00–9.60 ث، توليد 10 ث)</summary>
+<div class="pbox"><button class="copy" data-target="pb0">نسخ</button><pre id="pb0" dir="ltr">Flat 2D shadow-theatre cut-out animation, staged like Arabic khayal al-zill and filmed with a 1930s multiplane camera: head, hair, beard and hands are opaque black card with filigree scissor-cut edges; each garment is one flat panel of translucent dyed hide glowing like stained glass, itself the body shape, with no skin showing through. Backlit parchment layers, deep parallax, hard backlight only, noir chiaroscuro, long flat cast shadows, a silent-era tint per shot. The only saturated accent is deep burgundy on his clothing. Film grain, soft vignette, figures animated on twos while snow, smoke and sand drift smoothly. Keep the lower 40% of every frame calm and dark. Flat 2D, not 3D, not CGI. Vertical 9:16.
+
+Use @Audio1 as the rhythmic foundation: an off-screen male narrator reciting a poem over oud in four phrases; each hard cut lands where a phrase ends on a hissing consonant. The narrator is off-screen; the man never speaks. @Image1 defines only the cut-out technique, translucent-hide rendering, paper texture and palette; it contains no person and no clothing.
+
+THE MAN, identical in every shot: broad-shouldered athletic build; a big crown of thick dark wavy-curly hair cut as fine paper tendrils, always readable in his outline; a short dark beard cut as a jagged edge along the jaw; thin wire glasses seen edge-on: only the straight hairline temple arm glints from ear to brow, plus a tiny sliver of rim just in front of the brow line; no circle or ring is ever drawn on the head, and nothing bright sits where an eye would be. His head and face are solid opaque black with no eyes, no eye hole and no features; he is seen only in side profile against light, from behind, or as hands and a cast shadow; he never turns toward the camera; his lips stay closed and still under the beard and his jaw never moves; the voice is an off-screen narrator. In hardship his head bows. Exactly one man in the flesh; other people appear only as faceless cut-out hands or cast shadows that look clearly different from him, never with a curly crown. His clothes change completely at every cut, exactly as written; each shot has one place and one outfit.
+
+Shot 1: A cold stone prison cell, steel-blue, light through a high barred window, one amber lamp. In a grey-brown sackcloth prisoner&#x27;s tunic with a ragged hem, closed at the neck, iron cuffs and a thin burgundy cord knotted under one cuff, he sits on a stone bench in strict side profile; a cut-out forearm crosses in front of his jaw and hides his mouth while, on the wall behind, the enlarged shadow of huge iron pincers closes and jerks back, a clean small black molar in its jaws. Then the iron door slams and bar shadows sweep across the whole frame.
+Shot 2: Hard cut to a bare chamber at dusk, blue-grey, a narrow bright window ahead. In a loose white linen night-thobe, collar closed, he kneels on a reed mat in strict profile; a small bird of pale light, already half drawn out of his chest on a taut glowing thread, slips free and flies out of the window toward a huge sinking cut-paper sun. The sun slides below the sill anyway and blue darkness falls.
+Shot 3: Hard cut to a night-blue blizzard, extreme wide, side-on, the figures small on the horizon just below frame centre, the lower part empty snow. In a bulky ochre sheepskin coat with a fleece-fringed outline and a grey wool head-wrap, curls bursting out, snow piling on his shoulders, he leans into the wind leading one balking camel by its halter; in his other hand a small shivering monkey trots behind him on a short leash. No caravan.
+Shot 4: Hard cut to a medium side view of a muddy umber tannery under black clouds, limp hides hanging like defeated flags, wavy stink-lines rising from the vats. In a heavy dark leather tanner&#x27;s apron with crossed straps, one strap burgundy, over a short work tunic, a cloth band across his brow, he heaves a dripping hide onto a wooden frame, then tips his head back in strict profile, still a flat black card shape; the camera tilts up off him to the sky, where a black cut-out cloud closes over the last sliver of sun like a door shutting. The light dies. Hold.
+
+Cuts only at the three shot changes; each cut changes angle and shot size; the camera does not cut on its own. His face always falls in solid black shadow; he never turns toward the camera. Exactly one man in the flesh, fully clothed, his garment covering chest and back. No blood, no injury; hardship only through shadows and objects. The man never speaks; his lips and jaw stay still; no dialogue. No on-screen text, subtitles, letters, numbers, logo, watermark or border. Flat black cut-out silhouettes with translucent dyed-hide garments on glowing parchment; solemn, tragic, never comic; flat 2D, not 3D.</pre></div></details><details class="settings"><summary>إعدادات الجزء 1</summary><div class="prose ltr" dir="ltr"><p>RECOMMENDED ROUTE: Plan B (three parts, four shots each, one shot per hemistich) plus Plan C patches.</p>
+<ul>
+<li>Plan C = one storyboard shot as its own 5 s job (Seedance 2.5 t2v with draft=true, or Seedance 2.0), text-only, no audio. Paste in this order: style_bible_en (STYLE, STYLE LOCK, SAFETY TAIL) → the IDENTITY block from character_bible_en, verbatim → that shot's seedance_prompt. Trim the result on its CapCut marker.</li>
+<li>Plan B stages each hemistich in ONE place and ONE outfit, so each part carries only four outfits (less outfit bleed). Three storyboard images have their own outfit and come from Plan C patches: S01 (barber's stall, cream thobe, 0.00–1.00), S04 (rooftop, sand thobe and aba, 3.65–4.90) and S11 (kitchen hearth, soot-grey tunic, 14.20–15.35). With the patches, every outfit in the storyboard reaches the final cut.</li>
+<li>If budget allows, Plan C for all 20 poem shots (S01–S20) is the most reliable route for wardrobe changes; the tail S21 is made separately (see the P3 settings).</li>
+</ul>
+<p>This part:</p>
+<ul>
+<li>Model: Seedance 2.0 (seedance_2_0), mode std, 1080p, 9:16, duration 10 s, genre drama. Drafts: mode fast, 720p.</li>
+<li>generate_audio: off.</li>
+<li>image_references: @Image1 = the style plate (required: Seedance 2.0 refuses an audio reference without at least one image).</li>
+<li>audio_references: @Audio1 = /tmp/claude-0/-home-user--/6995951e-a6e2-5994-89fd-7bad52ede4e6/scratchpad/seedance-kit/audio/A1_part1_0.00-9.60_10.00s.wav (9.60 s of poem + 0.40 s silence).</li>
+<li>If the job fails in under 10 s (filter rejection), restructure the wording rather than rerolling unchanged; the identity block carries identity as text.</li>
+<li>Seedance 2.0 ignores timecodes, so the prompt has none. EDITOR-ONLY table (global = local): an even split puts cuts near 2.5 / 5.0 / 7.5; they are needed at 2.35 / 4.90 / 7.35. In CapCut place the clip at 0.00, split it at its own cuts, then retime each piece 75–125% or freeze its last frames so it ends on its marker; use 0.00–9.60.</li>
+<li>Text-only fallback: delete the reference sentences and generate silent.</li>
+<li>Face check: trim any frame in which he faces the camera or a mouth or eye appears.</li>
+</ul></div></details><details class="prompt big"><summary>Seedance 2.0 · الجزء 2 (9.60–18.85 ث، توليد 9 ث)</summary>
+<div class="pbox"><button class="copy" data-target="pb1">نسخ</button><pre id="pb1" dir="ltr">Flat 2D shadow-theatre cut-out animation, staged like Arabic khayal al-zill and filmed with a 1930s multiplane camera: head, hair, beard and hands are opaque black card with filigree scissor-cut edges; each garment is one flat panel of translucent dyed hide glowing like stained glass, itself the body shape, with no skin showing through. Backlit parchment layers, deep parallax, hard backlight only, noir chiaroscuro, long flat cast shadows, a silent-era tint per shot. The only saturated accent is deep burgundy on his clothing. Film grain, soft vignette, figures animated on twos while snow, smoke and sand drift smoothly. Keep the lower 40% of every frame calm and dark. Flat 2D, not 3D, not CGI. Vertical 9:16.
+
+Use @Audio1 as the rhythmic foundation: an off-screen male narrator reciting a poem over oud in four phrases; each hard cut lands where a phrase ends on a hissing consonant. The narrator is off-screen; the man never speaks. @Image1 defines only the cut-out technique, translucent-hide rendering, paper texture and palette; it contains no person and no clothing. [Optional: @Image2 defines only the stubby spotted body and thick tail of the lizard in Shot 1; render it as a real desert lizard in black cut-out, not a toy.]
+
+THE MAN, identical in every shot: broad-shouldered athletic build; a big crown of thick dark wavy-curly hair cut as fine paper tendrils, always readable in his outline; a short dark beard cut as a jagged edge along the jaw; thin wire glasses seen edge-on: only the straight hairline temple arm glints from ear to brow, plus a tiny sliver of rim just in front of the brow line; no circle or ring is ever drawn on the head, and nothing bright sits where an eye would be. His head and face are solid opaque black with no eyes, no eye hole and no features; he is seen only in side profile against light, from behind, or as hands and a cast shadow; he never turns toward the camera; his lips stay closed and still under the beard and his jaw never moves; the voice is an off-screen narrator. In hardship his head bows. Exactly one man in the flesh; other people appear only as faceless cut-out hands or cast shadows that look clearly different from him, never with a curly crown. His clothes change completely at every cut, exactly as written; each shot has one place and one outfit. The recurring other person is a plump hand heavy with rings and a large carnelian signet ring.
+
+Shot 1: A rocky mountain gorge at night, a huge moon, amber firelight in deep blue. Camera directly behind him at fire level: in an ochre dishdasha hitched at a leather belt, a fur-trimmed hide vest and a head-cloth bound with a faded burgundy cord, he crouches facing a tiny campfire and lowers a skewered roasted lizard with a thick spiky-ringed tail, one bite missing, the bite hidden behind his head; his shoulders heave with disgust, his head still turned to the fire. One continuous pull-back and tilt up: beyond the fire a colossal bear rears on its hind legs, a black silhouette blotting out the moon; he grips his long spear, a toothpick beside it.
+Shot 2: Hard cut to a bleached barren field under a white-hot sky, camera at knee height. In a straw-yellow knee-length farmer&#x27;s tunic, a rope belt, a seed sack across his chest and a straw head-wrap, he strides in strict profile and casts grain in one wide arc; it bounces off the hard ground like pebbles. Across the middle of the frame the cracks are drawn as lips stitched shut, and the last open crack at frame centre presses shut. Nothing grows.
+Shot 3: Hard cut to a narrow souq alley at dusk with a clay street brazier glowing red-amber; camera directly behind him at floor level. In a soot-smeared charcoal wool aba over a grey tunic he kneels and blows on the embers; curling smoke rolls back over him and fills the frame. As it clears he walks on bent nearly double, the aba drawn over his head like a hood, a sliver of burgundy lining at its edge; shadows of pointing hands rise on the walls and small faceless hooded shadow figures with no curls turn their backs.
+Shot 4: Hard cut to his tall carved brass-studded house door, faded sepia, over the shoulder from behind at hand height. In a long cream merchant&#x27;s thobe under a faded brown bisht with frayed burgundy trim, he lays a big ornate iron house key into the plump carnelian-ringed hand reaching in from the frame edge. Slow push-in: the fingers snap a tiny copper coin into four and drop one quarter into his open palm with a glint; behind him the carved door swings shut. Hold.
+
+Cuts only at the three shot changes; each cut changes angle and shot size; the camera does not cut on its own. His face always falls in solid black shadow; he never turns toward the camera. Exactly one man in the flesh, fully clothed, his garment covering chest and back. No blood, no injury; hardship only through shadows and objects. The man never speaks; his lips and jaw stay still; no dialogue. No on-screen text, subtitles, letters, numbers, logo, watermark or border. Flat black cut-out silhouettes with translucent dyed-hide garments on glowing parchment; solemn, tragic, never comic; flat 2D, not 3D.</pre></div></details><details class="settings"><summary>إعدادات الجزء 2</summary><div class="prose ltr" dir="ltr"><ul>
+<li>Model: Seedance 2.0 (seedance_2_0), mode std, 1080p, 9:16, duration 9 s, genre drama. Drafts: mode fast, 720p.</li>
+<li>generate_audio: off.</li>
+<li>image_references: @Image1 = the same style plate (required with audio). Optional @Image2 = /tmp/claude-0/-home-user--/6995951e-a6e2-5994-89fd-7bad52ede4e6/scratchpad/seedance-kit/refs/R5_lizard.png (Shot 1 only). If you skip it, delete the bracketed line.</li>
+<li>audio_references: @Audio1 = /tmp/claude-0/-home-user--/6995951e-a6e2-5994-89fd-7bad52ede4e6/scratchpad/seedance-kit/audio/A2_part2_9.60-18.85_9.25s.wav (9.25 s, no pad).</li>
+<li>EDITOR-ONLY table (local; global = local + 9.60): an even split puts cuts near 2.25 / 4.5 / 6.75; they are needed at 1.90 / 4.60 / 6.90 (global 11.50 / 14.20 / 16.50). Place the clip at 9.60, split it at its own cuts, retime each piece 75–125% or freeze its last frames to hit the marker; keep the first 9.25 s.</li>
+<li>Plan C patch for this part: S11 (kitchen hearth, soot-grey tunic) at 14.20–15.35, so L7's two halves get two outfits. Patch with Plan C any other shot whose outfit drifts.</li>
+<li>If the job fails in under 10 s, resubmit without @Image2.</li>
+<li>Text-only fallback: delete the reference sentences and generate silent.</li>
+</ul></div></details><details class="prompt big"><summary>Seedance 2.0 · الجزء 3 (18.85–29.57 ث، توليد 10 ث)</summary>
+<div class="pbox"><button class="copy" data-target="pb2">نسخ</button><pre id="pb2" dir="ltr">Flat 2D shadow-theatre cut-out animation, staged like Arabic khayal al-zill and filmed with a 1930s multiplane camera: head, hair, beard and hands are opaque black card with filigree scissor-cut edges; each garment is one flat panel of translucent dyed hide glowing like stained glass, itself the body shape, with no skin showing through. Backlit parchment layers, deep parallax, hard backlight only, noir chiaroscuro, long flat cast shadows, a silent-era tint per shot. The only saturated accent is deep burgundy on his clothing. Film grain, soft vignette, figures animated on twos while snow, smoke and sand drift smoothly. Keep the lower 40% of every frame calm and dark. Flat 2D, not 3D, not CGI. Vertical 9:16.
+
+Use @Audio1 as the rhythmic foundation: an off-screen male narrator reciting a poem over oud in four phrases; each hard cut lands where a phrase ends on a hissing consonant. The narrator is off-screen; the man never speaks. @Image1 defines only the cut-out technique, translucent-hide rendering, paper texture and palette; it contains no person and no clothing. The high strings swell from Shot 2; slow the pacing as they rise.
+
+THE MAN, identical in every shot: broad-shouldered athletic build; a big crown of thick dark wavy-curly hair cut as fine paper tendrils, always readable in his outline; a short dark beard cut as a jagged edge along the jaw; thin wire glasses seen edge-on: only the straight hairline temple arm glints from ear to brow, plus a tiny sliver of rim just in front of the brow line; no circle or ring is ever drawn on the head, and nothing bright sits where an eye would be. His head and face are solid opaque black with no eyes, no eye hole and no features; he is seen only in side profile against light, from behind, or as hands and a cast shadow; he never turns toward the camera; his lips stay closed and still under the beard and his jaw never moves; the voice is an off-screen narrator. His head bows in hardship, sinks at the door and rises upright as he walks away. Exactly one man in the flesh; other people appear only as faceless cut-out hands or cast shadows that look clearly different from him, never with a curly crown. His clothes change completely at every cut, exactly as written; each shot has one place and one outfit. The recurring other person is a plump hand heavy with rings and a large carnelian signet ring.
+
+Shot 1: A long sun-baked mud-brick wall by market steps at sunset, hot ochre, wide side-on. In a patched brown traveller&#x27;s cloak and dusty sirwal, barefoot on hot stones, he hands his last worn boot to a thin bare trader&#x27;s hand with no rings and receives a flat loaf. On the wall his shadow walks beside a companion&#x27;s slighter shadow in a tall wound turban with no curls, a water skin on its shoulder; the companion&#x27;s shadow crumbles into blowing sand and is gone.
+Shot 2: Hard cut to a harbour quay at night in a gale, sea-green, a huge billowing sail behind; low angle from behind. In a sea-green porter&#x27;s vest closed to the collar over a coarse undershirt and a burgundy head-rag, he stands bent under a heavy coil of hawser across his shoulders. The loose end of a giant palm-fibre hawser rears like a sea serpent and slams the sail again and again; its shadow sweeps across the sail and his bent back, and with each swing he sinks lower; gulls scatter. Push onto the rope: it snaps taut and the frame flashes pure white.
+Shot 3: From the white, golden dawn: a vast empty flagstone courtyard, high and symmetrical, a slow grand push between foreground pillars on which small shadows of pincers, prison bars, a bear and a coiled rope slide past and fade. A towering dead-black brass-studded door with a ring knocker, a hard lamp-glow above it throwing its shadow toward him. He stands small, back to camera, in his best but plain clothes: a clean pressed white thobe and his one old black bisht with worn, neatly mended gold trim and a glowing burgundy lining. The push ends low over his shoulder: the door&#x27;s shadow swallows his shadow while his head slowly sinks and his shoulders drop.
+Shot 4: Hard cut to a close side view at hand height: his black hand in the burgundy-lined bisht sleeve, already raised a finger&#x27;s width from the brass knocker, trembles and never touches it. A hatch snaps open; the plump carnelian-ringed hand dangles one coin on a string; his hand lowers. The camera cranes straight up over the top of the door to a high view from behind it: far below, seen only as a crown of curls and a spread bisht, he walks away toward the risen sun, never looking back, rising fully upright; the sun throws his long shadow back across the door. The coin drops unclaimed into the dust; the hatch slams. Hold on the bright courtyard.
+
+Cuts only at the three shot changes; each cut changes angle and shot size; the camera does not cut on its own. His face always falls in solid black shadow; he never turns toward the camera. Exactly one man in the flesh, fully clothed, his garment covering chest and back. No blood, no injury; hardship only through shadows and objects. The man never speaks; his lips and jaw stay still; no dialogue. No on-screen text, subtitles, letters, numbers, logo, watermark or border. Flat black cut-out silhouettes with translucent dyed-hide garments on glowing parchment; solemn, tragic, never comic; flat 2D, not 3D.</pre></div></details><details class="settings"><summary>إعدادات الجزء 3</summary><div class="prose ltr" dir="ltr"><ul>
+<li>Model: Seedance 2.0 (seedance_2_0), mode std, 1080p, 9:16, duration 10 s, genre drama (try one take with epic). Drafts: mode fast, 720p.</li>
+<li>generate_audio: off.</li>
+<li>image_references: @Image1 = the style plate (required with audio).</li>
+<li>audio_references: @Audio1 = /tmp/claude-0/-home-user--/6995951e-a6e2-5994-89fd-7bad52ede4e6/scratchpad/seedance-kit/audio/A3_part3_18.85-28.85_10.00s.wav (10.00 s).</li>
+<li>EDITOR-ONLY table (local; global = local + 18.85): an even split puts cuts near 2.5 / 5.0 / 7.5; they are needed at 2.20 / 4.50 / 7.15 (global 21.05 / 23.35 / 26.00). Key hits: rope snap and white flash at 4.22 (23.07); coin on the string at about 8.05 (26.9); hatch slam at 9.69 (28.54). Place the clip at 18.85, split it at its own cuts, retime each piece 75–125% or freeze its last frames; keep local 0.00–10.00 (global 18.85–28.85). If the model misses a key hit, build it in post: a white layer of 4–6 frames, and a black horseshoe-arch mask closing in 3 frames.</li>
+<li>Optional Plan C patch: S20 (the reverse view from inside the hatch) at 27.50–28.85, if you prefer it to the crane.</li>
+<li>Face check: trim any frame in which he faces the camera or the hatch, or a mouth or eye appears.</li>
+</ul>
+<p>Tail S21 (global 28.85–29.57), a newly generated shot in the same flat cut-out style; no photograph and no real person:</p>
+<ul>
+<li>PRIMARY: its own short job, no audio, text-only by default: Kling 4.0, or Seedance 2.0 / 2.5 t2v (2.5 with draft=true first), 4–5 s, 9:16, 1080p. Paste as for Plan C: style_bible_en (STYLE, STYLE LOCK, SAFETY TAIL) → the IDENTITY block from character_bible_en, verbatim → S21's seedance_prompt. No image of any person is ever attached. Only if the look drifts, rerun with @Image1 = the style plate; only if the turtleneck colour still drifts, add @Image2 = /tmp/claude-0/-home-user--/6995951e-a6e2-5994-89fd-7bad52ede4e6/scratchpad/seedance-kit/refs/R2_swatch.jpg with the line '@Image2 defines only the burgundy colour and fine knit of the turtleneck; render it as flat translucent dyed hide, not a photo.' Trim 0.72 s from its best moment, ideally the frames where the bowed head lands upright; if the rise lasts longer, speed that section 150–200%; if it looks twitchy, take a slower stretch of the rise; if the trimmed piece starts after the window has opened, build the opening in post with the arch mask widening over 28.85–28.95.</li>
+<li>ALTERNATIVE: the last second of the Plan A 30 s job, with its bracketed OPTIONAL TAIL line kept.</li>
+<li>CapCut fallback without AI: hold the last frame of S20's light slit and dissolve to white by 29.57.</li>
+<li>Face check: reject any take in which he turns toward the camera, or an eye, mouth or facial feature appears.</li>
+</ul></div></details>
+    </section>
+    <section class="route"><h3>Seedance 2.5 · دفعة واحدة 30 ثانية</h3>
+      <p class="prose">للمستقبل إذا زاد الرصيد (210 كريدت بدقة 720p).</p>
+      <details class="prompt big"><summary>الأمر الكامل لـ Seedance 2.5</summary>
+<div class="pbox"><button class="copy" data-target="pa">نسخ</button><pre id="pa" dir="ltr">STYLE: Flat 2D shadow-theatre cut-out animation, staged like Arabic khayal al-zill and filmed with a 1930s multiplane camera. Head, hair, beard and hands are opaque black card with filigree scissor-cut edges; each garment is one flat panel of translucent dyed hide glowing like stained glass, itself the body shape, with no skin showing through. Backlit parchment layers, deep parallax, hard backlight only, noir chiaroscuro, long flat cast shadows. A silent-era tint per scene; the only saturated accent is deep burgundy on his clothing, peaking at the door. Film grain, soft vignette, figures animated on twos. Keep the lower 40% of every frame calm and dark. Flat 2D, not 3D, not CGI. Vertical 9:16.
+
+REFERENCES: @Audio1 is the rhythmic foundation: an off-screen male narrator reciting over oud, high strings rising from 21 s; cut on its hissing consonants and pauses. [OPTIONAL, delete if not attached: @Image1 defines only the cut-out technique, hide rendering, texture and palette; it contains no person.]
+
+MAIN IDEA: A silhouetted man endures ancient hardships, each in new clothes, then stands at a wretch&#x27;s towering door, does not knock, and walks away into the light.
+
+THE MAN, identical in every shot: broad-shouldered athletic build; a big crown of thick dark wavy-curly hair cut as fine paper tendrils, always readable in his outline; a short dark beard cut as a jagged edge along the jaw; thin wire glasses seen edge-on: only the straight hairline temple arm glints from ear to brow, plus a tiny sliver of rim just in front of the brow line; no circle or ring is ever drawn on the head, and nothing bright sits where an eye would be. His head and face are solid opaque black with no eyes, no eye hole and no features; he is seen only in side profile against light, from behind, or as hands and a cast shadow; he never turns toward the camera; his lips stay closed and still under the beard and his jaw never moves; the voice is an off-screen narrator. His head bows in hardship, sinks at the door and rises upright as he walks away. His clothes change completely at every change of place, exactly as written. Others are only faceless cut-out hands or curl-less shadows; the recurring one is a plump hand with a large carnelian signet ring.
+
+TIMELINE (nine windows; hard cuts between windows and only where written; each cut changes angle and shot size; the camera does not cut on its own):
+0-2s: Stone prison cell, steel-blue. In a grey-brown sackcloth tunic closed at the neck, iron cuffs and a thin burgundy cord at one cuff, he sits in profile; a cut-out forearm hides his mouth while the wall shadow of iron pincers closes and jerks back. The iron door slams; bar shadows sweep the frame.
+2-5s: Bare chamber at dusk. In a white linen night-thobe he kneels in profile; a small bird of pale light, half drawn from his chest on a glowing thread, slips free and flies out of the window toward a huge sinking sun, which slides under anyway; blue darkness falls.
+5-7s: Blizzard, extreme wide. In a bulky ochre fleece-fringed sheepskin coat and a wool head-wrap he leads one balking camel by its halter across an empty white plain, a small shivering monkey on a leash behind him.
+7-10s: Umber tannery under black clouds. In a strapped leather apron, one strap burgundy, he heaves a dripping hide onto a frame; tilt up off him to the sky: at 9 seconds a black cloud closes over the last sliver of sun like a door.
+10-14s: Desert gorge at night, from directly behind at a tiny fire. In an ochre dishdasha, a fur-trimmed vest and a head-cloth with a faded burgundy cord, he lowers a skewered spiny-tailed lizard with one bite gone, the bite hidden behind his head; his shoulders heave. A colossal bear rears beyond the fire against the moon. Dawn: he casts grain on cracked earth; it bounces like pebbles; the cracks, drawn as stitched-shut mouths, seal.
+14-19s: His own house. In a faded brown bisht with frayed burgundy trim, from directly behind at floor level, he blows on the hearth embers; smoke rolls back over him. Then, the bisht drawn over his head like a hood as shadow hands point, at his carved door he lays his iron key in the plump ringed hand, which snaps a copper coin and drops one quarter into his palm; the door shuts.
+19-23s: Harbour, sunset into sea-green night. In a sea-green porter&#x27;s vest closed to the collar and a burgundy head-rag, barefoot, he trades his last boot to a bare trader&#x27;s hand for a loaf; on the wall a companion&#x27;s slighter turbaned shadow beside his crumbles into sand. Night: bent under a coil of hawser, he sinks lower as a giant palm-fibre hawser rears like a sea serpent and slams the sail again and again, its shadow sweeping his back. At 23 seconds the rope snaps taut and the frame flashes white.
+23-26s: Slow and grand golden dawn courtyard; small shadows of pincers, bars, a bear and a rope slide past on the foreground pillars and fade, tiny beside a towering dead-black brass-studded door, a hard lamp-glow above it throwing its shadow toward him. In a clean white thobe and his one old black bisht with mended gold trim and glowing burgundy lining, he stands small, back to camera. Low over the shoulder: the door&#x27;s shadow swallows his; his head sinks.
+26-30s: Close at hand height: his raised hand trembles a finger&#x27;s width from the knocker; a hatch snaps open and the ringed hand dangles one coin on a string; his hand lowers. Reverse from inside the dark doorway: from the first frame he is already six paces away, back to camera, walking into the light, never looking back; the risen sun ahead throws his long shadow back across the door; he rises fully upright. At 29 seconds the coin drops into the dust, the hatch slams and the frame closes to an arch-shaped slit of light that swells to white. [OPTIONAL TAIL, delete if S21 is made as its own job: in the last second the white opens into a tall glowing window in a present-day room of black cut-outs, pothos vines trailing from a high shelf; from behind, in his own burgundy fine-knit turtleneck and black high-waisted pleated trousers, he raises his bowed head until upright, chin level.]
+
+KEEP CONSISTENT: his silhouette, curls, beard edge, glasses-arm glint and the cut-out technique; only clothing, place and tint change. His face always falls in solid black shadow.
+
+CONSTRAINTS: Exactly one man in the flesh, fully clothed, his garment covering chest and back. Audio @Audio1 plays exactly as uploaded; do not modify. The man never speaks; no dialogue, no generated speech. No on-screen text, subtitles, letters, numbers, logos, watermark or border. No blood, no injury; hardship only through shadows and objects. Flat black cut-out silhouettes with translucent dyed-hide garments on glowing parchment; solemn, tragic, never comic; flat 2D, not 3D.</pre></div></details><details class="settings"><summary>إعدادات Seedance 2.5</summary><div class="prose ltr" dir="ltr"><p>Generation:</p>
+<ul>
+<li>mode: omni_reference with @Audio1 (Seedance 2.5 accepts an audio-only reference).</li>
+<li>t2v fallback (no references at all): delete the whole REFERENCES paragraph and the sentence 'Audio @Audio1 plays exactly as uploaded; do not modify.' Keep 'The man never speaks; no dialogue, no generated speech.' (the off-screen-narrator statement also stays inside THE MAN block).</li>
+<li>duration: 30 s, aspect 9:16, bitrate_mode: high.</li>
+<li>Run a 480p draft first with draft=true. Finalize the best take at 1080p by passing its draft_job_id within 7 days.</li>
+<li>generate_audio: off for the final. Test on and off in the drafts, because it is unverified whether timing still follows @Audio1 when audio is off. The final soundtrack is always the original audio, laid in CapCut.</li>
+</ul>
+<p>References:</p>
+<ul>
+<li>audio_references: @Audio1 = /tmp/claude-0/-home-user--/6995951e-a6e2-5994-89fd-7bad52ede4e6/scratchpad/seedance-kit/audio/A0_full_29.57s.wav (29.56 s WAV, no encoder padding, under the 30 s cap).</li>
+<li>image_references (optional): @Image1 = the style plate (no person). If you skip it, delete the bracketed OPTIONAL line. The prompt is complete as text only.</li>
+</ul>
+<p>Structure:</p>
+<ul>
+<li>9 whole-second windows, one place and one outfit per window; pins at 9 s, 23 s and 29 s.</li>
+<li>16 hardships in 8 places and outfits: to stay inside the 6–9 window budget and stop outfit bleed, Plan A pairs L5–L6 (desert), L7–L8 (his own house) and L9–L10 (harbour) into one place and one outfit each. The per-hemistich outfits of the full storyboard come from Plan B plus Plan C.</li>
+<li>The 26–30 s window ends on white: a lead-in for the tail S21, which by default comes from its own short job (see S21 and the P3 settings). To try it inside this take instead, keep the bracketed OPTIONAL TAIL line: the last second then shows S21 (the present-day man from behind in his burgundy turtleneck, his head rising before a glowing window); trim 0.72 s of it onto 28.85–29.57. If that second fails, delete the line and make S21 as its own job.</li>
+</ul>
+<p>Edit:</p>
+<ul>
+<li>Whole-second pins cannot land sibilant-exact cuts. Slip every cut to its CapCut marker by up to ±0.5 s; the hatch slam generated at 29 s is slipped −0.46 s onto 28.54. Lay the white flash at 23.07 and the arch close at 28.54 in post.</li>
+<li>Trim any frame in which he faces the camera or a mouth or eye appears.</li>
+</ul>
+<p>Risks and fixes:</p>
+<ul>
+<li>Repair a broken window with video_edit on that time range rather than rerolling all 30 s.</li>
+<li>If more than two windows fail, switch to Plan B plus Plan C.</li>
+</ul>
+<p>Length: about 1,170 words with the OPTIONAL TAIL line (59 words), about 1,110 without it. If the platform rejects the length, delete MAIN IDEA and KEEP CONSISTENT (about 55 words), the OPTIONAL TAIL line, and, when no image is attached, the bracketed OPTIONAL line (about 20 words).</p></div></details>
+    </section>
+  </section>
+
+  <section id="post">
+    <h2>المونتاج والخط</h2>
+    <details open><summary>كتابة القصيدة على الفيديو (CapCut)</summary><div class="prose"><p>لا يُكتب أيّ حرفٍ داخل Seedance؛ القصيدة كلّها تُضاف في CapCut.</p>
+<p><strong>النصّ والخطّ</strong></p>
+<ul>
+<li>الصق النصّ يدوياً بالتشكيل الكامل. لا تستعمل التعليق التلقائي في CapCut لأنّه يُفسد الحركات.</li>
+<li>الأبيات بخطّ Amiri Bold، وهو مجانيّ من Google Fonts ويعرض التشكيل بدقّة. البديل Scheherazade New. أضِف ملفّ TTF من «النص ← الخط ← إضافة».</li>
+<li>سطر النسبة بخطّ Amiri Regular.</li>
+</ul>
+<p><strong>ملاحظات لغوية</strong> (القرار لك):</p>
+<ul>
+<li>أبقينا «لِقَلعُ» كما في الفيديو المصدر؛ والأفصح «لَقَلعُ» بفتح اللام، لأنّها لام الابتداء للتوكيد وخبرها «أهونُ».</li>
+<li>«وَقَودُ فَردِ» كما في نصّك، وفي روايةٍ «قِردِ»، والصورة تحمل الروايتين.</li>
+<li>البيت الخامس: يُطبع في أكثر المصادر «إِلفٍ»، ويُقرأ «أَلفٍ» (ألف ضربة) جناساً. أبقينا نصّك «وَضَربُ إِلفٍ»؛ اسمع المُلقي واكتب ما ينطقه.</li>
+<li>صدر البيت السادس كما في نصّك ينقص مقطعاً في الوزن (مخلّع البسيط)، ويستقيم بقراءة «أَهوَنُ مِن وَقفَةٍ لِحُرٍّ». اسمع المُلقي: إن قالها هكذا فاكتبها كما قال، وانقل التوهّج العنّابي إلى «لِحُرٍّ»؛ وإلّا فأبقِ نصّك.</li>
+</ul>
+<p><strong>اللون والظلّ</strong></p>
+<ul>
+<li>النصّ كريميّ رقّي #EDE0C4.</li>
+<li>ظلّ حبريّ #0B0907: شفافية 70%، تمويه 8px، إزاحة 3px إلى الأسفل، بلا إطار حول الحروف.</li>
+<li>لا شرائط ولا زخارف فيها حروف. وإن أردت إطاراً من النجمة الثمانية فأضِفه طبقةً منفصلة في الذروة فقط بشفافية 25%، هندسةً خالصة بلا حروف.</li>
+</ul>
+<p><strong>الموضع على لوحة 1080×1920</strong></p>
+<ul>
+<li>كلّ المطالبات تُبقي أدنى 40% من الإطار (من y=1152 إلى الأسفل) هادئاً ومظلماً، والحركة المهمّة في الـ60% العليا.</li>
+<li>الكتلة النصّية بين y≈1180 وy≈1480، داخل المنطقة الهادئة، وفوق واجهة إنستغرام السفلية التي تبدأ نحو y≈1500.</li>
+<li>هامش جانبي 90px على الأقلّ، وعرض الكتلة لا يتجاوز 900px.</li>
+<li>الحجم 64–70px، وتباعد الأسطر 1.7.</li>
+</ul>
+<p><strong>سطر النسبة (في الافتتاح)</strong></p>
+<ul>
+<li>«تُنسب إلى الإمام الشافعي» من 0.30 إلى 4.70، بخطّ Amiri Regular، حجم 30px، شفافية 70%، في الوسط فوق كتلة الأبيات مباشرة (y≈1120).</li>
+<li>يظهر بذوبانٍ بعد ظهور صدر البيت الأول، ويذوب بين 4.50 و4.70.</li>
+</ul>
+<p><strong>التوقيت: بيتاً بيتاً</strong>
+يظهر الصدر في الأعلى، ثم يظهر العجز تحته لحظة نطقه، ويبقى البيت كاملاً حتى نهايته.</p>
+<table>
+<thead>
+<tr>
+<th>البيت</th>
+<th>ظهور الصدر</th>
+<th>ظهور العجز</th>
+<th>الخروج</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>| 1 | 0.00 | 2.30 | يذوب 4.70–4.90 |
+| 2 | 4.85 | 7.30 | يذوب 9.40–9.60 |
+| 3 | 9.55 | 11.45 | يذوب 14.00–14.20 |
+| 4 | 14.15 | 16.45 | يذوب 18.65–18.85 |
+| 5 | 18.80 | 21.00 | ينقلب لونه مع الوميض ثم يذوب حتى 23.35 |</p>
+<p><strong>الدخول والخروج</strong></p>
+<ul>
+<li>الدخول كشفٌ كأنّ الحبر يتشرّبه الورق: قناعٌ يمسح من اليمين إلى اليسار بحافّة مموّهة 40px خلال 0.25 ث، مع صعود 6px، وانتقال من تمويه 6px إلى الوضوح.</li>
+<li>الخروج ذوبانٌ مدّته 0.2 ث.</li>
+<li>لا قفز ولا تكبير كرتوني.</li>
+</ul>
+<p><strong>إبراز القافية</strong></p>
+<ul>
+<li>كلمات قافية السين وحدها: أَمسِ، شَمسِ، خَرسِ، فِلسِ، قَلسِ، نَحسِ، عند ضربات السين: 4.48، 9.30، 13.86، 18.45، 23.07، 28.54. تومض كلٌّ منها بتوهّجٍ عنّابي #7E1F2D (توهّج خارجي 14px) مدّة 0.3 ث ثم تعود إلى الكريمي.</li>
+<li>ومعها حَبسٍ عند 1.98 ونَفسٍ عند 3.41 بتوهّجٍ أخفّ.</li>
+<li>اختياري: لونٌ ثانويّ كهرمانيّ خافت #E8A54B لأزواج السجع الداخلي التي تبني كل بيت: برد/فرد/جلد، ضبّ/دبّ/حبّ، نار/عار/دار، خفّ/إلف.</li>
+<li>لا تخلط المجموعتين.</li>
+</ul>
+<p><strong>التنفيذ في CapCut</strong></p>
+<ul>
+<li>CapCut يطبّق التوهّج على طبقة النصّ كلّها ولا يحرّكه بإطارات مفتاحية، وحركات Typewriter والكشف كلمةً كلمة الجاهزة تكسر اتّصال الحروف العربية واتّجاه الكتابة.</li>
+<li>لذلك اجعل كل كلمة قافية، وكل كلمة في الذروة، طبقةَ نصٍّ مستقلّة تُصفّ يدوياً من اليمين إلى اليسار في موضعها من السطر.</li>
+<li>للتوهّج: انسخ الكلمة فوق نفسها مع تفعيل Glow، وحرّك شفافية النسخة وحدها 0→100→0 خلال 0.3 ث.</li>
+<li>لا تستعمل حركات Typewriter أو كلمة-كلمة الجاهزة مع العربية.</li>
+</ul>
+<p><strong>الوميض الأبيض عند 23.07</strong></p>
+<ul>
+<li>يُقلب لون النصّ إلى الأسود الحبري #0B0907 لثلاثة إطارات حتى يبقى مقروءاً، ثم يعود.</li>
+</ul>
+<p><strong>الذروة: البيت السادس (23.35–28.85)</strong></p>
+<ul>
+<li>يبقى النصّ في المنطقة الهادئة نفسها (y≈1180–1480) بحجم 76px، ويُميَّز بالكشف كلمةً كلمة وبتوهّج «الحُرِّ» فقط؛ لا يُوضع أيّ نصّ فوق المطرقة أو اليد أو القطعة النقدية.</li>
+<li>الكشف كلمةً كلمة بطبقاتٍ مستقلّة على الإلقاء: «أَهوَنُ» نحو 23.45، ثم «مِن»، ثم «وَقفَةِ»، ثم «الحُرِّ» نحو 25.3. يبقى الصدر ظاهراً، ويُضاف العجز تحته من 26.00 كلمةً كلمة.</li>
+<li>«الحُرِّ» تبقى بتوهّجٍ عنّابي ثابت (توهّج خارجي 18px)، وهو لون كرامته في الفيلم كلّه.</li>
+<li>«نَحسِ» تظهر نحو 28.30، وعند 28.54 تُختم كالخِتم: تكبير من 106% إلى 100% في 3 إطارات، مع نبضة عنّابية، ثم تنطفئ إلى رماديّ بنّيّ باهت #8A7A66.</li>
+<li>يذوب البيت كلّه بين 28.65 و28.85.</li>
+</ul>
+<p><strong>الذيل (28.95–29.57)</strong></p>
+<ul>
+<li>الأفضل ألّا يُكتب شيء: تبقى الصورة وحدها، وعنّابيّ كنزته هو آخر نغمةٍ للكرامة.</li>
+<li>أو، اختيارياً، سطر النسبة «تُنسب إلى الإمام الشافعي» مرّةً ثانية: Amiri Regular، حجم 30px، شفافية 70%، كريميّ #EDE0C4 بلا توهّج حتى يبقى العنّابي للكنزة وحدها، في الوسط عند y≈1320 داخل المنطقة الهادئة، يظهر بذوبانٍ من 28.95 ويبقى حتى 29.57.</li>
+<li>لا يُضاف أيّ اسم حساب أو معرّف.</li>
+</ul>
+<p><strong>الملمس</strong></p>
+<ul>
+<li>ضع طبقة الحبيبات نفسها فوق النصّ بنسبة 15–20%، مع وميضٍ خفيف 2%.</li>
+<li>لا تطبّق على النصّ اهتزاز الإطار، حفاظاً على المقروئية.</li>
+</ul></div></details><details><summary>الصوت والمونتاج والمؤثرات</summary><div class="prose"><p><strong>1) المسار الرئيسي</strong></p>
+<ul>
+<li>ضع الملفّ الأصلي A_original_29.57s.m4a على 0.00 بمستواه الأصلي (كسب 0 dB)، دون أيّ تغيير في السرعة أو الطبقة، ودون ضغطٍ أو تطبيع. مساره: ‎/tmp/claude-0/-home-user--/6995951e-a6e2-5994-89fd-7bad52ede4e6/scratchpad/seedance-kit/audio/A_original_29.57s.m4a‎</li>
+<li>اكتم صوت جميع مقاطع Seedance، فصوتها مرجعٌ للتوقيت فقط.</li>
+<li>لا تضف موسيقى.</li>
+</ul>
+<p><strong>2) العلامات (Markers)</strong></p>
+<ul>
+<li>العلامات المقيسة (ضربات السين والوقفات): 0.93، 1.98، 2.89، 3.41، 4.48، 6.30، 9.01، 9.30، 10.30، 10.93، 12.04، 12.70، 13.86، 18.45، 19.95، 20.70، 23.07، 28.54.</li>
+<li>حدود الأبيات والأشطر: 1.00، 2.35، 4.90، 7.35، 9.60، 11.50، 14.20، 16.50، 18.85، 21.05، 23.35، 26.00، 26.90، 28.85، 29.57.</li>
+<li>أربع علامات تقديرية ليست مقيسة: 3.65 (وَرَدُّ)، 15.35 (وَحَملُ)، 24.75 (وَقفَةِ)، 27.50 (بِبابِ). كبّر الموجة الصوتية وانقل كلّاً منها إلى بداية الحرف الفعلية (±0.2 ث) قبل قصّ المقاطع، حتى لا يقع القطع في منتصف كلمة.</li>
+<li>رقم الإطار = الثانية × 24.</li>
+<li>لا تحرّك الصوت أبداً؛ المقاطع هي التي تتحرّك.</li>
+</ul>
+<p><strong>3) التجميع</strong></p>
+<ul>
+<li><strong>الخطّة B، وهي الموصى بها مع ترقيعات الخطّة C:</strong></li>
+<li>P1 (توليد 10 ث) عند 0.00، وP2 (توليد 9 ث) عند 9.60، وP3 (توليد 10 ث) عند 18.85.</li>
+<li>Seedance 2.0 يتجاهل الأزمنة المكتوبة، فيقسم اللقطات الأربع بالتساوي تقريباً. قسّم كلّ جزءٍ عند قطوعه هو، ثم غيّر سرعة كل قطعة بين 75% و125%، أو جمّد آخر إطاراتها، حتى تنتهي على علامتها:<ul>
+<li>P1: القطوع المتوقّعة نحو 2.5 / 5.0 / 7.5، والمطلوبة 2.35 / 4.90 / 7.35.</li>
+<li>P2: المتوقّعة نحو 11.85 / 14.10 / 16.35، والمطلوبة 11.50 / 14.20 / 16.50؛ واستعمل أوّل 9.25 ث.</li>
+<li>P3: المتوقّعة نحو 21.35 / 23.85 / 26.35، والمطلوبة 21.05 / 23.35 / 26.00؛ واستعمل حتى 28.85.</li>
+</ul>
+</li>
+<li>ترقيعات الخطّة C على علاماتها لاستعادة الأثواب المستقلّة: S01 (0.00–1.00، ثوب الحلّاق الكريمي)، وS04 (3.65–4.90، السطح والثوب الرمليّ والعباءة)، وS11 (14.20–15.35، المطبخ والثوب الملطّخ بالسخام)، واختيارياً S20 بإطارها من داخل الكوّة (27.50–28.85).</li>
+<li>أيّ لقطةٍ تسرّب إليها ثوب لقطةٍ مجاورة: أعِد توليدها وحدها بالخطّة C وضعها على علامتها.</li>
+<li><strong>الذيل S21 (28.85–29.57):</strong> لقطةٌ مُولَّدة جديدة بأسلوب مسرح الظلّ نفسه، بلا أيّ صورةٍ فوتوغرافية:</li>
+<li>المسار الأساسي: مهمّةٌ قصيرة مستقلّة (Kling 4.0 أو Seedance، 4–5 ث، نصّ فقط بلا صوت). اقطع منها 0.72 ث من أفضل لحظة، ويُفضَّل أن تنتهي على الرأس وقد استقام؛ وإن طال ارتفاع الرأس فسرّع ذلك الجزء 150–200%.</li>
+<li>البديل: الثانية الأخيرة من مهمّة الخطّة A ذات الثلاثين ثانية.</li>
+<li>احتياطٌ في CapCut بلا ذكاء اصطناعي: ثبّت آخر إطارٍ من شقّ الضوء في S20 وأذِبه إلى الأبيض حتى 29.57.</li>
+<li><strong>الخطّة C، وهي الأضمن:</strong> مهمّةٌ واحدة لكل لقطة، طولها 5 ث، تُقصّ على العلامات، مع إزاحةٍ لا تتجاوز ±0.5 ث أو سرعةٍ بين 90% و110%.</li>
+<li><strong>الخطّة A، وهي تجريبية:</strong> قصّ اللقطة الطويلة عند كل قطع، واسحب كل جزء إلى علامته (±0.5 ث)؛ وصفقة الكوّة المولّدة عند 29 ث تُزاح −0.46 ث إلى 28.54.</li>
+<li>في كل الخطط: احذف أيّ إطارٍ يواجه فيه الرجل الكاميرا أو الكوّة، أو يظهر فيه فمٌ أو عين.</li>
+</ul>
+<p><strong>4) مؤثّرات تُبنى في المونتاج (ضمانٌ إن لم يولّدها Seedance)</strong></p>
+<ul>
+<li>وميضٌ أبيض كامل من 4 إلى 6 إطارات عند 23.07، ثم ذوبانٌ من الأبيض حتى 23.35.</li>
+<li>قناعُ قوسٍ أسود على شكل حدوة الفرس يُغلق في 3 إطارات عند 28.54، ويترك شقّاً من الضوء يثبت حتى 28.85، ثم يتّسع فيصير نافذة الذيل بين 28.85 و28.95 (ابنِ هذا الاتّساع بالقناع نفسه إن بدأ مقطع الذيل والنافذة مفتوحة).</li>
+<li>عند 9.01–9.30 خفّض السطوع تدريجياً بنسبة 40% إن لم تمت الشمس في الصورة.</li>
+<li>الانتقالات التي حُذفت من المطالبات تُبنى هنا بالأقنعة أو المزج عند علاماتها: قناع ثقب المفتاح من الضرس عند 1.00، ووهج النافذة إلى الشمس عند 3.65 (مع ترقيع S04)، ومسحة الثلج عند 4.90، ومسحة الدخان عند 15.35، ومسحة الرمل إلى رذاذ البحر عند 21.05.</li>
+</ul>
+<p><strong>5) مؤثّرات صوتية خفيفة (اختيارية)</strong></p>
+<ul>
+<li>اجعلها بين −28 و−18 dB تحت الإلقاء، وابدأ كلّاً منها بعد ضربة السين بإطارٍ أو إطارين حتى لا تغطّي الحرف.</li>
+<li>اخفض المؤثّرات تلقائياً (ducking) بمقدار 6 dB حين يوجد الصوت البشري.</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>الزمن (ث)</th>
+<th>المؤثّر</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>| 0.93 | طقّة كلّابٍ معدنية جافّة |
+| 1.98 | صفقة باب حديد مكتومة مع خشخشة مفاتيح |
+| 3.41 | رفرفة خافتة تتلاشى |
+| 4.48 | ارتخاء حبل |
+| 6.30 | هبّة ريحٍ ثلجية |
+| 9.01–9.30 | رعدٌ منخفض جدّاً |
+| 10.93 | زمجرة دبٍّ عميقة، مفلترة تحت 400Hz لتبقى إحساساً لا ضجيجاً |
+| 12.04 | نثر حَبٍّ على أرضٍ يابسة |
+| 13.86 | طقطقة طينٍ متشقّق |
+| 14.4 و15.0 | نفختان على جمر |
+| 18.45 | رنّة فلسٍ نحاسيّ صغيرة، أوضح مؤثّرٍ صغير |
+| 19.95–20.70 | ريحٌ رملية تتصاعد مع دخول الوتر |
+| 21.05–22.8 | خفقات شراعٍ بعيدة مكتومة |
+| 23.07 | فرقعة حبلٍ غليظة مع ضربةٍ منخفضة، أقوى نقطة، نحو −14 dB |
+| 26.9 | انفتاح شبّاكٍ خشبي |
+| 28.54 | صفقة الشبّاك ورنّة القطعة في التراب |
+| 28.85–29.57 | دوران بكرة جهاز عرضٍ قديم يخفت مع ذيل الموسيقى |</p>
+<p><strong>6) الطابع العتيق للصورة</strong></p>
+<ul>
+<li>حبيبات فيلم بنسبة 15–25%، ووميض سطوع 2–3%، وتظليلٌ بيضاويّ للحوافّ.</li>
+<li>طبقة سيبيا موحّدة بنسبة 10% لا تمحو العنّابي.</li>
+<li>CapCut لا يثبّت الإطارات «على اثنين» ولا يصدّر 12 إطاراً/ث؛ لذلك مرّر مقاطع مسرح الظلّ قبل الاستيراد عبر الأمر: ffmpeg -i in.mp4 -vf 'fps=12,fps=24' out.mp4، بما فيها الذيل S21 لأنّه من الأسلوب نفسه؛ أو تجاوز هذه الخطوة لأنّ المطالبات تطلب الحركة على اثنين أصلاً.</li>
+<li>تجنّب VHS والـGlitch وتسرّب الضوء والخدوش الكثيفة.</li>
+</ul>
+<p><strong>7) التصدير</strong></p>
+<ul>
+<li>الصورة: 1080×1920، بمعدّل 24 إطاراً/ث، ترميز H.264 بمعدّل 16–20 Mbps.</li>
+<li>الصوت: AAC بمعدّل 320kbps، والمسار الأصلي بمستواه كما هو؛ إنستغرام يضبط الجهارة بنفسه.</li>
+<li>المدّة 29.57 ث بالضبط، والإطار الأخير ثابتٌ على رأسه المرفوع.</li>
+</ul></div></details>
+  </section>
+
+  <section id="kit">
+    <h2>الملفات المرجعية</h2>
+    <p class="prose">كلها اختيارية ما عدا صوت القصيدة الأصلي للمونتاج. الأوامر تشتغل بالكتابة وحدها.</p>
+    <ul class="refs"><li><b dir="ltr">@Audio1 (Plan A)</b><span dir="ltr" class="path">/tmp/claude-0/-home-user--/6995951e-a6e2-5994-89fd-7bad52ede4e6/scratchpad/seedance-kit/audio/A0_full_29.57s.wav (29.56 s, 16-bit WAV, about 5 MB; replaces the earlier 30.01 s MP3, which was over the 30 s cap)</span><span>Rhythm and timing driver for the single 30 s Seedance 2.5 job; 2.5 accepts an audio-only reference. WAV adds no encoder padding, so it stays under the 30 s limit (if you re-export, check with ffprobe that the duration is below 30.000). It is not trusted as the output soundtrack.</span></li><li><b dir="ltr">@Audio1 (Plan B, one per part)</b><span dir="ltr" class="path">P1: /tmp/claude-0/-home-user--/6995951e-a6e2-5994-89fd-7bad52ede4e6/scratchpad/seedance-kit/audio/A1_part1_0.00-9.60_10.00s.wav (9.60 s of poem + 0.40 s silence = 10.00 s). P2: /tmp/claude-0/-home-user--/6995951e-a6e2-5994-89fd-7bad52ede4e6/scratchpad/seedance-kit/audio/A2_part2_9.60-18.85_9.25s.wav (9.25 s, no pad). P3: /tmp/claude-0/-home-user--/6995951e-a6e2-5994-89fd-7bad52ede4e6/scratchpad/seedance-kit/audio/A3_part3_18.85-28.85_10.00s.wav (10.00 s, ends where the voice ends).</span><span>Beat driver for each Seedance 2.0 part (generated at 10 s, 9 s and 10 s). Every clip is within the 2–15 s limit and is WAV, so no encoder padding. Seedance 2.0 refuses an audio reference unless at least one image is attached: always attach @Image1.</span></li><li><b dir="ltr">@Image1 (style plate; required in every Plan B part, optional in Plan A)</b><span dir="ltr" class="path">Generate one 9:16 still first in any image model with this prompt: &#x27;Flat 2D shadow-theatre cut-out: an empty backlit souq courtyard under a horseshoe arch, layered amber parchment planes with multiplane depth, a mashrabiya lattice shadow across the floor; opaque black card cut-outs of a palm tree, pillars and a hanging oil lamp with filigree scissor-cut edges; one translucent dyed-hide hanging cloth glowing like stained glass in muted ochre with a thin burgundy border; noir backlight, fine film grain, lower part of the frame dark. No people, no figure, no text, no letters, no border.&#x27; Check it closely: no person, no eye-like shapes, no text.</span><span>The strongest lock against drift into 3D or comic styles. It contains no person and no costume, so nothing leaks into his changing outfits. Paste line: &#x27;@Image1 defines only the cut-out technique, translucent-hide rendering, paper texture and palette; it contains no person and no clothing.&#x27;</span></li><li><b dir="ltr">@Image2 (optional; P2 Shot 1 and the S08 Plan C job only)</b><span dir="ltr" class="path">/tmp/claude-0/-home-user--/6995951e-a6e2-5994-89fd-7bad52ede4e6/scratchpad/seedance-kit/refs/R5_lizard.png (800x328 crop of his plush lizard only; the TV, map, polaroids and cabinet are cropped out)</span><span>The one room motif that truly serves its line (ضَبّ). Paste line: &#x27;@Image2 defines only the stubby spotted body and thick tail of the lizard; render it as a real desert lizard in black cut-out, not a toy.&#x27; Never attach it to any other shot. If a job fails in under 10 s (filter rejection), resubmit without @Image2; the prompt already describes the lizard as text.</span></li><li><b dir="ltr">S21 tail (its own generated job; no file to upload)</b><span dir="ltr" class="path">No reference image of any person. Text-only by default: Kling 4.0, or Seedance 2.0 / 2.5 t2v, 4–5 s, 9:16, no audio. Paste as for Plan C: style_bible_en (STYLE, STYLE LOCK, SAFETY TAIL) → the IDENTITY block → S21&#x27;s seedance_prompt. Alternative: the last second of the Plan A 30 s job, with its bracketed OPTIONAL TAIL line kept.</span><span>A newly generated closing shot in the same flat 2D shadow-theatre cut-out style: the present-day free man seen from behind, in his own burgundy fine-knit turtleneck and black high-waisted pleated trousers, before a tall glowing window; his bowed head rises until upright. Trim 0.72 s from its best moment onto 28.85–29.57. Only if the look drifts, rerun with @Image1 = the style plate (it contains no person).</span></li><li><b dir="ltr">Optional @Image2 in the S21 job only (burgundy swatch; attached after @Image1)</b><span dir="ltr" class="path">/tmp/claude-0/-home-user--/6995951e-a6e2-5994-89fd-7bad52ede4e6/scratchpad/seedance-kit/refs/R2_swatch.jpg (480x300 crop of the burgundy knit only, from his own photo; the figurine, plant and shelves are cropped out)</span><span>Only if the text alone misses the colour of his turtleneck, and only together with @Image1 = the style plate, so the swatch is always the second image. It contains no person. Paste line: &#x27;@Image2 defines only the burgundy colour and fine knit of the turtleneck; render it as flat translucent dyed hide, not a photo.&#x27; Never attach it to any other shot.</span></li><li><b dir="ltr">S21 CapCut fallback (no AI)</b><span dir="ltr" class="path">No file: the last frame of S20 (the arch-shaped slit of light).</span><span>Only if no S21 take works: freeze S20&#x27;s last frame from 28.85 and dissolve it to white by 29.57. No figure is added, so no face can appear.</span></li><li><b dir="ltr">CapCut master (not a Seedance reference)</b><span dir="ltr" class="path">/tmp/claude-0/-home-user--/6995951e-a6e2-5994-89fd-7bad52ede4e6/scratchpad/seedance-kit/audio/A_original_29.57s.m4a (29.57 s)</span><span>The final soundtrack, laid at 0.00 under the edited film. Every generated clip is muted.</span></li></ul>
+  </section>
+
+  <section id="vision">
+    <h2>رؤية المخرج</h2>
+    <div class="prose"><p>القصيدة في بنيتها مسرحُ ظلال: قائمةٌ من ستّ عشرةَ محنة تمرّ كما تمرّ الدُّمى خلف الستارة، ثم تهون كلّها أمام مشهدٍ واحد هو وقفة الحرّ بباب اللئيم. لذلك اخترنا «خيال الظلّ» العربي، الفنّ الذي كتب له ابنُ دانيال المولود في الموصل، وصوّرناه بعمق الكاميرا متعدّدة الطبقات في رسوم الثلاثينيات وبإضاءة النوار الخلفية. ويبقى الأسلوب نفسه حتى آخر إطار، فالحاضر في الخاتمة يُروى بالظلّ أيضاً.</p>
+<p>إخفاء الوجه هنا جزءٌ من بنية الفنّ نفسه. الرأس والشعر واللحية واليدان من ورقٍ أسود معتم بلا عين ولا ثقب، والشفتان مطبقتان لا تتحرّكان، لأنّ الصوت راوٍ من خارج الصورة. هويّتك تُعرف من أربع علامات: تاج الشعر المجعّد المقصوص خيوطاً دقيقة، وحدّ اللحية المسنّن، وذراع النظّارة الرفيعة تلمع من الأذن إلى الحاجب دون أن تُرسم أيّ حلقةٍ في موضع العين، والكتفان العريضان. وتُعرف أيضاً من الهيئة: ينحني الرأس في المحن، وأمام الباب ينحني قليلاً بلا أيّ عمل، ثم يستقيم ويرتفع ذقنه حين يدير ظهره للباب وفي الخاتمة.</p>
+<p>الثياب وحدها مصنوعة من جلدٍ مصبوغ شفّاف يتوهّج كالزجاج الملوّن، كما كانت دمى خيال الظلّ الحقيقية، وكلّ ثوبٍ لوحٌ واحد مسطّح هو نفسه شكل الجسد، لا يشفّ عن جلدٍ ولا جسد. ولأنّك طلبت ألّا تبقى ثيابك نفسها، فلكلّ مكانٍ ولكلّ شطرٍ ثوبه، بلونٍ وخطٍّ خارجيّ لا يتكرّران:</p>
+<ul>
+<li>ثوبٌ قطني كريمي عند الحلّاق.</li>
+<li>خيشٌ رمادي ممزّق الحاشية وقيدٌ في السجن.</li>
+<li>ثوب نومٍ كتّاني عند النزع.</li>
+<li>ثوبٌ رمليّ بحزامٍ وعباءة على السطح.</li>
+<li>فروةٌ بلون المَغْرة بحافّةٍ صوفية مشعّثة في الثلج.</li>
+<li>مريلةُ دبّاغٍ بأحزمة.</li>
+<li>عُدّةُ صيّادٍ بصدرية فرو.</li>
+<li>ثوبُ فلّاحٍ بلون القشّ.</li>
+<li>ثوبٌ رماديّ ملطّخ بالسخام عند الموقد.</li>
+<li>عباءةٌ مسحوبة على الرأس للخزي.</li>
+<li>بشتُ تاجرٍ باهت.</li>
+<li>عباءةُ مسافرٍ مرقّعة وقدمان حافيتان.</li>
+<li>صدريةُ حمّالٍ خضراء مغلقة حتى العنق.</li>
+<li>أفضل ثيابه على بساطتها أمام الباب الأخير.</li>
+<li>ثيابك أنت في الحاضر كما في صورك: كنزةٌ عنّابية رفيعة الحياكة بياقةٍ عالية، وبنطالٌ أسود عالي الخصر بثنيات.</li>
+</ul>
+<p>لونٌ واحد مشبع فقط يكسر السواد والكهرماني، هو العنّابي لون كنزتك، وهو هنا لون الكرامة. يظهر خيطاً على الكُمّ في أول لقطة، ويبقى معقوداً تحت قيد السجن، ثم يصير حزام مريلة، فعقدةً على عمامة الصيّاد، فبطانةً مخبّأة تحت قناع العار، فحاشيةً مهترئة على بشت التاجر، فعصابةً على رأس الحمّال، حتى يتوهّج بطانةً كاملة في بشته القديم أمام الباب. وفي الخاتمة يعود العنّابي إلى أصله: كنزتك أنت في الحاضر، وهي آخر نغمةٍ للكرامة في الفيلم. الكرامة لا تولد عند الباب، إنّها حاضرة في كل محنة.</p>
+<p>والبشت الأخير ليس ثوب ثريّ: الرجل باع داره بربع فلس وباع خفّه، فلم يبقَ له إلّا بشتٌ واحد قديم حاشيته الذهبية باهتة مرتوقة بعناية. الكرامة هنا ليست مالاً، بل هيئةٌ يحفظها صاحبها، ولذلك يبدو رجاؤه «نوالاً» من اللئيم صادقاً ومؤلماً.</p>
+<p>الباب موتيفٌ متكرّر: باب الزنزانة، ثم الغيمة التي تُطبق على الشمس كما يُغلق باب، ثم باب الدار المبيعة، ثم الباب الأخير وهو أسوأها. وحين تبدأ «أهونُ» تمرّ على الأعمدة ظلالٌ صغيرة لمحنه السابقة، الكلّاب والقضبان والدبّ والحبل، وتتلاشى ضئيلةً أمام ظلّ الباب الهائل: هذه هي المقارنة التي تقوم عليها القصيدة كلّها. والشاعر لم يجعل الأشدّ هو الردّ، بل «الوقفة» نفسها، لذلك يبتلع ظلُّ الباب ظلَّ الرجل وهو واقفٌ لم يطرق بعد، وينحني رأسه لأوّل مرّة بلا أيّ عمل. وعند «نوالاً» تتدلّى من الكوّة قطعةُ نقدٍ على خيط، تمسكها اليدُ المكتنزة ذات خاتم العقيق نفسها التي اشترت داره بربع فلس، فاللئيم واحد. تنزل يده، ومن أوّل إطارٍ في اللقطة التالية نراه قد ابتعد ماشياً نحو الضوء وظهره لنا، وقد طلعت الشمس أمامه فامتدّ ظلّه حتى غطّى الباب، ورأسه يرتفع حتى يستقيم. وعند «نحس» تُصفق الكوّة وتسقط القطعة في التراب ولا يلتقطها أحد، وينغلق الإطار على شقٍّ من الضوء. ثم يتّسع الشقّ فيصير نافذةً عالية مضيئة في غرفةٍ من زماننا، مقصوصةٍ هي أيضاً من ورقٍ أسود: أغصان نبتةٍ متسلّقة تتدلّى من رفٍّ عالٍ، ولوحٌ خشبيّ من شرائح متوازية على الجدار، وطيفٌ باهت لخريطةٍ قديمة للعالم بلا أيّ حرف. تقف أمامها بثيابك أنت، الكنزة العنّابية والبنطال الأسود، وظهرك لنا، ورأسك المنحني يرتفع كما ارتفع رأسه حين أدار ظهره للباب حتى يستقيم، والضوء يتحوّل من الكهرماني الدافئ إلى فضّيّ ناعم. ولا يظهر وجهك أبداً، فالخاتمة من مسرح الظلّ نفسه لا صورةٌ فوتوغرافية: الحرّ هو الحرّ في كل زمان.</p>
+<p>العنف كلّه رمزيّ: ظلّ سجّانٍ بحلقة مفاتيح، وظلّ كلّاب على الجدار، وحبلٌ يضرب الشراع ويمرّ ظلّه على ظهر الحمّال المنحني تحت حمله، ووميضٌ أبيض. لا دم ولا جسد يُضرب، والنبرة جليلة مأساوية لا هزل فيها.</p></div>
+  </section>
+</div>
+<script>
+document.addEventListener('click', function (e) {
+  var b = e.target.closest('.copy'); if (!b) return;
+  var el = document.getElementById(b.dataset.target); if (!el) return;
+  var t = el.textContent;
+  function done() { b.textContent = 'نُسخ'; b.classList.add('ok'); setTimeout(function () { b.textContent = 'نسخ'; b.classList.remove('ok'); }, 1600); }
+  function fallback() { var r = document.createRange(); r.selectNodeContents(el); var s = window.getSelection(); s.removeAllRanges(); s.addRange(r); b.textContent = 'حدّد النص وانسخه'; }
+  try { navigator.clipboard.writeText(t).then(done, fallback); } catch (err) { fallback(); }
+});
+</script>
