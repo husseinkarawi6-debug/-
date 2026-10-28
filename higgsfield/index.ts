@@ -3,14 +3,16 @@
 // Credentials: HF_CREDENTIALS=KEY_ID:KEY_SECRET in .env.local (git-ignored), loaded at runtime.
 import fs from 'node:fs';
 import path from 'node:path';
+import util from 'node:util';
 import { config, higgsfield } from '@higgsfield/client/v2';
 
 const MODEL = 'bytedance/seedance-2.5/text-to-video';
 
+// .env.local wins over an inherited HF_CREDENTIALS (process.loadEnvFile never overrides).
 const envFile = path.resolve(import.meta.dirname, '..', '.env.local');
-if (fs.existsSync(envFile)) process.loadEnvFile(envFile);
+const fileEnv = fs.existsSync(envFile) ? util.parseEnv(fs.readFileSync(envFile, 'utf8')) : {};
 
-const credentials = process.env.HF_CREDENTIALS?.trim();
+const credentials = (fileEnv.HF_CREDENTIALS ?? process.env.HF_CREDENTIALS)?.trim();
 if (!credentials || !credentials.includes(':')) {
   console.error('HF_CREDENTIALS is missing or not in KEY_ID:KEY_SECRET format. Set it in .env.local.');
   process.exit(1);
