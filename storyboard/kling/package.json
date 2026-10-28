@@ -1,0 +1,15 @@
+{
+  "name": "khayal-alzill-kling",
+  "version": "1.0.0",
+  "description": "Kling 4.0 (Higgsfield API) generation for the shadow-theatre poem film",
+  "scripts": {
+    "climax": "node generate.mjs prompts/climax_6s.txt 6 720p",
+    "full": "node generate.mjs prompts/full_30s.txt 30 720p"
+  },
+  "license": "ISC",
+  "dependencies": {
+    "@higgsfield/client": "^0.2.6"
+  },
+  "private": true,
+  "type": "module"
+}
