@@ -1,117 +1,143 @@
-# «وقفةُ الحُرّ»: ستوري بورد سينمائي لـ Kling 4.0
+# «وقفةُ الحُرّ»: ستوري بورد سينمائي لـ Kling 4.0 (النسخة القوية)
 
-> **ملف واحد كامل.** أعطه لـ Claude Code داخل مشروع الاستوديو، وهو ينفّذه على Kling 4.0 (Higgsfield API) من أول خطوة إلى المونتاج النهائي.
-> نفس القصة والأشطر والتوقيت والثياب، لكن بصورة **سينمائية حيّة** بدل خيال الظل: فيلم تاريخي بكاميرا 35mm وإضاءة درامية.
+> **ملف واحد كامل.** أعطه لـ Claude Code في مشروع الاستوديو، فيولّد كل شيء على Kling 4.0 (Higgsfield API) ويركّب الفيلم حتى النهاية.
+> **ممنوع أي نص أو كتابة على الفيديو.** يُسلَّم بالصورة وصوت القصيدة الأصلي فقط.
 
 ---
 
 ## 0. تعليمات لـ Claude Code (اقرأها أولاً)
 
 1. **المشروع:** المستودع `husseinkarawi6-debug/-`، الفرع `ccr-3e631938-w45w9m`.
-   - السكربت الجاهز: `storyboard/kling/generate.mjs`.
-   - طريقة الاستعمال: `node generate.mjs <prompt-file> <duration> <720p|1080p>`.
-   - المقاس ثابت 9:16 داخل السكربت.
-2. **المفتاح:** `HF_CREDENTIALS` موجود كمتغير بيئة.
+   - السكربت: `storyboard/kling/generate.mjs`.
+   - الاستعمال: `node generate.mjs <prompt-file> <duration> <720p|1080p>`، والمقاس 9:16 ثابت.
+2. **المفتاح:** `HF_CREDENTIALS` من البيئة أو من `.env.local`.
    - لا تقرأه، ولا تطبعه، ولا تحفظه في أي ملف.
    - إذا لم يكن موجوداً، توقّف وأخبرني.
-3. **الأوامر:** أنشئ ملفات الأوامر من الكتل المرقّمة في القسم 6:
-   - مكانها: `storyboard/kling/prompts/cine/`.
-   - انسخ كل كتلة كما هي حرفياً، كل كتلة في ملف باسمها: `CINE_P1.txt`، `CINE_P2.txt`، `CINE_P3.txt`، `CINE_TAIL.txt`.
-4. **التوليد مدفوع.** قبل كل طلب:
-   - اطبع اسم الملف والمدة والدقة.
-   - لا تعِد أي طلب فشل أكثر من مرة واحدة بدون إذني.
+3. **ملفات الأوامر:** انسخ كل كتلة من القسم 7 حرفياً إلى ملف في `storyboard/kling/prompts/cine/`:
+   - `CINE_P1.txt`، `CINE_P2.txt`، `CINE_P3.txt`، `CINE_TAIL.txt`.
+4. **التوليد:** ولّد الأربعة دفعة واحدة بدقة **1080p**، بلا اختبار مسبق ولا انتظار لموافقتي.
+   - اطبع اسم كل ملف ومدته ودقته قبل إرساله.
+   - إذا فشل طلب، أعِده مرة واحدة فقط.
    - لا تقل «نجح» إلا إذا رجعت حالة `completed` ومعها `video.url`.
-5. **الترتيب:** ولّد الأجزاء الأربعة كلها دفعة واحدة، بلا اختبار مسبق ولا انتظار لموافقتي: **P1 وP2 وP3 وTAIL**، كل منها بدقة 1080p. بعدها أكمل المونتاج حتى الفيديو النهائي.
-6. **بعد التوليد:** نفّذ القسم 8 (المونتاج) والقسم 9 (فحص الجودة)، وسلّمني الملفات المذكورة في القسم 10. **لا تضع أي نص على الفيديو.**
+5. **بعد التوليد:** نفّذ بالترتيب:
+   - القسم 8: الانتقالات والمؤثرات.
+   - القسم 9: المونتاج.
+   - القسم 10: فحص الجودة.
+   - ثم سلّمني ما في القسم 11.
+6. **لا تضع أي كلمة على الفيديو**، ولا تولّد أي شيء خارج هذا الملف.
 
 ---
 
-## 1. الفكرة
+## 1. القصة: «كل شيء يُنتزع منه… إلا كرامته»
 
-- **القصيدة:** قائمة بست عشرة محنة، كلها أهون من «وقفة الحرّ يرجو نوالاً بباب نحس». تُنسب إلى الإمام الشافعي.
-- **الفيلم:** رجل واحد لا نرى وجهه أبداً، يعبر هذه المحن واحدةً تلو الأخرى، وثيابه ومكانه يتبدّلان مع كل شطر. يحتمل كل شيء.
-- **الذروة:** يقف أمام باب لئيم، ويرفع يده ليطرق ثم لا يطرق. يستدير ويمشي نحو الشمس، فتسقط قطعة النقد في التراب ولا يلتقطها أحد.
-- **الخاتمة:** الرجل نفسه في زماننا، بكنزته العنّابية أمام نافذة، ورأسه المنحني يرتفع.
-- **الرسالة:** الكرامة ليست مالاً ولا وجهاً، بل هيئة.
+القصيدة (تُنسب إلى الإمام الشافعي) قائمة بمحن كلها «أهونُ من وقفةِ الحُرِّ يرجو نوالاً ببابِ نحسِ».
 
-## 2. الأسلوب السينمائي (Look)
+**الخط الدرامي:**
+- رجل حرّ يُجرَّد من كل شيء، مشهداً بعد مشهد.
+- **اليد نفسها** تظهر في المحن كلها: يد مكتنزة بخواتم وخاتم عقيق أحمر، يد اللئيم. تمدّ له النجاة بثمن الذل: فلس، أو مفتاح، أو بطانية، أو صحن طعام.
+- في كل مرة **يرفض** ويختار المحنة.
+- **الرمز:** خيط عنّابي معقود على معصمه، هو كرامته. كلما خسر شيئاً بقي الخيط.
 
-- **الصورة:**
-  - فيلم تاريخي واقعي، كأنه مصوّر على 35mm بعدسات أنامورفيك.
-  - التكوين عمودي 9:16، لكنه مؤطَّر بعين سينمائية.
-  - حبيبات فيلم خفيفة، وضبابية حركة طبيعية بـ 24 إطاراً.
+**الخسارات بالترتيب:**
+
+| | خسر |
+|---|---|
+| 1 | الصحة |
+| 2 | الحرية |
+| 3 | الروح والعمر |
+| 4 | الماضي |
+| 5 | الدفء |
+| 6 | الرزق |
+| 7 | الأمان |
+| 8 | الأمل |
+| 9 | السمعة |
+| 10 | البيت |
+| 11 | الحذاء |
+| 12 | الصديق |
+| 13 | الجسد المتعب |
+
+في القاع لا يبقى معه إلا الخيط.
+
+**الذروة:**
+- يقف أخيراً أمام **باب اللئيم نفسه**.
+- تُفتح الكوّة ويتدلّى **كيس ذهب كامل**.
+- ينظر إلى الخيط على معصمه، فينزل يده، ويستدير، ويمشي نحو الشمس.
+- الذهب يسقط في التراب ولا يلتفت إليه، والكوّة تنصفق.
+
+**الخاتمة:** هو اليوم بكنزته العنّابية أمام نافذته، ونفس الخيط على معصمه، ورأسه يرتفع.
+**الرسالة:** خسر كل شيء… ولم يخسر نفسه.
+
+## 2. لغة التصوير
+
+- **الشكل:** فيلم تاريخي واقعي.
+  - مصوّر على 35mm أنامورفيك، بحبيبات ناعمة ووهج عدسات أفقي (anamorphic flares).
+  - عمق ميدان ضحل، وضبابية حركة بـ 24 إطاراً.
+  - التكوين عمودي 9:16 بعين سينمائية.
 - **الإضاءة:**
-  - **ضوء خلفي قوي** (backlight / rim light) في أغلب اللقطات، فيصير البطل ظلاً أسود أو حافة ضوء.
-  - ضباب جوّي يُظهر أشعة الضوء، وتباين قوي بين الضوء والظل (chiaroscuro).
-- **الألوان:** ألوان ترابية خافتة، ولون مشبع واحد فقط هو **العنّابي**، لون الكرامة. يكبر حضوره مع الفيلم:
+  - ضوء خلفي قوي في كل لقطة تقريباً، فيصير البطل ظلاً أو حافة ضوء.
+  - ضباب جوّي، وأشعة ضوء (god rays)، وغبار يسبح في الضوء، وتباين قوي (chiaroscuro).
+- **العدسات والحركة:**
 
-  | المشهد | العنّابي |
-  |---|---|
-  | البداية | خيط على الكُمّ |
-  | المدبغة | حزام المريلة |
-  | بيع الدار | حاشية البشت |
-  | الميناء | عصابة الحمّال |
-  | الباب | بطانة البشت كاملة |
-  | الخاتمة | الكنزة |
+  | النوع | العدسة | الاستعمال |
+  |---|---|---|
+  | لقطات واسعة | 24mm | المكان والوحدة |
+  | لقطات متوسطة | 50mm | الجسد والحركة |
+  | ماكرو | 100mm | اليدان، والخيط، والفلس، والعين على الأشياء |
 
-- **الكاميرا:** حركات بطيئة ومتعمّدة: دوللي، وكرين، ودفع نحو الهدف (push-in)، ولقطات من فوق الكتف، وماكرو على اليدين والأشياء. ممنوع الكاميرا المحمولة المهتزّة.
-- **النبرة:** جليلة ومأساوية، بلا هزل.
+  حركات بطيئة ومحكمة: دوللي، كرين، دفع نحو الهدف، كاميرا علوية (top-down)، وتتبّع جانبي.
 
-**لون كل مشهد:**
+- **السرعة:** إبطاء شديد (slow motion) في لحظات الرمز:
+  - طيران الحمامة.
+  - نثر الحَبّ.
+  - سقوط الفلس.
+  - سقوط الذهب.
 
-| الزمن (ث) | المشهد | اللون |
-|---|---|---|
-| 0–2.35 | الحلاق والسجن | أزرق ليلي فولاذي مع بقعة سراج كهرمانية |
-| 2.35–4.90 | النزع والأمس | فضي، ثم غروب برتقالي ينطفئ إلى أزرق |
-| 4.90–7.35 | البرد | أبيض مزرق |
-| 7.35–9.60 | المدبغة | بنّي ترابي تحت سماء سوداء |
-| 9.60–11.50 | الضب والدب | ليل أزرق عميق مع نار كهرمانية |
-| 11.50–14.20 | الأرض البور | أوكر شاحب محروق |
-| 14.20–16.50 | النار والعار | جمر أحمر، ثم رمادي الغسق |
-| 16.50–18.85 | بيع الدار | سيبيا دافئ |
-| 18.85–21.05 | الخف والرفيق | أوكر الغروب، ويبرد عند 20.7 |
-| 21.05–23.35 | الميناء | أخضر بحري ليلي |
-| 23.35–28.85 | الباب | ذهبي الفجر، والباب أسود ميّت |
-| 28.85–29.57 | الحاضر | ضوء نافذة فضي |
+  وتسريع مفاجئ (speed ramp) عند الصدمات:
+  - صفقة الباب.
+  - قيام الدب.
+  - فرقعة الحبل.
+
+- **اللون:** ألوان ترابية خافتة. العنّابي هو اللون المشبع الوحيد، ويكبر مع الفيلم.
+- **النبرة:** جليلة ومأساوية وملحمية، بلا هزل.
 
 ## 3. البطل وقاعدة الوجه
 
 **الشكل:**
-- رجل في منتصف العشرينات، رياضي البنية، عريض الكتفين.
+- منتصف العشرينات، رياضي عريض الكتفين.
 - شعر داكن كثيف مموّج كيرلي.
 - لحية قصيرة داكنة تظهر كحافة على الفك فقط.
 - نظارة رفيعة بإطار سلكي دائري، يلمع ذراعها خلف الأذن.
+- **خيط عنّابي معقود على معصمه الأيمن في كل مشهد.**
 
-**قاعدة الوجه (إلزامية في كل لقطة):**
-- الوجه **لا يظهر أبداً**.
-- نراه فقط بإحدى هذه الطرق: من الخلف، أو ظلاً أسود أمام ضوء ساطع، أو في ظل كثيف، أو بجزء من جسده (يدان، قدمان، كتفان، ظلّه على الأرض).
+**قاعدة الوجه (إلزامية):**
+- **الوجه لا يظهر أبداً.**
+- نراه من الخلف، أو ظلاً أمام ضوء، أو في ظل كثيف، أو يدين وقدمين وظلاً فقط.
 - لا لقطة أمامية ولا ثلاثة أرباع، ولا عين ولا فم.
-- لا يتكلم أبداً، والصوت راوٍ من خارج الصورة.
+- لا يتكلم أبداً.
 
-**الثياب تتغيّر مع كل مكان:**
+**الثياب تتغيّر في كل مكان:**
 
 | المشهد | الثياب |
 |---|---|
 | الحلاق | ثوب قطني كريمي |
 | السجن | خيش رمادي ممزق وقيد حديد |
-| النزع | ثوب نوم كتّاني أبيض |
-| السطح | ثوب رملي بحزام منسوج وعباءة صوف داكنة |
+| النزع | ثوب كتّان أبيض |
+| السطح | ثوب رملي وعباءة صوف داكنة |
 | الثلج | فروة بلون المَغْرة وشماغ صوف |
-| المدبغة | مريلة جلد بحزام عنّابي |
-| الصحراء والدب | دشداشة أوكر مشمّرة وصدرية فرو، وعصابة بخيط عنّابي |
-| الحقل | ثوب فلاح بلون القش وحزام حبل |
-| الموقد | ثوب رمادي ملطّخ بالسخام |
-| الزقاق | عباءة داكنة مسحوبة على الرأس (التقنّع) |
-| بيع الدار | ثوب تاجر كريمي، وبشت بنّي باهت بحاشية عنّابية مهترئة |
-| الخف | عباءة مسافر مرقّعة وقدمان حافيتان |
-| الميناء | صدرية حمّال خضراء وعصابة عنّابية |
-| الباب | ثوب أبيض نظيف، وبشت أسود قديم ببطانة عنّابية وحاشية ذهبية مرتوقة |
-| الخاتمة | كنزة عنّابية بياقة عالية وبنطال أسود عالي الخصر |
+| المدبغة | مريلة جلد |
+| الضب والدب | دشداشة أوكر وصدرية فرو |
+| الحقل | ثوب فلاح بلون القش |
+| الموقد والزقاق | ثوب رمادي ملطّخ بالسخام، وعباءة داكنة مسحوبة على الرأس |
+| بيع الدار | ثوب تاجر كريمي وبشت بنّي باهت |
+| الخف | عباءة مسافر مرقّعة، حافي القدمين |
+| الميناء | صدرية حمّال خضراء |
+| الباب | ثوب أبيض نظيف وبشت أسود قديم ببطانة عنّابية وحاشية ذهبية مرتوقة |
+| الخاتمة | كنزة عنّابية وبنطال أسود |
 
-**الشخصيات الأخرى:** لا وجوه لها. يظهرون أيدياً أو ظلالاً فقط.
-- **اللئيم:** يد مكتنزة كثيرة الخواتم بخاتم عقيق أحمر. هي نفسها التي تشتري الدار، وهي نفسها التي تتدلّى من الكوّة.
+**الآخرون:** بلا وجوه أبداً، أيدٍ أو ظلال فقط.
+- **اللئيم:** يد مكتنزة كثيرة الخواتم بخاتم عقيق أحمر، وكمّ حريري مطرّز بالذهب.
 
-**العنف رمزي فقط:** ظلال، وأشياء، ووميض. لا دم ولا جرح ولا ضرب ظاهر. الحبل لا يلمس جسده أبداً.
+**العنف رمزي:** ظلال، وأشياء، وبرق. لا دم ولا جرح، والحبل لا يلمسه.
 
 ## 4. خريطة الزمن (مقيسة من الصوت، بدقة ±0.25 ث تقريباً)
 
@@ -131,159 +157,208 @@
 | 12 | 26.00–28.85 | يَرجو نَوالاً بِبابِ نَحسِ |
 | ذيل | 28.85–29.57 | موسيقى فقط |
 
-**ضربات السين** (نقاط القطع والذروات الصغيرة): 0.93، 1.98، 2.89، 3.41، 4.48، 9.01، 9.30، 10.93، 12.04، 13.86، 18.45، **23.07** (أقواها)، 28.54.
+**ضربات السين** (نقاط القطع): 0.93، 1.98، 2.89، 3.41، 4.48، 9.01، 9.30، 10.93، 12.04، 13.86، 18.45، **23.07** (أقواها)، 28.54.
 
-**وقفات داخلية:** 6.30، 10.30، 12.70، 19.95. عند 20.70 تدخل وتريات عالية.
+**وقفات:** 6.30، 10.30، 12.70، 19.95. عند 20.70 تدخل الوتريات العالية وتبدأ الذروة.
 
 ## 5. الستوري بورد: 21 لقطة
 
-| # | الزمن (ث) | ماذا نرى | الكاميرا | كيف يختفي الوجه |
+| # | الزمن (ث) | القصة والصورة | التصوير | المؤثر |
 |---|---|---|---|---|
-| S01 | 0.00–1.00 | دكان حلاق جرّاح ليلاً تحت قوس، وسراج زيت يرتجف. ماكرو على كلّاب حديد في يد الحلاق يلمع. على الجدار ظل الكلّاب ضخماً ينطبق ثم يرتدّ بقوة عند 0.93 | ماكرو، ثم دفع نحو الجدار | البطل من الخلف، ويده تقبض على المقعد |
-| S02 | 1.00–2.35 | زنزانة حجرية، وأشعة قمر زرقاء من نافذة بقضبان. يجلس على مقعد حجري بخيش وقيد. ظل عصا السجّان على الجدار. باب الحديد يُصفق عند 1.98، ويتطاير الغبار | ثابتة واسعة، ثم ارتجاج الصفقة | ظهره للكاميرا |
-| S03 | 2.35–3.65 | غرفة عارية عند الغسق. يجثو قرب نافذة ضيقة ساطعة بثوب كتّان أبيض. حمامة بيضاء على العتبة تطير خارجاً عند 3.41، وهي الروح | جانبية، ثم إمالة مع الحمامة | ظل أسود أمام النافذة |
-| S04 | 3.65–4.90 | سطح طيني عند الغروب فوق مدينة قباب. يشدّ حبلاً ثقيلاً نحو الشمس الغاربة. الشمس تغرب رغمه، ويبهت اللون عند 4.48 | من الخلف، كرين صاعد | ظهره، وظل أمام الشمس |
-| S05 | 4.90–6.30 | عاصفة ثلج. فروة وشماغ، والثلج يتراكم على كتفيه، ويرتجف | متوسطة من الخلف | ظهره |
-| S06 | 6.30–7.35 | لقطة جوية لسهل أبيض بلا نهاية. شخص صغير يقود جملاً عنيداً بخطامه، وعلى السرج قرد صغير يرتجف | درون من أعلى، حركة جانبية | بعيد جداً |
-| S07 | 7.35–9.60 | مدبغة تحت سحب سوداء، جلود معلّقة، وبخار من الأحواض. يرفع جلداً يقطر على إطار، ثم تُميل الكاميرا إلى السماء فتبتلع الغيوم آخر الشمس عند 9.01–9.30 | جانبية، ثم إمالة للأعلى | جانبية ظلية، والرأس للأعلى أمام سماء رمادية |
-| S08 | 9.60–11.50 | وادٍ صخري ليلاً ونار صغيرة. يُنزل سيخاً عليه ضب مشوي، وكتفاه ترتجفان قرفاً. ترجع الكاميرا للخلف فينكشف دب ضخم ينتصب على الحافة أمام القمر عند 10.93 | من خلفه عند النار، ثم سحب للخلف وكرين | ظهره، والنار أمامه |
-| S09 | 11.50–12.70 | حقل محروق تحت شمس بيضاء. ينثر الحَبّ في قوس واسع بحركة بطيئة عند 12.04، فيرتدّ الحَبّ عن الأرض الصلبة | جانبية منخفضة، بحركة بطيئة | ظل أمام سماء بيضاء |
-| S10 | 12.70–14.20 | ماكرو على تراب متشقّق، الحَبّ يسقط في الشقوق ولا شيء ينبت، والشق يُطبق غباراً. في العمق يتكئ على معوله. كرة شوك تتدحرج عند 13.86 | ماكرو، ثم سحب بؤري (rack focus) إلى العمق | بعيد وخارج البؤرة |
-| S11 | 14.20–15.35 | موقد طيني ليلاً. يجثو وينفخ الجمر، فيرتدّ الدخان عليه | قريبة من الخلف على مستوى الأرض | رأسه وكتفاه تحجب الموقد |
-| S12 | 15.35–16.50 | زقاق سوق ضيق عند الغسق. يمشي منحنياً وعباءته مسحوبة على رأسه. ظلال أيدٍ تشير إليه على الجدران، ومارّة بلا ملامح خارج البؤرة يديرون ظهورهم | تتبّع من الخلف | العباءة تغطي رأسه، والكاميرا خلفه |
-| S13 | 16.50–18.85 | باب بيته المنقوش. يضع مفتاحاً حديدياً في يد مكتنزة بخاتم عقيق. اليد تكسر فلساً نحاسياً أربعاً، وتُسقط الربع في كفه عند 18.45. الباب يُغلق خلفه | من فوق الكتف، ماكرو على الأيدي | يداه فقط |
-| S14 | 18.85–19.95 | درجات سوق عند الغروب. قدمان حافيتان على حجر ساخن، ويداه تسلّمان خفاً جلدياً بالياً ليد نحيلة مقابل رغيف | ماكرو على القدمين واليدين | لا يظهر إلا الأيدي والأقدام |
-| S15 | 19.95–21.05 | جدار طيني طويل والشمس منخفضة. ظلّان طويلان يمشيان معاً، فيتلاشى ظل الرفيق في رمال تذروها الريح، ويكمل ظله وحده. يبرد اللون عند 20.7 | جانبية ثابتة على الجدار | ظلال فقط |
-| S16 | 21.05–23.35 | ميناء ليلاً في عاصفة بلون أخضر بحري. حمّال منحنٍ تحت لفّة حبال. حبل سفينة غليظ يجلد الشراع مراراً كأفعى بحرية. عند 23.07 يشتدّ الحبل ويضرب برق أبيض فيملأ الصورة | من الخلف منخفضة، ثم دفع نحو الحبل | ظهره، والليل |
-| S17 | 23.35–24.75 | ساحة متناظرة فارغة في فجر ذهبي. باب أسود شاهق بمسامير نحاسية ومطرقة حلقية. يقف صغيراً بثوب أبيض وبشت أسود ببطانة عنّابية. على الأعمدة تمرّ ظلال محنه الصغيرة: كلّاب، قضبان، دب، حبل | كرين نازل، ثم دفع بطيء جداً | ظهره |
-| S18 | 24.75–26.00 | ظل الباب الضخم يزحف على البلاط ويبتلع ظله، ورأسه ينحني | منخفضة من فوق الكتف | ظهره |
-| S19 | 26.00–27.50 | ماكرو: يده في كُمّ بطانته عنّابية، على بُعد إصبع من المطرقة، ترتجف ولا تلمسها. كوّة تُفتح عند 26.9، وتتدلّى منها اليد المكتنزة بفلس على خيط. يده تنزل | ماكرو جانبي على مستوى اليد | اليد فقط |
-| S20 | 27.50–28.85 | لقطة معاكسة من داخل عتمة الباب عبر الكوّة. هو قد ابتعد يمشي نحو شمس طالعة، ويستقيم، وظله الطويل يمتدّ إلى الباب. الفلس يسقط في التراب، والكوّة تُصفق عند 28.54 | معاكسة، إطار داخل إطار | ظهره، وبعيد |
-| S21 | 28.85–29.57 | الحاضر: غرفة حديثة فيها نباتات متدلية، ولوح خشبي مخطّط، وخريطة عالم قديمة. يقف أمام نافذة ساطعة بكنزة عنّابية وبنطال أسود، ورأسه المنحني يرتفع حتى يستقيم | متوسطة واسعة من الخلف، دفع خفيف | ظهره وظلّه أمام النافذة |
+| S01 | 0.00–1.00 | دكان حلاق جرّاح ليلاً. كلّاب حديد يقترب من فمه، ومن الظلام تمتدّ يد اللئيم بفلس: ادفع لتنجو من الألم. يقبض يده على الخيط العنّابي ويرفض. ظل الكلّاب على الجدار يرتدّ بقوة عند 0.93 | ماكرو 100mm على اليدين، ثم دفع نحو الظل | سراج يرتجف، ودخان زيت |
+| S02 | 1.00–2.35 | زنزانة. اليد تمرّر مفتاح الزنزانة أمام القضبان فلا يمدّ يده. باب الحديد يُصفق عند 1.98 | ثابتة من الخلف، ثم ارتجاج الصفقة مع تسريع | غبار يسقط من السقف، وأشعة قمر زرقاء |
+| S03 | 2.35–3.65 | غرفة عارية، يجثو مريضاً أمام نافذة ساطعة. حمامة بيضاء تطير من صدره عبر النافذة (روحه) عند 3.41 | ظل جانبي، ثم إمالة مع الحمامة | إبطاء 120fps، وريش يسبح في الضوء |
+| S04 | 3.65–4.90 | سطح طيني عند الغروب. يشدّ الشمس بحبل ليرجع الأمس، فينقطع الحبل في يده وتغرب الشمس عند 4.48 | كرين صاعد من الخلف | وهج عدسة شمسي، والألوان تنطفئ إلى رمادي |
+| S05 | 4.90–6.30 | عاصفة ثلج. نافذة دافئة تُفتح على جنبه واليد تمدّ بطانية، فيمشي أمامها ولا يقف | متوسطة من الخلف بعدسة 50mm | ثلج كثيف، وبخار النفس، وضوء النافذة الدافئ يتلاشى خلفه |
+| S06 | 6.30–7.35 | سهل أبيض لا نهاية له. يقود وحده جملاً عنيداً عليه قرد يرتجف | درون علوي بحركة جانبية | آثار أقدام طويلة في الثلج |
+| S07 | 7.35–9.60 | مدبغة. يرفع جلداً يقطر على إطار، والغيوم تبتلع الشمس فيضيع تعبه | جانبية ظلية، ثم إمالة إلى السماء | بخار الأحواض، والضوء يموت عند 9.01–9.30 |
+| S08 | 9.60–11.50 | ليلاً عند النار. اليد تضع صحن طعام فاخراً على صخرة، فيدفعه بقدمه ويأكل الضب المرّ. يقوم خلفه دب ضخم أمام القمر عند 10.93 | من خلفه عند النار، ثم سحب للخلف وكرين | شرر يتطاير، وارتجاج الكاميرا مع قيام الدب |
+| S09 | 11.50–12.70 | حقل محروق تحت شمس بيضاء. ينثر آخر حبّاته عند 12.04 | جانبية منخفضة | تجميد شبه كامل (bullet-time) والحَبّ معلّق في الهواء |
+| S10 | 12.70–14.20 | الحَبّ يسقط في الشقوق ولا ينبت شيء. الشق يُطبق عند 13.86. في العمق يتكئ على معوله | ماكرو، ثم سحب بؤري (rack focus) إلى العمق | غبار ساخن، وتموّج الحرارة |
+| S11 | 14.20–15.35 | موقد. ينفخ ناراً لا تشتعل، فيرتدّ الدخان عليه | منخفضة من الخلف | جمر أحمر، ودخان كثيف يملأ الصورة |
+| S12 | 15.35–16.50 | زقاق السوق. يمشي مغطّى الرأس، والأيدي تشير إليه، والمارّة بلا ملامح يديرون ظهورهم | تتبّع من الخلف، وأشخاص خارج البؤرة | ظلال الأيدي تكبر على الجدران |
+| S13 | 16.50–18.85 | باب بيته. يسلّم المفتاح لنفس اليد، فتكسر فلساً أربعاً وتعطيه الربع عند 18.45. الباب يُغلق | من فوق الكتف، وماكرو على الأيدي والخيط | إبطاء لسقوط الربع، ولمعة نحاس |
+| S14 | 18.85–19.95 | درجات السوق. قدماه الحافيتان على حجر ساخن، يبيع حذاءه برغيف | ماكرو على القدمين واليدين | تموّج حرارة |
+| S15 | 19.95–21.05 | جدار طويل. ظلّه وظل صديقه يمشيان معاً، فيتفتت ظل الصديق رملاً ويمضي ظله وحده | جانبية ثابتة على الجدار | عاصفة رمل، واللون يبرد عند 20.7 |
+| S16 | 21.05–23.35 | ميناء في عاصفة ليلاً. حمّال منحنٍ تحت الحبال، وحبل السفينة الغليظ يجلد الشراع ألف مرة. عند 23.07 يشتدّ الحبل ويضرب برق | منخفضة من الخلف، ثم دفع سريع نحو الحبل | مطر أفقي، ورذاذ بحر، وبرق أبيض كامل |
+| S17 | 23.35–24.75 | فجر ذهبي. ساحة متناظرة وباب أسود شاهق. على الأعمدة تمرّ ظلال كل ما خسره: الكلّاب، والقضبان، والبيت، وظل الصديق | كرين نازل ودفع بطيء جداً | أشعة ذهبية وغبار معلّق |
+| S18 | 24.75–26.00 | ظل الباب يزحف ويبتلع ظله، ورأسه ينحني لأول مرة | منخفضة من فوق الكتف | الظل يتحرك والضوء ثابت |
+| S19 | 26.00–27.50 | ماكرو: يده ترتفع نحو المطرقة وترتجف، والخيط العنّابي يلمع. تُفتح الكوّة عند 26.9 ويتدلّى منها كيس ذهب. ينظر إلى الخيط، فتنزل يده | ماكرو جانبي، وسحب بؤري من الذهب إلى الخيط | لمعة الذهب، ونبض ضوء على الخيط |
+| S20 | 27.50–28.85 | لقطة معاكسة من داخل عتمة الباب: يبتعد نحو الشمس ويستقيم ظهره. الكيس يسقط وتتناثر العملات في التراب، والكوّة تُصفق عند 28.54 | معاكسة، إطار داخل إطار | إبطاء لسقوط الذهب، ووهج شمس |
+| S21 | 28.85–29.57 | الحاضر: غرفته (نباتات متدلية، لوح خشبي، خريطة قديمة). بكنزة عنّابية أمام النافذة، والخيط على معصمه، ورأسه يرتفع | متوسطة من الخلف، دفع خفيف | ضوء نافذة فضي |
 
-## 6. أوامر Kling 4.0 (انسخها حرفياً إلى ملفات)
+## 6. الانتقالات المميزة
 
-**خطة التوليد الموصى بها:** ثلاثة أجزاء متعددة اللقطات، وخاتمة وحدها.
+بعضها يُكتب داخل أمر Kling، وكلها **مضمونة في المونتاج** بالقسم 8.
+
+| # | عند (ث) | من ← إلى | النوع |
+|---|---|---|---|
+| T1 | 1.00 | ظل الضرس ← ثقب قفل الزنزانة | **قطع مطابق بالشكل** (match cut): الضرس يدور ويصير القفل |
+| T2 | 2.35 | الباب يُصفق إلى السواد ← شقّ ضوء ← نافذة الغرفة | **من الأسود إلى الضوء** |
+| T3 | 3.65 | جناح الحمامة الأبيض يملأ الشاشة ← قرص الشمس | **مسح بالحركة** (whip-match) |
+| T4 | 4.90 | الشمس تنطفئ ← اللون يبهت إلى أبيض ← ثلج | **تبييض كامل** (white-out) |
+| T5 | 6.30 | ثلج يملأ العدسة ← لقطة جوية | **صعود عبر الثلج** |
+| T6 | 7.35 | آثار الأقدام في الثلج ← نسيج الجلد المشدود | **مطابقة ملمس** (texture match) |
+| T7 | 9.60 | الغيمة تُغلق كالباب إلى السواد ← شرارة نار تولد في العتمة | **ولادة الضوء** |
+| T8 | 11.50 | زئير الدب، والقمر يُحجب، والصورة ترتجّ ← شمس بيضاء حارقة | **قطع صادم** (smash cut) |
+| T9 | 12.70 | الحَبّ المعلّق في الهواء ← الحَبّ في الشقوق | **مطابقة بالسقوط**، من التجميد إلى الماكرو |
+| T10 | 14.20 | الشق يُطبق ← توهّج الجمر | **قطع صادم أحمر** |
+| T11 | 15.35 | الدخان يملأ الصورة ← ينقشع عن الزقاق | **مسح بالدخان** |
+| T12 | 16.50 | الأيدي التي تشير ← يد اللئيم تستلم المفتاح | **مطابقة اليد** |
+| T13 | 18.85 | ربع الفلس يسقط ← قدم حافية تنزل على الحجر | **مطابقة بالسقوط** |
+| T14 | 21.05 | عاصفة الرمل ← رذاذ البحر | **مسح بالجزيئات**: رمل يتحول ماءً |
+| T15 | 23.35 | البرق الأبيض ← يذوب إلى فجر ذهبي | **تبييض كامل ثم ذوبان** |
+| T16 | 24.75 | بدون قطع | **لقطة واحدة متصلة**: الظل يبتلعه |
+| T17 | 26.00 | ظله الصغير ← يده الكبيرة | **قطع على الحركة** (cut on action) |
+| T18 | 28.54 | الكوّة تُصفق ← قوس أسود ينغلق ← شقّ ضوء ← نافذة الحاضر | **إغلاق على شكل قوس** (iris) ثم فتح |
+
+## 7. أوامر Kling 4.0 (انسخها حرفياً)
+
+**خطة التوليد:**
 
 | الملف | المدة | يغطي | الدقة |
 |---|---|---|---|
-| CINE_P1.txt | 10 ث | 0.00–9.60 (الأشطر 1–4) | 1080p |
-| CINE_P2.txt | 10 ث | 9.60–18.85 (الأشطر 5–8) | 1080p |
-| CINE_P3.txt | 10 ث | 18.85–28.85 (الأشطر 9–12) | 1080p |
+| CINE_P1.txt | 5 ث | 0.00–4.90 (الأشطر 1–2) | 1080p |
+| CINE_P2.txt | 10 ث | 4.90–14.20 (الأشطر 3–6) | 1080p |
+| CINE_P3.txt | 15 ث | 14.20–28.85 (الأشطر 7–12) | 1080p |
 | CINE_TAIL.txt | 4 ث | 28.85–29.57 (الخاتمة) | 1080p |
 
-بعد التوليد يُقصّ كل جزء ويُضبط على حدود الأشطر في المونتاج. للتجربة الأرخص استعمل 720p.
-
-**السعر:** سعر الـ API غير منشور. على موقع Higgsfield كان Kling 4.0 بـ 3.25 كريدت/ث بدقة 1080p، و2.25 كريدت/ث بدقة 720p، فالمجموع 34 ثانية تقريباً.
+المجموع 34 ثانية توليد.
 
 ### CINE_P1
 ```
-Photoreal live-action historical film, shot on 35mm anamorphic, vertical 9:16. Natural and practical light only, hard backlight and rim light, volumetric haze, deep chiaroscuro, muted earth palette with one deep burgundy accent, fine film grain, 24fps motion blur, slow deliberate camera moves. Solemn, tragic, epic.
-THE MAN, the same in every shot: mid-twenties, athletic, broad shoulders, thick dark wavy-curly voluminous hair, short dark beard seen only as an edge along the jaw, thin round wire glasses whose temple arm glints behind his ear. His face is NEVER visible: he is always seen from behind, as a black silhouette against bright light, in deep shadow, or only as hands and shadow. No frontal or three-quarter view, no eyes, no mouth. He never speaks. His clothes change completely in every shot exactly as written.
-Shot 1: Night. A cold stone prison cell lit by blue moonlight through a high barred window and one amber oil lamp. In a ragged grey-brown sackcloth tunic with iron shackles and a thin burgundy cord at one wrist, he sits on a stone bench with his back to camera. On the wall the huge shadow of iron pincers closes and jerks back. The heavy iron door slams shut and dust shakes from the ceiling.
-Shot 2: Hard cut. A bare room at dusk, a narrow bright window. In a white linen night-robe he kneels as a black silhouette against the window; a white dove lifts off the sill and flies out into the light. Then on a mud-brick rooftop at sunset he hauls on a heavy rope toward the huge sinking sun, seen from behind; the sun sinks anyway and the colour drains to blue.
-Shot 3: Hard cut. A night blizzard on an endless white plain. In a bulky ochre sheepskin coat and a grey wool head-wrap, snow crusting his shoulders, seen from behind, he leans into the wind and leads one balking camel by its halter, a small shivering monkey on the saddle. Wide aerial view, the figures small.
-Shot 4: Hard cut. A muddy tannery under black clouds, stretched hides on wooden frames, steam rising from the vats. In a heavy leather apron with one burgundy strap he heaves a dripping hide onto a frame in side silhouette, then the camera tilts up to the sky as black clouds swallow the last sliver of sun and the light dies.
-Exactly one man, fully clothed. Other people appear only as faceless hands or shadows. No blood, no injury, no visible violence. No text, subtitles, letters, numbers, logos or watermark.
+Photoreal live-action historical epic, shot on 35mm anamorphic with horizontal lens flares, vertical 9:16. Hard backlight and rim light, volumetric haze, god rays, floating dust, deep chiaroscuro, shallow depth of field, muted earth palette with one saturated deep-burgundy accent, fine film grain, 24fps motion blur. Slow precise camera moves; slow motion on symbolic moments, sudden speed ramps on impacts. Solemn, tragic, epic.
+THE MAN, the same in every shot: mid-twenties, athletic, broad shoulders, thick dark wavy-curly voluminous hair, short dark beard seen only as an edge along the jaw, thin round wire glasses whose temple arm glints behind his ear, a thin burgundy thread tied around his right wrist in every shot. His face is NEVER visible: always from behind, as a black silhouette against bright light, in deep shadow, or only as hands, feet and shadow. No frontal or three-quarter view, no eyes, no mouth. He never speaks. His clothes change completely in every shot exactly as written. THE OTHER: only a plump hand heavy with gold rings and a red carnelian signet ring in a gold-embroidered silk sleeve, never a face.
+Shot 1: Night, a barber-surgeon's stall lit by one trembling oil lamp. Macro on his hands in a cream cotton robe gripping the stool, the burgundy thread on his wrist; from the darkness the ringed hand offers a copper coin and his fist closes, refusing. On the wall the huge shadow of iron pincers closes and violently jerks back. The pincers' shadow spins and match-cuts into the black keyhole of a cell door.
+Shot 2: A stone prison cell, blue moonlight through a high barred window. In a ragged grey-brown sackcloth tunic with iron shackles he sits with his back to camera; the ringed hand dangles the cell key outside the bars and he does not reach. The iron door slams shut in a sudden speed ramp, dust raining from the ceiling, cut to black, then a thin slit of light.
+Shot 3: The slit becomes a narrow bright window in a bare room at dusk. In a white linen robe he kneels as a black silhouette; a white dove rises from his chest and flies out through the window in extreme slow motion, feathers floating in the light. Its white wing fills the frame and whips into a huge sinking sun.
+Shot 4: A mud-brick rooftop at sunset over a city of domes, crane up from behind: in a sand-coloured robe and dark wool cloak he hauls on a rope tied toward the sun; the rope snaps in his hands, the sun sinks, the colour drains to grey and bleaches to white.
+Exactly one man, fully clothed. No blood, no injury, no visible violence. No text, subtitles, letters, numbers, logos or watermark anywhere.
 ```
 
 ### CINE_P2
 ```
-Photoreal live-action historical film, shot on 35mm anamorphic, vertical 9:16. Natural and practical light only, hard backlight and rim light, volumetric haze, deep chiaroscuro, muted earth palette with one deep burgundy accent, fine film grain, 24fps motion blur, slow deliberate camera moves. Solemn, tragic, epic.
-THE MAN, the same in every shot: mid-twenties, athletic, broad shoulders, thick dark wavy-curly voluminous hair, short dark beard seen only as an edge along the jaw, thin round wire glasses whose temple arm glints behind his ear. His face is NEVER visible: he is always seen from behind, as a black silhouette against bright light, in deep shadow, or only as hands and shadow. No frontal or three-quarter view, no eyes, no mouth. He never speaks. His clothes change completely in every shot exactly as written.
-Shot 1: Night in a rocky mountain gorge, a huge moon. Camera directly behind him at a small campfire: in an ochre hitched-up dishdasha, a fur-trimmed vest and a head-cloth tied with a faded burgundy cord, he lowers a skewer with a roasted desert lizard and his shoulders heave with disgust. The camera pulls back and cranes up to reveal a colossal bear rising on its hind legs on the ridge, a black silhouette against the moon; he grips a long spear.
-Shot 2: Hard cut. A bleached barren field under a white-hot sun. In a straw-coloured farmer's tunic with a rope belt and a seed sack, side silhouette, he casts grain in one wide slow-motion arc; the grains bounce off cracked dry earth. Macro on the cracks: nothing grows. Far behind, out of focus, he leans on his hoe as a tumbleweed rolls past.
-Shot 3: Hard cut. A clay hearth glowing red at night, camera low behind him: in a soot-stained grey tunic he kneels and blows on the embers; thick smoke rolls back over him. The smoke clears into a narrow souq alley at dusk: he walks bent over, his dark wool cloak pulled over his head like a hood with a sliver of burgundy lining, while shadows of pointing hands rise on the walls and faceless out-of-focus passers-by turn their backs.
-Shot 4: Hard cut. His tall carved brass-studded house door in warm sepia light, over the shoulder at hand height. In a cream merchant's robe under a faded brown bisht with a frayed burgundy trim, his hand lays a large iron house key into a plump hand heavy with rings and a carnelian signet ring. Macro: the ringed fingers snap a small copper coin into four and drop one quarter into his open palm. The door swings shut behind him.
-Exactly one man, fully clothed. Other people appear only as faceless hands or shadows. No blood, no injury, no visible violence. No text, subtitles, letters, numbers, logos or watermark.
+Photoreal live-action historical epic, shot on 35mm anamorphic with horizontal lens flares, vertical 9:16. Hard backlight and rim light, volumetric haze, god rays, floating dust, deep chiaroscuro, shallow depth of field, muted earth palette with one saturated deep-burgundy accent, fine film grain, 24fps motion blur. Slow precise camera moves; slow motion on symbolic moments, sudden speed ramps on impacts. Solemn, tragic, epic.
+THE MAN, the same in every shot: mid-twenties, athletic, broad shoulders, thick dark wavy-curly voluminous hair, short dark beard seen only as an edge along the jaw, thin round wire glasses whose temple arm glints behind his ear, a thin burgundy thread tied around his right wrist in every shot. His face is NEVER visible: always from behind, as a black silhouette against bright light, in deep shadow, or only as hands, feet and shadow. No frontal or three-quarter view, no eyes, no mouth. He never speaks. His clothes change completely in every shot exactly as written. THE OTHER: only a plump hand heavy with gold rings and a red carnelian signet ring in a gold-embroidered silk sleeve, never a face.
+Shot 1: From white, a night blizzard. Medium from behind: in a bulky ochre sheepskin coat and grey wool head-wrap, snow crusting his shoulders, breath steaming, he walks past a warm glowing window where the ringed hand holds out a thick blanket; he does not stop and the warm light fades behind him. Rise through the falling snow to a top-down aerial of an endless white plain: small and alone he leads one balking camel with a shivering monkey on the saddle, long footprints trailing.
+Shot 2: The footprints match-cut into the texture of a stretched hide. A muddy tannery under black clouds, steam rising from the vats: in a heavy leather apron he heaves a dripping hide onto a wooden frame in side silhouette; tilt up as black clouds close over the last sliver of sun like a door and the light dies to black.
+Shot 3: In the black a spark ignites a small campfire in a rocky gorge under a huge moon, sparks flying. From behind at fire level, in an ochre dishdasha and fur vest: the ringed hand sets a rich silver platter of food on a rock beside him; he pushes it away with his foot and lowers a skewer with a bitter roasted desert lizard, shoulders heaving. Pull back and crane up: a colossal bear rises on its hind legs on the ridge, blotting out the moon, the camera shuddering; he grips a long spear.
+Shot 4: Smash cut to a white-hot sun over a burnt barren field. In a straw-coloured farmer's tunic, low side angle, he casts his last grain in one wide arc frozen in bullet-time, the grains hanging in the air; they fall into cracked earth, macro, nothing grows, heat shimmer, a crack presses shut.
+Exactly one man, fully clothed. No blood, no injury, no visible violence. No text, subtitles, letters, numbers, logos or watermark anywhere.
 ```
 
 ### CINE_P3
 ```
-Photoreal live-action historical film, shot on 35mm anamorphic, vertical 9:16. Natural and practical light only, hard backlight and rim light, volumetric haze, deep chiaroscuro, muted earth palette with one deep burgundy accent, fine film grain, 24fps motion blur, slow deliberate camera moves. Solemn, tragic, epic; the pace slows from Shot 3.
-THE MAN, the same in every shot: mid-twenties, athletic, broad shoulders, thick dark wavy-curly voluminous hair, short dark beard seen only as an edge along the jaw, thin round wire glasses whose temple arm glints behind his ear. His face is NEVER visible: he is always seen from behind, as a black silhouette against bright light, in deep shadow, or only as hands and shadow. No frontal or three-quarter view, no eyes, no mouth. He never speaks. His clothes change completely in every shot exactly as written.
-Shot 1: Sunset on market steps. Macro on his bare feet on hot stone and his hands in a patched traveller's cloak handing a worn leather boot to a thin bare hand in exchange for a flat loaf. Then on a long mud-brick wall in low sun, two long shadows walk side by side; the companion's shadow dissolves into blowing sand and his shadow walks on alone.
-Shot 2: Hard cut. A harbour at night in a storm, sea-green light, a huge billowing sail. Low angle from behind: in a sea-green porter's vest and a burgundy head-rag he stands bent under a heavy coil of rope while a giant ship's hawser whips the sail again and again like a sea serpent, never touching him; gulls scatter. Push in on the rope as it snaps taut and a white lightning flash fills the frame.
-Shot 3: From the white, a vast empty symmetrical stone courtyard at golden dawn, a slow grand crane down between pillars. A towering dead-black arched door studded with brass, a brass ring knocker, a lamp glowing above it. In a clean white ankle-length robe and one old black bisht with worn mended gold trim and a glowing burgundy lining, he stands small, back to camera. Low over his shoulder: the door's huge shadow creeps across the flagstones and swallows his shadow as his head slowly sinks.
-Shot 4: Hard cut. Macro side view at hand height: his hand in the burgundy-lined sleeve hangs a finger's width from the brass knocker, trembles, and never touches it. A small hatch in the door snaps open and a plump ringed hand dangles one copper coin on a string. His hand lowers. Reverse angle from inside the dark doorway through the hatch: he is already walking away toward the blazing rising sun, back to camera, rising fully upright, his long shadow stretching back across the door. The coin drops unclaimed into the dust and the hatch slams shut.
-Exactly one man, fully clothed. Other people appear only as faceless hands or shadows. No blood, no injury, no visible violence. No text, subtitles, letters, numbers, logos or watermark.
+Photoreal live-action historical epic, shot on 35mm anamorphic with horizontal lens flares, vertical 9:16. Hard backlight and rim light, volumetric haze, god rays, floating dust, deep chiaroscuro, shallow depth of field, muted earth palette with one saturated deep-burgundy accent, fine film grain, 24fps motion blur. Slow precise camera moves; slow motion on symbolic moments, sudden speed ramps on impacts. Solemn, tragic, epic; the pace slows from Shot 3.
+THE MAN, the same in every shot: mid-twenties, athletic, broad shoulders, thick dark wavy-curly voluminous hair, short dark beard seen only as an edge along the jaw, thin round wire glasses whose temple arm glints behind his ear, a thin burgundy thread tied around his right wrist in every shot. His face is NEVER visible: always from behind, as a black silhouette against bright light, in deep shadow, or only as hands, feet and shadow. No frontal or three-quarter view, no eyes, no mouth. He never speaks. His clothes change completely in every shot exactly as written. THE OTHER: only a plump hand heavy with gold rings and a red carnelian signet ring in a gold-embroidered silk sleeve, never a face.
+Shot 1: Red embers in a clay hearth; from behind at floor level, in a soot-stained grey tunic, he blows on them and thick smoke rolls back and fills the frame; it clears into a narrow souq alley at dusk where he walks bent, his dark cloak pulled over his head, as shadows of pointing hands grow on the walls and faceless out-of-focus passers-by turn their backs. At his carved house door, over the shoulder, in a faded brown merchant's bisht, he lays his iron key in the ringed hand, which snaps a copper coin into four and drops one quarter into his palm in slow motion. Then his bare feet step onto hot market stones and he trades his last worn boot for a loaf; on a long wall his shadow walks beside a companion's shadow, which crumbles into a gust of sand.
+Shot 2: The sand becomes sea spray. A harbour at night in a storm, horizontal rain, sea-green light, a huge billowing sail. Low from behind: in a sea-green porter's vest he stands bent under a heavy coil of rope while a giant ship's hawser whips the sail again and again like a sea serpent, never touching him. Fast push-in on the rope as it snaps taut and white lightning fills the whole frame.
+Shot 3: The white dissolves into a vast empty symmetrical stone courtyard at golden dawn, god rays and floating dust, a slow grand crane down between pillars on which small shadows of iron pincers, prison bars, a house and a walking companion slide past and fade. A towering dead-black arched door studded with brass, a brass ring knocker. In a clean white robe and one old black bisht with mended gold trim and a glowing burgundy lining he stands small, back to camera; the door's huge shadow creeps across the flagstones and swallows his shadow as his head sinks.
+Shot 4: Macro side view at hand height: his hand rises toward the brass knocker and trembles a finger's width from it, the burgundy thread catching the light. A hatch snaps open and the ringed hand dangles a heavy pouch of gold. Rack focus from the gold to the burgundy thread; his hand lowers. Reverse angle from inside the dark doorway through the hatch: he walks away into the blazing rising sun, back to camera, his spine straightening with every step, his long shadow stretching back across the door. The pouch drops and gold coins scatter in the dust in slow motion; the hatch slams shut.
+Exactly one man, fully clothed. No blood, no injury, no visible violence. No text, subtitles, letters, numbers, logos or watermark anywhere.
 ```
 
 ### CINE_TAIL
 ```
-Photoreal live-action film, shot on 35mm, vertical 9:16, soft silver window light with a warm amber edge, fine film grain, slow push-in, quiet and dignified.
-A present-day room: trailing pothos vines from a high shelf, a slatted wooden wall panel, an antique world map on the wall with no readable lettering, a tall bright window. A man in his mid-twenties with broad shoulders, thick dark wavy-curly hair and thin round wire glasses stands before the window with his back to the camera, a black silhouette against the light, wearing a burgundy fine-knit turtleneck and black high-waisted pleated trousers. His head is bowed, then slowly rises until he stands fully upright, chin level, and holds. His face is never visible; he never turns toward the camera. No text, letters, logos or watermark.
+Photoreal live-action film, shot on 35mm, vertical 9:16, soft silver window light with a warm amber edge, fine film grain, a slow gentle push-in, quiet and dignified. It opens from a narrow arch-shaped slit of white light that widens into a tall bright window.
+A present-day room: trailing pothos vines from a high shelf, a slatted wooden wall panel, an antique world map on the wall with no readable lettering. A man in his mid-twenties with broad shoulders, thick dark wavy-curly hair and thin round wire glasses stands before the window with his back to the camera, a black silhouette against the light, wearing a burgundy fine-knit turtleneck and black high-waisted pleated trousers, a thin burgundy thread tied around his right wrist. His bowed head slowly rises until he stands fully upright, chin level, and holds. His face is never visible; he never turns toward the camera. No text, letters, logos or watermark.
 ```
 
-**إذا احتجت إعادة لقطة واحدة:**
-1. خذ وصفها من الجدول في القسم 5.
-2. ضع قبلها نفس فقرتي الأسلوب والبطل الموجودتين في أول كل كتلة.
-3. ولّدها بمدة 3 إلى 5 ثوانٍ.
-4. قصّها على حدودها في المونتاج.
+## 8. الانتقالات والمؤثرات في المونتاج (ffmpeg وRemotion)
 
-## 7. نقاط التزامن في كل جزء
+**نفّذ هذه في كل الأحوال، حتى لو أخرج Kling بعضها بنفسه:**
+
+| # | المؤثر | التنفيذ |
+|---|---|---|
+| 1 | قطع مطابق 1.00 (الضرس إلى القفل) | قناع دائري يدور وينكمش خلال 6 إطارات، مع ذوبان 4 إطارات |
+| 2 | 1.98 صفقة الباب | تسريع 150% لآخر 6 إطارات، وارتجاج الصورة ±12px لمدة 4 إطارات، ثم أسود 3 إطارات، ثم شق ضوء ينفتح أفقياً حتى 2.35 |
+| 3 | 3.65 مسح الجناح | ضبابية حركة اتجاهية 8 إطارات (`xfade=transition=wipeleft` مع `gblur`) |
+| 4 | 4.48–4.90 | نزع اللون تدريجياً (`hue=s=0`)، ثم تبييض كامل 4 إطارات عند 4.90 |
+| 5 | 9.01–9.30 | إطفاء السطوع حتى الأسود، ثم ولادة شرارة: لمعة برتقالية 3 إطارات عند 9.60 |
+| 6 | 10.93 قيام الدب | ارتجاج ±16px لمدة 6 إطارات، وتسريع |
+| 7 | 11.50 | قطع صادم إلى أبيض 2 إطار ثم الحقل |
+| 8 | 12.04 | تجميد 8 إطارات للحَبّ المعلّق (إن لم يظهر من Kling) |
+| 9 | 14.20 | قطع صادم بلمعة حمراء إطار واحد |
+| 10 | 15.35 | مسح بالدخان: طبقة دخان شبه شفافة تعبر الصورة 10 إطارات (`xfade=transition=fadeblack` مخفّف) |
+| 11 | 21.05 | مسح بالجزيئات (`xfade=transition=pixelize` أو `hblur`) 8 إطارات |
+| 12 | **23.07** | **برق:** أبيض كامل 5 إطارات، ثم ذوبان من الأبيض حتى 23.35 |
+| 13 | 28.54 | **قوس:** قناع قوس حدوة فرس أسود ينغلق خلال 3 إطارات، ويترك شق ضوء يتسع إلى الأبيض حتى 28.85، ثم تُفتح الخاتمة من الأبيض |
+| 14 | التلوين العام | منحنى دافئ خفيف، والحفاظ على العنّابي، وتوحيد اللون بين الأجزاء الثلاثة |
+| 15 | الملمس | حبيبات خفيفة `noise=alls=4:allf=t`، وتظليل حواف `vignette=PI/5.5`، ووهج خفيف على الإضاءات (`gblur` بمزج screen 10%) |
+| 16 | حواف سينمائية | شريطان أسودان خفيفان أعلى وأسفل (letterbox) بارتفاع 60px لكل منهما، طوال الفيلم ما عدا الخاتمة. في الخاتمة ينفتح الشريطان تدريجياً خلال 0.4 ث، رمزاً للتحرر |
+
+**مؤثرات صوتية اختيارية:**
+- مستواها بين −28 و−18 dB، تحت صوت القصيدة.
+- لا تغطي الكلام أبداً، واخفضها تلقائياً بمقدار 6 dB عند وجود الصوت البشري (ducking).
+
+| الزمن (ث) | المؤثر |
+|---|---|
+| 0.93 | طقّة معدن |
+| 1.98 | صفقة باب حديد مع صدى |
+| 3.41 | رفرفة أجنحة |
+| 4.48 | انقطاع حبل |
+| 6.30 | ريح ثلج |
+| 9.01 | رعد بعيد |
+| 9.60 | اشتعال شرارة |
+| 10.93 | زئير دب منخفض |
+| 12.04 | نثر حَبّ |
+| 13.86 | طقطقة طين |
+| 15.35 | همهمات سوق |
+| 18.45 | رنّة فلس |
+| 20.0 | ريح رملية |
+| 21.05–23.0 | عاصفة وشراع يخفق |
+| **23.07** | **فرقعة حبل وبرق، أقوى نقطة (−14 dB)** |
+| 26.9 | انفتاح كوّة خشب |
+| 28.3 | رنين ذهب يتناثر |
+| 28.54 | صفقة الكوّة |
+| 28.85–29.57 | نفَس هادئ وريح خفيفة |
+
+## 9. المونتاج
+
+1. **الصوت:** استخرجه بدون تعديل من فيديو القصيدة الأصلي (`VID_20261027_165024_693.mp4`):
+   `ffmpeg -i VID.mp4 -vn -c:a copy audio_master.m4a`
+   مدته 29.57 ث، ويُوضع على 0.00. لا يُغيَّر.
+2. **اكتشاف القطوع:** اكتشف القطوع داخل كل جزء بـ PySceneDetect أو بـ `select='gt(scene,0.3)'`.
+3. **ضبط التوقيت:** غيّر سرعة كل لقطة بـ `setpts` بين 75% و125%، أو جمّد آخر إطاراتها بـ `tpad`، حتى تنتهي على حدّها:
 
 | الجزء | يوضع عند | حدود اللقطات بزمن الجزء | بالزمن العام | يُقصّ عند |
 |---|---|---|---|---|
-| P1 | 0.00 | 2.35 / 4.90 / 7.35 | نفسها | 9.60 |
-| P2 | 9.60 | 1.90 / 4.60 / 6.90 | 11.50 / 14.20 / 16.50 | 18.85 (9.25 ث محلياً) |
-| P3 | 18.85 | 2.20 / 4.50 / 7.15 | 21.05 / 23.35 / 26.00 | 28.85 (10.00 ث محلياً) |
-| TAIL | 28.85 | — | — | 29.57 (0.72 ث) |
+| P1 | 0.00 | 1.00 / 2.35 / 3.65 | نفسها | 4.90 |
+| P2 | 4.90 | 2.45 / 4.70 / 6.60 | 7.35 / 9.60 / 11.50 | 9.30 (14.20 عاماً) |
+| P3 | 14.20 | 6.85 / 9.15 / 11.80 | 21.05 / 23.35 / 26.00 | 14.65 (28.85 عاماً) |
+| TAIL | 28.85 | — | — | 0.72 |
 
-**أحداث يجب أن تقع في وقتها:**
+   - **داخل لقطة P3 الأولى** (14.20–21.05) أحداث عدة؛ اقطعها على: 15.35 (الزقاق)، 16.50 (الباب)، 18.85 (الحذاء)، 19.95 (الجدار).
+   - **إذا جاءت مدة جزء أقصر من حاجته:** وزّع لقطاته على حدودها بالإبطاء، ولا تتجاوز 75%، أو كرّر لحظة هادئة ثابتة.
+   - **إذا بقي فراغ لا يُغطّى:**
+     1. خذ وصف تلك اللقطة من جدول القسم 5.
+     2. ضع قبله فقرتي الأسلوب والبطل من بداية أي كتلة.
+     3. ولّدها وحدها بـ Kling 4.0، بمدة 3 إلى 5 ثوانٍ.
 
-| الزمن (ث) | الحدث |
-|---|---|
-| 1.98 | صفقة الباب |
-| 3.41 | طيران الحمامة |
-| 9.01 | انطفاء الشمس |
-| 10.93 | قيام الدب |
-| 12.04 | نثر الحَبّ |
-| 18.45 | سقوط ربع الفلس |
-| 23.07 | البرق الأبيض |
-| 26.9 | انفتاح الكوّة |
-| 28.54 | صفقة الكوّة |
+4. **الربط:** اربط الأجزاء بالانتقالات المذكورة في القسم 8.
+5. **المواصفات النهائية:** 1080×1920، و24 إطاراً/ث، والمدة **29.57 ث** بالضبط.
+6. **بدون أي نص على الفيديو.**
+7. **التصدير:** `final_cinematic.mp4`، بترميز H.264 بمعدل 12–16 Mbps، وصوت AAC بمعدل 256k.
 
-## 8. المونتاج (Claude Code ينفّذه بـ ffmpeg وRemotion)
-
-1. **الصوت:** استخرجه من فيديو القصيدة الأصلي (`VID_20261027_165024_693.mp4`) بدون تعديل:
-   `ffmpeg -i VID.mp4 -vn -c:a copy audio_master.m4a`
-   مدته 29.57 ث، ويُوضع على 0.00. لا يُغيَّر فيه شيء.
-2. **اكتشاف القطوع:** اكتشف القطوع داخل كل جزء بـ PySceneDetect أو بـ `select='gt(scene,0.3)'`.
-3. **ضبط التوقيت:** غيّر سرعة كل لقطة بـ `setpts` بين 75% و125%، أو جمّد آخر إطاراتها بـ `tpad`، حتى تنتهي على حدّها في القسم 7.
-4. **الربط:** اربط الأجزاء بـ concat. المدة النهائية **29.57 ث**، والمقاس **1080×1920** بـ **24 إطاراً/ث**.
-5. **مؤثرات الضمان** (إن لم تظهر في التوليد):
-   - وميض أبيض 4–6 إطارات عند 23.07.
-   - إطفاء تدريجي للسطوع بنسبة 40% بين 9.01 و9.30.
-   - قناع قوس أسود ينغلق في 3 إطارات عند 28.54 ويترك شقّ ضوء يتسع إلى الأبيض حتى 28.85.
-6. **التلوين:**
-   - وحّد اللون بين الأجزاء بمنحنى خفيف دافئ، وحافظ على العنّابي.
-   - حبيبات خفيفة: `noise=alls=4:allf=t`.
-   - تظليل حواف: `vignette=PI/5.5`.
-7. **بدون نص:** لا تُكتب أي كلمة على الفيديو. لا أبيات، ولا ترجمة، ولا سطر نسبة، ولا اسم.
-8. **التصدير:**
-   - ملف واحد: `final_cinematic.mp4`، صورة وصوت فقط بلا أي نص.
-   - H.264، معدل 12–16 Mbps، صوت AAC بمعدل 256k.
-
-## 9. فحص الجودة قبل التسليم
+## 10. فحص الجودة
 
 - [ ] **لا وجه ولا عين ولا فم في أي إطار.**
   - شغّل كشف الوجوه (MediaPipe أو OpenCV) على كل 3 إطارات، ثم راجع النتائج بعينك.
   - أي إطار فيه وجه: احذفه، أو جمّد الإطار السابق، أو قصّ الإطار.
-- [ ] الثياب تتغيّر بين المشاهد كما في الجدول، والعنّابي حاضر ويكبر.
-- [ ] لا دم ولا عنف ظاهر، ولا نص مولّد داخل الصورة.
-- [ ] الأحداث المهمة على وقتها: 1.98، 10.93، 18.45، 23.07، 28.54.
+- [ ] الخيط العنّابي ظاهر في أغلب المشاهد، والثياب تتغيّر حسب الجدول.
+- [ ] يد اللئيم تظهر في عروض النجاة، وهو يرفضها في كل مرة.
+- [ ] الانتقالات الثمانية عشر موجودة، والأحداث على وقتها: 1.98، 10.93، 18.45، 23.07، 28.54.
+- [ ] لا دم، ولا عنف ظاهر، ولا أي نص أو كتابة على الفيديو.
 - [ ] المدة 29.57 ث (±1 إطار)، والصوت الأصلي لم يُمسّ.
-- [ ] لا يوجد أي نص أو كتابة على الفيديو.
 
-## 10. التسليم
+## 11. التسليم
 
 - `final_cinematic.mp4`: صورة وصوت فقط، بلا أي نص.
-- روابط الأجزاء الأربعة الأصلية من Kling، ورقم كل طلب (`request_id`).
+- روابط الأجزاء الأصلية من Kling، ورقم كل طلب (`request_id`).
 - `contact_sheet.png`: إطار من كل شطر، مع الزمن.
 - `QA_REPORT.md`، ويحتوي:
   - ما تولّد وكم ثانية.
   - ما أُعيد ولماذا.
-  - أي إطار حُذف بسبب الوجه.
+  - الإطارات المحذوفة.
   - السرعات المستعملة لكل لقطة.
   - أي مشكلة لم تُحل.
