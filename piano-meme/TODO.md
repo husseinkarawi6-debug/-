@@ -8,7 +8,8 @@
 - [x] مكتبات بايثون: librosa، opencv، scipy، soundfile
 - [x] البريف الجديد بـ `BRIEF.md`
 - [ ] **ملفات `refs/` الناقصة بهذي النسخة** (شوف PLAN.md، قسم «شنو ناقص»)
-- [ ] فتح الشبكة لسيرفر صور الأداة (`d2ol7oe51mr4n9.cloudfront.net`) حتى أنزّل الرسمات وأشوفها
+- [x] فتح الشبكة لسيرفر صور الأداة (`d2ol7oe51mr4n9.cloudfront.net` و `upload.higgsfield.ai`)
+- [x] صورك الثلاث من مكتبة Higgsfield ← `refs/me/hf_*.png` (الوجه مغطى، أحتاج صورة وجه واضحة)
 
 ## 2. التحليل والخطة
 - [x] `audio/analyze.py` (يشتغل هسه بوضع timing.md بس: `--no-audio`)
