@@ -1,0 +1,518 @@
+{
+ "fps": 30,
+ "durationInFrames": 1056,
+ "audioPresent": false,
+ "shots": [
+  {
+   "shot": 1,
+   "start": 0,
+   "end": 50,
+   "speaker": "learner",
+   "silent": false
+  },
+  {
+   "shot": 2,
+   "start": 51,
+   "end": 99,
+   "speaker": "lazy",
+   "silent": true
+  },
+  {
+   "shot": 3,
+   "start": 100,
+   "end": 164,
+   "speaker": "learner",
+   "silent": false
+  },
+  {
+   "shot": 4,
+   "start": 165,
+   "end": 245,
+   "speaker": "lazy",
+   "silent": false
+  },
+  {
+   "shot": 5,
+   "start": 246,
+   "end": 265,
+   "speaker": "learner",
+   "silent": false
+  },
+  {
+   "shot": 6,
+   "start": 266,
+   "end": 290,
+   "speaker": "lazy",
+   "silent": false
+  },
+  {
+   "shot": 7,
+   "start": 291,
+   "end": 310,
+   "speaker": "learner",
+   "silent": false
+  },
+  {
+   "shot": 8,
+   "start": 311,
+   "end": 334,
+   "speaker": "lazy",
+   "silent": false
+  },
+  {
+   "shot": 9,
+   "start": 335,
+   "end": 360,
+   "speaker": "learner",
+   "silent": false
+  },
+  {
+   "shot": 10,
+   "start": 361,
+   "end": 385,
+   "speaker": "lazy",
+   "silent": false
+  },
+  {
+   "shot": 11,
+   "start": 386,
+   "end": 403,
+   "speaker": "learner",
+   "silent": false
+  },
+  {
+   "shot": 12,
+   "start": 404,
+   "end": 433,
+   "speaker": "lazy",
+   "silent": false
+  },
+  {
+   "shot": 13,
+   "start": 434,
+   "end": 460,
+   "speaker": "learner",
+   "silent": false
+  },
+  {
+   "shot": 14,
+   "start": 461,
+   "end": 481,
+   "speaker": "lazy",
+   "silent": false
+  },
+  {
+   "shot": 15,
+   "start": 482,
+   "end": 503,
+   "speaker": "learner",
+   "silent": false
+  },
+  {
+   "shot": 16,
+   "start": 504,
+   "end": 529,
+   "speaker": "lazy",
+   "silent": false
+  },
+  {
+   "shot": 17,
+   "start": 530,
+   "end": 560,
+   "speaker": "learner",
+   "silent": false
+  },
+  {
+   "shot": 18,
+   "start": 561,
+   "end": 584,
+   "speaker": "lazy",
+   "silent": false
+  },
+  {
+   "shot": 19,
+   "start": 585,
+   "end": 604,
+   "speaker": "learner",
+   "silent": false
+  },
+  {
+   "shot": 20,
+   "start": 605,
+   "end": 631,
+   "speaker": "lazy",
+   "silent": false
+  },
+  {
+   "shot": 21,
+   "start": 632,
+   "end": 823,
+   "speaker": "learner",
+   "silent": false
+  },
+  {
+   "shot": 22,
+   "start": 824,
+   "end": 858,
+   "speaker": "lazy",
+   "silent": true
+  },
+  {
+   "shot": 23,
+   "start": 859,
+   "end": 1055,
+   "speaker": "both",
+   "silent": false
+  }
+ ],
+ "captions": [
+  {
+   "start": 8,
+   "end": 63,
+   "text": "Spanish is easy, right?",
+   "lang": "en"
+  },
+  {
+   "start": 104,
+   "end": 164,
+   "text": "How do you say “tomorrow” in Spanish?",
+   "lang": "en"
+  },
+  {
+   "start": 192,
+   "end": 234,
+   "text": "Mañana",
+   "lang": "es"
+  },
+  {
+   "start": 246,
+   "end": 265,
+   "text": "Morning",
+   "lang": "en"
+  },
+  {
+   "start": 266,
+   "end": 290,
+   "text": "Mañana",
+   "lang": "es"
+  },
+  {
+   "start": 291,
+   "end": 310,
+   "text": "Spider",
+   "lang": "en"
+  },
+  {
+   "start": 311,
+   "end": 334,
+   "text": "Araña",
+   "lang": "es"
+  },
+  {
+   "start": 335,
+   "end": 360,
+   "text": "Scratches",
+   "lang": "en"
+  },
+  {
+   "start": 361,
+   "end": 385,
+   "text": "Araña",
+   "lang": "es"
+  },
+  {
+   "start": 386,
+   "end": 403,
+   "text": "Skill",
+   "lang": "en"
+  },
+  {
+   "start": 404,
+   "end": 433,
+   "text": "Maña",
+   "lang": "es"
+  },
+  {
+   "start": 434,
+   "end": 460,
+   "text": "Spiderweb",
+   "lang": "en"
+  },
+  {
+   "start": 461,
+   "end": 481,
+   "text": "Telaraña",
+   "lang": "es"
+  },
+  {
+   "start": 482,
+   "end": 503,
+   "text": "Strange",
+   "lang": "en"
+  },
+  {
+   "start": 504,
+   "end": 529,
+   "text": "Extraña",
+   "lang": "es"
+  },
+  {
+   "start": 530,
+   "end": 560,
+   "text": "Spain",
+   "lang": "en"
+  },
+  {
+   "start": 561,
+   "end": 584,
+   "text": "España",
+   "lang": "es"
+  },
+  {
+   "start": 585,
+   "end": 604,
+   "text": "Mountain",
+   "lang": "en"
+  },
+  {
+   "start": 605,
+   "end": 631,
+   "text": "Montaña",
+   "lang": "es"
+  },
+  {
+   "start": 632,
+   "end": 673,
+   "text": "Try this",
+   "lang": "en"
+  },
+  {
+   "start": 674,
+   "end": 740,
+   "text": "Tomorrow morning, the strange spider from Spain",
+   "lang": "en"
+  },
+  {
+   "start": 741,
+   "end": 853,
+   "text": "Tomorrow morning, the strange spider from Spain skillfully scratches the spiderweb on the mountain",
+   "lang": "en"
+  },
+  {
+   "start": 854,
+   "end": 1055,
+   "text": "Mañana por la mañana, la extraña araña de España araña con maña la telaraña de la montaña",
+   "lang": "es"
+  }
+ ],
+ "lines": [
+  {
+   "id": "L01",
+   "shot": 1,
+   "speaker": "learner",
+   "text": "Spanish is easy, right?",
+   "lang": "en",
+   "shotStart": 0,
+   "shotEnd": 50
+  },
+  {
+   "id": "L03",
+   "shot": 3,
+   "speaker": "learner",
+   "text": "How do you say tomorrow in Spanish?",
+   "lang": "en",
+   "shotStart": 100,
+   "shotEnd": 164
+  },
+  {
+   "id": "L04",
+   "shot": 4,
+   "speaker": "lazy",
+   "text": "Mañana",
+   "lang": "es",
+   "shotStart": 165,
+   "shotEnd": 245
+  },
+  {
+   "id": "L05",
+   "shot": 5,
+   "speaker": "learner",
+   "text": "Morning",
+   "lang": "en",
+   "shotStart": 246,
+   "shotEnd": 265
+  },
+  {
+   "id": "L06",
+   "shot": 6,
+   "speaker": "lazy",
+   "text": "Mañana",
+   "lang": "es",
+   "shotStart": 266,
+   "shotEnd": 290
+  },
+  {
+   "id": "L07",
+   "shot": 7,
+   "speaker": "learner",
+   "text": "Spider",
+   "lang": "en",
+   "shotStart": 291,
+   "shotEnd": 310
+  },
+  {
+   "id": "L08",
+   "shot": 8,
+   "speaker": "lazy",
+   "text": "Araña",
+   "lang": "es",
+   "shotStart": 311,
+   "shotEnd": 334
+  },
+  {
+   "id": "L09",
+   "shot": 9,
+   "speaker": "learner",
+   "text": "Scratches",
+   "lang": "en",
+   "shotStart": 335,
+   "shotEnd": 360
+  },
+  {
+   "id": "L10",
+   "shot": 10,
+   "speaker": "lazy",
+   "text": "Araña",
+   "lang": "es",
+   "shotStart": 361,
+   "shotEnd": 385
+  },
+  {
+   "id": "L11",
+   "shot": 11,
+   "speaker": "learner",
+   "text": "Skill",
+   "lang": "en",
+   "shotStart": 386,
+   "shotEnd": 403
+  },
+  {
+   "id": "L12",
+   "shot": 12,
+   "speaker": "lazy",
+   "text": "Maña",
+   "lang": "es",
+   "shotStart": 404,
+   "shotEnd": 433
+  },
+  {
+   "id": "L13",
+   "shot": 13,
+   "speaker": "learner",
+   "text": "Spiderweb",
+   "lang": "en",
+   "shotStart": 434,
+   "shotEnd": 460
+  },
+  {
+   "id": "L14",
+   "shot": 14,
+   "speaker": "lazy",
+   "text": "Telaraña",
+   "lang": "es",
+   "shotStart": 461,
+   "shotEnd": 481
+  },
+  {
+   "id": "L15",
+   "shot": 15,
+   "speaker": "learner",
+   "text": "Strange",
+   "lang": "en",
+   "shotStart": 482,
+   "shotEnd": 503
+  },
+  {
+   "id": "L16",
+   "shot": 16,
+   "speaker": "lazy",
+   "text": "Extraña",
+   "lang": "es",
+   "shotStart": 504,
+   "shotEnd": 529
+  },
+  {
+   "id": "L17",
+   "shot": 17,
+   "speaker": "learner",
+   "text": "Spain",
+   "lang": "en",
+   "shotStart": 530,
+   "shotEnd": 560
+  },
+  {
+   "id": "L18",
+   "shot": 18,
+   "speaker": "lazy",
+   "text": "España",
+   "lang": "es",
+   "shotStart": 561,
+   "shotEnd": 584
+  },
+  {
+   "id": "L19",
+   "shot": 19,
+   "speaker": "learner",
+   "text": "Mountain",
+   "lang": "en",
+   "shotStart": 585,
+   "shotEnd": 604
+  },
+  {
+   "id": "L20",
+   "shot": 20,
+   "speaker": "lazy",
+   "text": "Montaña",
+   "lang": "es",
+   "shotStart": 605,
+   "shotEnd": 631
+  },
+  {
+   "id": "L21",
+   "shot": 21,
+   "speaker": "learner",
+   "text": "Try this. Tomorrow morning, the strange spider from Spain skillfully scratches the spiderweb on the mountain",
+   "lang": "en",
+   "shotStart": 632,
+   "shotEnd": 823
+  },
+  {
+   "id": "L23",
+   "shot": 23,
+   "speaker": "both",
+   "text": "Mañana por la mañana, la extraña araña de España araña con maña la telaraña de la montaña",
+   "lang": "es",
+   "shotStart": 859,
+   "shotEnd": 1055
+  }
+ ],
+ "spanishWords": [
+  "Mañana",
+  "mañana",
+  "por",
+  "la",
+  "extraña",
+  "araña",
+  "de",
+  "España",
+  "con",
+  "maña",
+  "telaraña",
+  "montaña",
+  "Araña",
+  "Maña",
+  "Telaraña",
+  "Extraña",
+  "Montaña"
+ ]
+}

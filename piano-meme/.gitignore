@@ -4,6 +4,12 @@ refs/reference/reference.mp4
 refs/reference/sheets/
 # style references are other artists' work: keep local only
 refs/style/
+# the soundtrack is cut from the reference clip, so it stays local too
+video/public/audio/
+audio/work/
+
+# downloaded tools (tools/get_rhubarb.sh puts them back)
+tools/rhubarb/
 
 node_modules/
 video/node_modules/

@@ -1,12 +1,21 @@
 import React from "react";
 import { Composition } from "remotion";
-import { FPS, H, W } from "./palette";
-import { RigTest } from "./RigTest";
+import { defaultInkProps, FPS, H, inkSchema, TOTAL, W } from "./config";
+import { PianoMeme } from "./PianoMeme";
 
 export const RemotionRoot: React.FC = () => {
   return (
     <>
-      <Composition id="RigTest" component={RigTest} durationInFrames={180} fps={FPS} width={W} height={H} />
+      <Composition
+        id="PianoMeme"
+        component={PianoMeme}
+        durationInFrames={TOTAL}
+        fps={FPS}
+        width={W}
+        height={H}
+        schema={inkSchema}
+        defaultProps={defaultInkProps}
+      />
     </>
   );
 };
