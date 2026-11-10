@@ -1,0 +1,14 @@
+# Personal photos and the third-party reference clip stay off the public repository.
+refs/me/
+refs/reference/reference.mp4
+refs/reference/sheets/
+# style references are other artists' work: keep local only
+refs/style/
+
+node_modules/
+video/node_modules/
+video/dist/
+art/work/
+__pycache__/
+*.pyc
+.DS_Store

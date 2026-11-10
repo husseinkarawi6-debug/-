@@ -1,0 +1,160 @@
+{
+ "name": "hussein",
+ "size": [
+  1024,
+  1024
+ ],
+ "pieces": {
+  "head": {
+   "file": "rig/hussein/head.png",
+   "x": 326,
+   "y": 0,
+   "w": 346,
+   "h": 480
+  },
+  "armL": {
+   "file": "rig/hussein/armL.png",
+   "x": 11,
+   "y": 353,
+   "w": 371,
+   "h": 671
+  },
+  "armR": {
+   "file": "rig/hussein/armR.png",
+   "x": 633,
+   "y": 355,
+   "w": 374,
+   "h": 669
+  },
+  "torso": {
+   "file": "rig/hussein/torso.png",
+   "x": 94,
+   "y": 315,
+   "w": 839,
+   "h": 709,
+   "note": "TEMPORARY: hidden areas smeared by code, waiting for the OpenAI inpaint"
+  }
+ },
+ "joints": {
+  "neck": [
+   517,
+   440
+  ],
+  "shoulderL": [
+   205,
+   415
+  ],
+  "elbowL": [
+   85,
+   748
+  ],
+  "wristL": [
+   245,
+   868
+  ],
+  "shoulderR": [
+   820,
+   415
+  ],
+  "elbowR": [
+   942,
+   748
+  ],
+  "wristR": [
+   782,
+   868
+  ]
+ },
+ "fingertips": {
+  "L": {
+   "thumb": [
+    355,
+    985
+   ],
+   "index": [
+    308,
+    1010
+   ],
+   "middle": [
+    266,
+    1015
+   ],
+   "ring": [
+    229,
+    1015
+   ],
+   "pinky": [
+    188,
+    1005
+   ]
+  },
+  "R": {
+   "thumb": [
+    655,
+    992
+   ],
+   "index": [
+    700,
+    1012
+   ],
+   "middle": [
+    748,
+    1012
+   ],
+   "ring": [
+    790,
+    1010
+   ],
+   "pinky": [
+    838,
+    1000
+   ]
+  }
+ },
+ "knuckles": {
+  "L": {
+   "thumb": [
+    318,
+    905
+   ],
+   "index": [
+    292,
+    925
+   ],
+   "middle": [
+    262,
+    930
+   ],
+   "ring": [
+    232,
+    930
+   ],
+   "pinky": [
+    203,
+    925
+   ]
+  },
+  "R": {
+   "thumb": [
+    712,
+    905
+   ],
+   "index": [
+    722,
+    925
+   ],
+   "middle": [
+    752,
+    930
+   ],
+   "ring": [
+    784,
+    930
+   ],
+   "pinky": [
+    815,
+    925
+   ]
+  }
+ }
+}
