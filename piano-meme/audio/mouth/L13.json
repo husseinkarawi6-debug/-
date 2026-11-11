@@ -1,0 +1,44 @@
+{
+ "line": "L13",
+ "speaker": "learner",
+ "text": "Spiderweb",
+ "recognizer": "pocketSphinx",
+ "gated": true,
+ "cues": [
+  {
+   "start": 434,
+   "end": 436,
+   "shape": "C"
+  },
+  {
+   "start": 437,
+   "end": 440,
+   "shape": "B"
+  },
+  {
+   "start": 441,
+   "end": 444,
+   "shape": "F"
+  },
+  {
+   "start": 445,
+   "end": 446,
+   "shape": "D"
+  },
+  {
+   "start": 447,
+   "end": 447,
+   "shape": "C"
+  },
+  {
+   "start": 448,
+   "end": 449,
+   "shape": "B"
+  },
+  {
+   "start": 450,
+   "end": 460,
+   "shape": "X"
+  }
+ ]
+}

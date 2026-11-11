@@ -1,0 +1,59 @@
+{
+ "line": "L14",
+ "speaker": "lazy",
+ "text": "Telaraña",
+ "recognizer": "phonetic",
+ "gated": true,
+ "cues": [
+  {
+   "start": 461,
+   "end": 462,
+   "shape": "B"
+  },
+  {
+   "start": 463,
+   "end": 463,
+   "shape": "C"
+  },
+  {
+   "start": 464,
+   "end": 466,
+   "shape": "A"
+  },
+  {
+   "start": 467,
+   "end": 467,
+   "shape": "C"
+  },
+  {
+   "start": 468,
+   "end": 470,
+   "shape": "F"
+  },
+  {
+   "start": 471,
+   "end": 472,
+   "shape": "B"
+  },
+  {
+   "start": 473,
+   "end": 477,
+   "shape": "X"
+  },
+  {
+   "start": 478,
+   "end": 478,
+   "shape": "A"
+  },
+  {
+   "start": 479,
+   "end": 480,
+   "shape": "C"
+  },
+  {
+   "start": 481,
+   "end": 481,
+   "shape": "D"
+  }
+ ]
+}

@@ -93,6 +93,32 @@ def parse_timing_md() -> list[dict]:
     return rows
 
 
+
+def measure_reference_captions() -> list[dict]:
+    """Exact caption change frames in reference.mp4 (24 fps), converted to
+    30 fps (first 30 fps frame at or after the change). Looks at the caption
+    band at the top of the frame."""
+    import math
+    import cv2
+    cap = cv2.VideoCapture(str(REF_VIDEO))
+    fps = cap.get(cv2.CAP_PROP_FPS) or 24.0
+    prev, events, k = None, [], 0
+    while True:
+        ok, fr = cap.read()
+        if not ok:
+            break
+        g = cv2.cvtColor(fr, cv2.COLOR_BGR2GRAY)
+        h, w = g.shape
+        band = g[int(h * 0.04):int(h * 0.27), int(w * 0.08):int(w * 0.92)] < 90
+        if prev is not None:
+            diff = int((band ^ prev).sum())
+            if diff > 250 and (not events or k - events[-1]["refFrame"] > 3):
+                events.append({"refFrame": k, "frame": int(math.ceil(k * FPS / fps - 1e-6)),
+                               "on": bool(band.sum() > 40)})
+        prev = band
+        k += 1
+    return events
+
 def build_captions(rows: list[dict]) -> list[dict]:
     caps = [dict(start=a, end=b, text=t, lang=l) for a, b, t, l in CAPTIONS]
     for r in rows:
@@ -132,6 +158,53 @@ def build_lines(rows: list[dict]) -> list[dict]:
                       "shotStart": r["start"], "shotEnd": r["end"]})
     return lines
 
+
+
+CAPTION_LINE = {0: "L01", 1: "L03", 2: "L04", **{3 + i: f"L{5 + i:02d}" for i in range(16)},
+                19: "L21", 20: "L21", 21: "L21", 22: None}
+SNAP_WINDOW = 8  # frames: a caption snaps to its own voice if it is this close
+
+
+def voice_onsets(line_id: str) -> list[int]:
+    p = MOUTH_DIR / f"{line_id}.json"
+    if not p.exists():
+        return []
+    cues = json.loads(p.read_text())["cues"]
+    out = []
+    for prev, cur in zip([{"shape": "X"}] + cues[:-1], cues):
+        if prev["shape"] == "X" and cur["shape"] != "X":
+            out.append(cur["start"])
+    return out
+
+
+def time_captions(caps: list[dict], events: list[dict]) -> list[dict]:
+    """Starts: own voice onset (if within SNAP_WINDOW of the reference),
+    otherwise the exact reference frame. Ends: next start - 1, or the
+    reference 'caption off' frame."""
+    ons = [e for e in events if e["on"]]
+    offs = [e for e in events if not e["on"]]
+    if len(ons) < len(caps):
+        sys.exit(f"reference: found {len(ons)} caption changes, expected {len(caps)}")
+    out = []
+    for i, c in enumerate(caps):
+        ref = ons[i]["frame"]
+        c = dict(c, refStart=ref, tableStart=c["start"])
+        lid = CAPTION_LINE.get(i)
+        cands = [f for f in voice_onsets(lid)] if lid else []
+        near = [f for f in cands if abs(f - ref) <= SNAP_WINDOW]
+        if near:
+            c["start"] = min(near, key=lambda f: abs(f - ref))
+            c["timing"] = f"voice onset of {lid}"
+        else:
+            c["start"] = ref
+            c["timing"] = "reference frame"
+        c["line"] = lid
+        out.append(c)
+    for i, c in enumerate(out):
+        nxt = out[i + 1]["start"] if i + 1 < len(out) else TOTAL
+        off = [e["frame"] for e in offs if c["start"] < e["frame"] < nxt]
+        c["end"] = (off[0] - 1) if off else nxt - 1
+    return out
 
 # ---------------------------------------------------------------------------
 # audio helpers
@@ -183,82 +256,104 @@ def runs_above(v, thr, min_len):
     return out
 
 
-def analyse_audio(mono: Path, lines: list[dict]) -> dict:
+def stationary_split(y, sr):
+    """Split the mix into 'held tones' (piano chords, held notes: straight
+    lines in the spectrogram) and 'gliding' sound (voices: curved lines).
+    Long horizontal median vs vertical median, like HPSS with a 0.5 s kernel."""
     import numpy as np
     import librosa
-    import scipy.signal as sps
+    import scipy.ndimage as ndi
+    hop, nfft = 256, 4096
+    D = librosa.stft(y, n_fft=nfft, hop_length=hop)
+    M = np.abs(D)
+    Ht = ndi.median_filter(M, size=(1, 43))   # ~0.5 s along time
+    Vf = ndi.median_filter(M, size=(17, 1))   # ~90 Hz along frequency
+    held_mask = (Ht ** 2) / (Ht ** 2 + Vf ** 2 + 1e-12)
+    # REPET-SIM: what repeats in the music is accompaniment, the rest is voice
+    S_rep = librosa.decompose.nn_filter(M, aggregate=np.median, metric="cosine",
+                                        width=int(librosa.time_to_frames(1.0, sr=sr, hop_length=hop)))
+    S_rep = np.minimum(M, S_rep)
+    rep_mask = librosa.util.softmask(M - S_rep, 2 * S_rep, power=2)
+    voice_mask = rep_mask * (1 - held_mask)
+    freqs = librosa.fft_frequencies(sr=sr, n_fft=nfft)
+    times = librosa.frames_to_time(np.arange(M.shape[1]), sr=sr, hop_length=hop)
+    return dict(D=D, M=M, held_mask=held_mask, voice_mask=voice_mask,
+                freqs=freqs, times=times, hop=hop, nfft=nfft)
+
+
+def analyse_audio(mono: Path, lines: list[dict], rows: list[dict]) -> dict:
+    import numpy as np
+    import librosa
+    import soundfile as sf
 
     y, sr = librosa.load(str(mono), sr=22050, mono=True)
     rms = lambda s: np.sqrt(np.mean(s ** 2) + 1e-12)
-
-    # Harmonic / percussive split. Piano + voice are both harmonic; the piano
-    # carries most of the low/mid energy, the voice most of 300–3400 Hz.
-    D = librosa.stft(y, n_fft=2048, hop_length=512)
-    H, P = librosa.decompose.hpss(D, margin=2.0)
-    yh = librosa.istft(H, hop_length=512, length=len(y))
-    yp = librosa.istft(P, hop_length=512, length=len(y))
-
     full_rms = per_frame(y, sr, rms)
-    harm_rms = per_frame(yh, sr, rms)
-    perc_rms = per_frame(yp, sr, rms)
 
-    # "piano" curve: harmonic energy below 1.2 kHz (keeps most of the voice out)
-    b, a = sps.butter(4, 1200 / (sr / 2), btype="low")
-    yh_low = sps.filtfilt(b, a, yh)
-    piano_rms = per_frame(yh_low, sr, rms)
-    # "voice" curve: harmonic energy 300–3400 Hz
-    b, a = sps.butter(4, [300 / (sr / 2), 3400 / (sr / 2)], btype="band")
-    voice = per_frame(sps.filtfilt(b, a, yh), sr, rms)
+    sp = stationary_split(y, sr)
+    M, f = sp["M"], sp["freqs"]
+    fr_t = (np.arange(TOTAL) + 0.5) / FPS
 
-    def db(v):
-        return 20 * np.log10(np.maximum(v, 1e-6))
+    def band_db(spec, lo, hi):
+        b = (f > lo) & (f < hi)
+        e = np.sqrt((spec[b] ** 2).sum(0))
+        return smooth(20 * np.log10(np.maximum(np.interp(fr_t, sp["times"], e), 1e-4)), 4)
 
-    piano_db = smooth(db(piano_rms), 6)
-    piano_norm = (piano_db - np.percentile(piano_db, 10)) / max(
-        1e-6, np.percentile(piano_db, 98) - np.percentile(piano_db, 10))
-    piano_norm = np.clip(piano_norm, 0, 1)
+    piano_db = band_db(M * (sp["held_mask"] > 0.75), 80, 2500)   # held tones = piano
+    voice_db = band_db(M * sp["voice_mask"], 250, 3000)          # gliding = voices
+    lo, hi = np.percentile(piano_db, 10), np.percentile(piano_db, 99)
+    piano_norm = np.clip((piano_db - lo) / max(1e-6, hi - lo), 0, 1)
 
-    # Loud piano section in the middle of the clip (between shot 5 and 21).
-    mid = np.zeros(TOTAL, bool)
-    mid[246:632] = True
-    thr = np.percentile(piano_norm[mid], 70)
-    loud_runs = [r for r in runs_above(np.where(mid, piano_norm, 0), thr, 10)]
-    # merge runs separated by < 8 frames
-    merged = []
-    for r in loud_runs:
-        if merged and r[0] - merged[-1][1] < 8:
-            merged[-1][1] = r[1]
-        else:
-            merged.append(r)
-    loud_main = max(merged, key=lambda r: float(piano_norm[r[0]:r[1] + 1].sum()), default=None)
+    # Vocals-only track for Rhubarb
+    yv = librosa.istft(sp["D"] * sp["voice_mask"], hop_length=sp["hop"], length=len(y))
+    yv = yv / (np.abs(yv).max() + 1e-9) * 0.9
+    sf.write(str(WORK / "vocals22k.wav"), yv, sr)
 
-    # Beats and onsets
+    # Loud piano in the middle: loudest 2 s window inside shots 5–20,
+    # then snapped to the shots it touches.
+    lin = 10 ** (piano_db / 20)
+    L = 60
+    best = max(range(246, 632 - L + 1), key=lambda a: lin[a:a + L].mean())
+    win = [best, best + L - 1]
+    touched = [r for r in rows if r["end"] >= win[0] and r["start"] <= win[1] and 5 <= r["shot"] <= 20]
+    # start and end the section on a lazy shot (those become the pianist)
+    while touched and touched[0]["speaker"] != "lazy":
+        touched = touched[1:]
+    while touched and touched[-1]["speaker"] != "lazy":
+        touched = touched[:-1]
+    section = {
+        "loudWindow": win,
+        "loudWindowDb": round(float(20 * np.log10(lin[win[0]:win[1] + 1].mean())), 2),
+        "start": touched[0]["start"] if touched else None,
+        "end": touched[-1]["end"] if touched else None,
+        "shots": [r["shot"] for r in touched],
+        "pianistShots": [r["shot"] for r in touched if r["speaker"] == "lazy"],
+    }
+
+    # Beats (dance, mic) and piano onsets (pianist's hands)
     hop = 512
     onset_env = librosa.onset.onset_strength(y=y, sr=sr, hop_length=hop)
     tempo, beat_frames = librosa.beat.beat_track(onset_envelope=onset_env, sr=sr, hop_length=hop)
     beat_t = librosa.frames_to_time(beat_frames, sr=sr, hop_length=hop)
-    on_h = librosa.onset.onset_strength(y=yh_low, sr=sr, hop_length=hop)
+    yh = librosa.istft(sp["D"] * (sp["held_mask"] > 0.5), hop_length=sp["hop"], length=len(y))
+    on_h = librosa.onset.onset_strength(y=yh, sr=sr, hop_length=hop)
     on_frames = librosa.onset.onset_detect(onset_envelope=on_h, sr=sr, hop_length=hop, backtrack=False)
     on_t = librosa.frames_to_time(on_frames, sr=sr, hop_length=hop)
     on_strength = on_h[on_frames] if len(on_frames) else np.array([])
     strong_thr = np.percentile(on_strength, 60) if len(on_strength) else 0
-
     to_f = lambda t: int(round(float(t) * FPS))
     onsets = [{"frame": to_f(t), "strength": round(float(s / (on_strength.max() + 1e-9)), 3),
                "strong": bool(s >= strong_thr)} for t, s in zip(on_t, on_strength)]
 
-    # Speech start/end inside each line's shot (voice band above local floor)
-    vdb = smooth(db(voice), 1)
+    # Speech start/end per line, from the voice curve
     for ln in lines:
         a, b2 = ln["shotStart"], ln["shotEnd"]
-        seg = vdb[a:b2 + 1]
-        floor = np.percentile(seg, 15)
-        peak = np.percentile(seg, 95)
-        thr_v = floor + 0.45 * (peak - floor)
+        seg = voice_db[a:b2 + 1]
+        floor, peak = np.percentile(seg, 10), np.percentile(seg, 95)
+        thr_v = floor + 0.5 * (peak - floor)
         active = np.where(seg > thr_v)[0]
-        if len(active) and peak - floor > 6:
-            ln["speechStart"] = int(a + active[0])
-            ln["speechEnd"] = int(a + active[-1])
+        if len(active) and peak - floor > 8:
+            ln["speechStart"], ln["speechEnd"] = int(a + active[0]), int(a + active[-1])
             ln["speechFromAudio"] = True
         else:
             ln["speechStart"], ln["speechEnd"] = a + 4, b2 - 4
@@ -270,16 +365,11 @@ def analyse_audio(mono: Path, lines: list[dict]) -> dict:
         "onsets": onsets,
         "curves": {
             "full": [round(float(v), 5) for v in full_rms],
-            "harmonic": [round(float(v), 5) for v in harm_rms],
-            "percussive": [round(float(v), 5) for v in perc_rms],
+            "pianoDb": [round(float(v), 2) for v in piano_db],
             "piano": [round(float(v), 4) for v in piano_norm],
-            "voice": [round(float(v), 5) for v in voice],
+            "voiceDb": [round(float(v), 2) for v in voice_db],
         },
-        "pianoLoud": {
-            "threshold": round(float(thr), 4),
-            "runs": merged,
-            "main": loud_main,
-        },
+        "pianoSection": section,
     }
 
 
@@ -287,7 +377,43 @@ def analyse_audio(mono: Path, lines: list[dict]) -> dict:
 # Rhubarb lip sync
 # ---------------------------------------------------------------------------
 
-def run_rhubarb(mono: Path, lines: list[dict]):
+
+def gate_cues(cues, ln, voice_db):
+    """Make the mouth follow the voice: closed (X) when the voice is quiet,
+    never closed for long while it is loud. Rhubarb picks the shape, the
+    voice level decides open / closed."""
+    import numpy as np
+    a, b = ln["shotStart"], ln["shotEnd"]
+    per = {}
+    for c in cues:
+        for f in range(c["start"], c["end"] + 1):
+            per[f] = c["shape"]
+    seg = np.array(voice_db[a:b + 1])
+    floor, peak = np.percentile(seg, 10), np.percentile(seg, 95)
+    on = seg > floor + 0.42 * (peak - floor)
+    # 1-frame hangover so short dips do not snap the jaw shut
+    on = on | np.r_[False, on[:-1]]
+    out = []
+    for i, f in enumerate(range(a, b + 1)):
+        level = (seg[i] - floor) / max(1e-6, peak - floor)
+        shape = per.get(f, "X")
+        if not on[i]:
+            shape = "X"
+        elif shape in ("X", "A") and level > 0.65:
+            shape = "D" if level > 0.9 else "C"
+        elif shape == "X":
+            shape = "B"
+        out.append(shape)
+    merged = []
+    for i, sh in enumerate(out):
+        f = a + i
+        if merged and merged[-1]["shape"] == sh:
+            merged[-1]["end"] = f
+        else:
+            merged.append({"start": f, "end": f, "shape": sh})
+    return merged
+
+def run_rhubarb(mono: Path, lines: list[dict], voice_db=None):
     if not RHUBARB.exists():
         print("! Rhubarb not found at tools/rhubarb — run tools/get_rhubarb.sh")
         return
@@ -296,14 +422,15 @@ def run_rhubarb(mono: Path, lines: list[dict]):
         a = max(0, ln["shotStart"] - 3)
         b = ln["shotEnd"] + 1
         seg = WORK / f"{ln['id']}.wav"
-        subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", str(mono), "-ss", f"{a / FPS}",
+        src = WORK / "vocals22k.wav" if (WORK / "vocals22k.wav").exists() else mono
+        subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", str(src), "-ss", f"{a / FPS}",
                         "-t", f"{(b - a) / FPS}", "-ac", "1", "-ar", "16000", str(seg)], check=True)
         dialog = WORK / f"{ln['id']}.txt"
         dialog.write_text(ln["text"], encoding="utf-8")
         out = WORK / f"{ln['id']}.rhubarb.json"
         # English lines: speech recogniser + dialog text. Spanish lines: phonetic.
         rec = "pocketSphinx" if ln["lang"] == "en" else "phonetic"
-        cmd = [str(RHUBARB), "-q", "-f", "json", "-r", rec, "--extendedShapes", "GX",
+        cmd = [str(RHUBARB), "-q", "-f", "json", "-r", rec, "--extendedShapes", "X",
                "-o", str(out), str(seg)]
         if rec == "pocketSphinx":
             cmd[1:1] = ["-d", str(dialog)]
@@ -316,8 +443,10 @@ def run_rhubarb(mono: Path, lines: list[dict]):
             f0, f1 = max(f0, ln["shotStart"]), min(f1, ln["shotEnd"])
             if f1 >= f0:
                 frames.append({"start": f0, "end": f1, "shape": c["value"]})
+        if voice_db is not None:
+            frames = gate_cues(frames, ln, voice_db)
         res = {"line": ln["id"], "speaker": ln["speaker"], "text": ln["text"],
-               "recognizer": rec, "cues": frames}
+               "recognizer": rec, "gated": voice_db is not None, "cues": frames}
         (MOUTH_DIR / f"{ln['id']}.json").write_text(json.dumps(res, ensure_ascii=False, indent=1))
         ln["mouth"] = f"audio/mouth/{ln['id']}.json"
     # bundle for Remotion (same data, one import)
@@ -344,16 +473,20 @@ def main():
         if not REF_VIDEO.exists():
             sys.exit(f"missing file: {REF_VIDEO.relative_to(ROOT)}")
         mono = extract_audio()
-        result.update(analyse_audio(mono, lines))
+        result.update(analyse_audio(mono, lines, rows))
         result["audioPresent"] = True
-        run_rhubarb(mono, lines)
+        run_rhubarb(mono, lines, result["curves"]["voiceDb"])
+        result["referenceCaptionEvents"] = measure_reference_captions()
+        result["captions"] = time_captions(captions, result["referenceCaptionEvents"])
 
     ANALYSIS.write_text(json.dumps(result, ensure_ascii=False, indent=1))
     print(f"wrote {ANALYSIS.relative_to(ROOT)}: {len(shots)} shots, {len(captions)} captions, "
           f"{len(lines)} spoken lines, audio={'yes' if result['audioPresent'] else 'no'}")
-    if result.get("pianoLoud", {}).get("main"):
-        a, b = result["pianoLoud"]["main"]
-        print(f"loud piano: frames {a}–{b} ({(b - a + 1) / FPS:.2f} s)")
+    ps = result.get("pianoSection")
+    if ps:
+        a, b = ps["loudWindow"]
+        print(f"loudest piano (2 s window): frames {a}–{b}; piano section = shots {ps['shots']} "
+              f"(frames {ps['start']}–{ps['end']}), pianist in shots {ps['pianistShots']}")
 
 
 if __name__ == "__main__":

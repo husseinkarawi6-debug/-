@@ -1,0 +1,54 @@
+{
+ "line": "L18",
+ "speaker": "lazy",
+ "text": "España",
+ "recognizer": "phonetic",
+ "gated": true,
+ "cues": [
+  {
+   "start": 561,
+   "end": 564,
+   "shape": "X"
+  },
+  {
+   "start": 565,
+   "end": 567,
+   "shape": "C"
+  },
+  {
+   "start": 568,
+   "end": 572,
+   "shape": "X"
+  },
+  {
+   "start": 573,
+   "end": 573,
+   "shape": "A"
+  },
+  {
+   "start": 574,
+   "end": 574,
+   "shape": "C"
+  },
+  {
+   "start": 575,
+   "end": 576,
+   "shape": "D"
+  },
+  {
+   "start": 577,
+   "end": 581,
+   "shape": "B"
+  },
+  {
+   "start": 582,
+   "end": 583,
+   "shape": "X"
+  },
+  {
+   "start": 584,
+   "end": 584,
+   "shape": "B"
+  }
+ ]
+}

@@ -1,0 +1,54 @@
+{
+ "line": "L16",
+ "speaker": "lazy",
+ "text": "Extraña",
+ "recognizer": "phonetic",
+ "gated": true,
+ "cues": [
+  {
+   "start": 504,
+   "end": 504,
+   "shape": "B"
+  },
+  {
+   "start": 505,
+   "end": 507,
+   "shape": "C"
+  },
+  {
+   "start": 508,
+   "end": 514,
+   "shape": "B"
+  },
+  {
+   "start": 515,
+   "end": 515,
+   "shape": "X"
+  },
+  {
+   "start": 516,
+   "end": 516,
+   "shape": "B"
+  },
+  {
+   "start": 517,
+   "end": 520,
+   "shape": "E"
+  },
+  {
+   "start": 521,
+   "end": 521,
+   "shape": "C"
+  },
+  {
+   "start": 522,
+   "end": 528,
+   "shape": "X"
+  },
+  {
+   "start": 529,
+   "end": 529,
+   "shape": "B"
+  }
+ ]
+}

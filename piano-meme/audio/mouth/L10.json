@@ -1,0 +1,44 @@
+{
+ "line": "L10",
+ "speaker": "lazy",
+ "text": "Araña",
+ "recognizer": "phonetic",
+ "gated": true,
+ "cues": [
+  {
+   "start": 361,
+   "end": 366,
+   "shape": "B"
+  },
+  {
+   "start": 367,
+   "end": 368,
+   "shape": "F"
+  },
+  {
+   "start": 369,
+   "end": 369,
+   "shape": "X"
+  },
+  {
+   "start": 370,
+   "end": 370,
+   "shape": "F"
+  },
+  {
+   "start": 371,
+   "end": 376,
+   "shape": "B"
+  },
+  {
+   "start": 377,
+   "end": 382,
+   "shape": "X"
+  },
+  {
+   "start": 383,
+   "end": 385,
+   "shape": "B"
+  }
+ ]
+}

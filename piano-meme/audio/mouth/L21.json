@@ -1,0 +1,189 @@
+{
+ "line": "L21",
+ "speaker": "learner",
+ "text": "Try this. Tomorrow morning, the strange spider from Spain skillfully scratches the spiderweb on the mountain",
+ "recognizer": "pocketSphinx",
+ "gated": true,
+ "cues": [
+  {
+   "start": 632,
+   "end": 632,
+   "shape": "C"
+  },
+  {
+   "start": 633,
+   "end": 633,
+   "shape": "B"
+  },
+  {
+   "start": 634,
+   "end": 637,
+   "shape": "C"
+  },
+  {
+   "start": 638,
+   "end": 640,
+   "shape": "B"
+  },
+  {
+   "start": 641,
+   "end": 646,
+   "shape": "X"
+  },
+  {
+   "start": 647,
+   "end": 653,
+   "shape": "B"
+  },
+  {
+   "start": 654,
+   "end": 670,
+   "shape": "X"
+  },
+  {
+   "start": 671,
+   "end": 673,
+   "shape": "B"
+  },
+  {
+   "start": 674,
+   "end": 677,
+   "shape": "D"
+  },
+  {
+   "start": 678,
+   "end": 681,
+   "shape": "E"
+  },
+  {
+   "start": 682,
+   "end": 684,
+   "shape": "C"
+  },
+  {
+   "start": 685,
+   "end": 689,
+   "shape": "E"
+  },
+  {
+   "start": 690,
+   "end": 694,
+   "shape": "B"
+  },
+  {
+   "start": 695,
+   "end": 711,
+   "shape": "X"
+  },
+  {
+   "start": 712,
+   "end": 722,
+   "shape": "B"
+  },
+  {
+   "start": 723,
+   "end": 726,
+   "shape": "C"
+  },
+  {
+   "start": 727,
+   "end": 729,
+   "shape": "B"
+  },
+  {
+   "start": 730,
+   "end": 730,
+   "shape": "X"
+  },
+  {
+   "start": 731,
+   "end": 735,
+   "shape": "B"
+  },
+  {
+   "start": 736,
+   "end": 737,
+   "shape": "C"
+  },
+  {
+   "start": 738,
+   "end": 751,
+   "shape": "B"
+  },
+  {
+   "start": 752,
+   "end": 754,
+   "shape": "X"
+  },
+  {
+   "start": 755,
+   "end": 756,
+   "shape": "B"
+  },
+  {
+   "start": 757,
+   "end": 760,
+   "shape": "C"
+  },
+  {
+   "start": 761,
+   "end": 763,
+   "shape": "B"
+  },
+  {
+   "start": 764,
+   "end": 769,
+   "shape": "X"
+  },
+  {
+   "start": 770,
+   "end": 775,
+   "shape": "B"
+  },
+  {
+   "start": 776,
+   "end": 778,
+   "shape": "C"
+  },
+  {
+   "start": 779,
+   "end": 781,
+   "shape": "X"
+  },
+  {
+   "start": 782,
+   "end": 787,
+   "shape": "C"
+  },
+  {
+   "start": 788,
+   "end": 796,
+   "shape": "B"
+  },
+  {
+   "start": 797,
+   "end": 798,
+   "shape": "C"
+  },
+  {
+   "start": 799,
+   "end": 812,
+   "shape": "B"
+  },
+  {
+   "start": 813,
+   "end": 817,
+   "shape": "F"
+  },
+  {
+   "start": 818,
+   "end": 819,
+   "shape": "E"
+  },
+  {
+   "start": 820,
+   "end": 823,
+   "shape": "B"
+  }
+ ]
+}

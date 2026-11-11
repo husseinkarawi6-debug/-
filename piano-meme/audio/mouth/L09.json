@@ -1,0 +1,44 @@
+{
+ "line": "L09",
+ "speaker": "learner",
+ "text": "Scratches",
+ "recognizer": "pocketSphinx",
+ "gated": true,
+ "cues": [
+  {
+   "start": 335,
+   "end": 335,
+   "shape": "X"
+  },
+  {
+   "start": 336,
+   "end": 340,
+   "shape": "B"
+  },
+  {
+   "start": 341,
+   "end": 342,
+   "shape": "C"
+  },
+  {
+   "start": 343,
+   "end": 344,
+   "shape": "B"
+  },
+  {
+   "start": 345,
+   "end": 352,
+   "shape": "F"
+  },
+  {
+   "start": 353,
+   "end": 357,
+   "shape": "X"
+  },
+  {
+   "start": 358,
+   "end": 360,
+   "shape": "B"
+  }
+ ]
+}

@@ -1,0 +1,49 @@
+{
+ "line": "L20",
+ "speaker": "lazy",
+ "text": "Montaña",
+ "recognizer": "phonetic",
+ "gated": true,
+ "cues": [
+  {
+   "start": 605,
+   "end": 607,
+   "shape": "C"
+  },
+  {
+   "start": 608,
+   "end": 608,
+   "shape": "A"
+  },
+  {
+   "start": 609,
+   "end": 611,
+   "shape": "X"
+  },
+  {
+   "start": 612,
+   "end": 615,
+   "shape": "C"
+  },
+  {
+   "start": 616,
+   "end": 617,
+   "shape": "B"
+  },
+  {
+   "start": 618,
+   "end": 626,
+   "shape": "X"
+  },
+  {
+   "start": 627,
+   "end": 627,
+   "shape": "B"
+  },
+  {
+   "start": 628,
+   "end": 631,
+   "shape": "E"
+  }
+ ]
+}

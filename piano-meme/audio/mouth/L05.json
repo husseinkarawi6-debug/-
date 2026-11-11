@@ -1,0 +1,34 @@
+{
+ "line": "L05",
+ "speaker": "learner",
+ "text": "Morning",
+ "recognizer": "pocketSphinx",
+ "gated": true,
+ "cues": [
+  {
+   "start": 246,
+   "end": 246,
+   "shape": "E"
+  },
+  {
+   "start": 247,
+   "end": 257,
+   "shape": "B"
+  },
+  {
+   "start": 258,
+   "end": 262,
+   "shape": "X"
+  },
+  {
+   "start": 263,
+   "end": 264,
+   "shape": "B"
+  },
+  {
+   "start": 265,
+   "end": 265,
+   "shape": "X"
+  }
+ ]
+}

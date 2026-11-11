@@ -1,0 +1,44 @@
+{
+ "line": "L15",
+ "speaker": "learner",
+ "text": "Strange",
+ "recognizer": "pocketSphinx",
+ "gated": true,
+ "cues": [
+  {
+   "start": 482,
+   "end": 484,
+   "shape": "B"
+  },
+  {
+   "start": 485,
+   "end": 489,
+   "shape": "C"
+  },
+  {
+   "start": 490,
+   "end": 493,
+   "shape": "X"
+  },
+  {
+   "start": 494,
+   "end": 496,
+   "shape": "B"
+  },
+  {
+   "start": 497,
+   "end": 500,
+   "shape": "X"
+  },
+  {
+   "start": 501,
+   "end": 502,
+   "shape": "B"
+  },
+  {
+   "start": 503,
+   "end": 503,
+   "shape": "X"
+  }
+ ]
+}

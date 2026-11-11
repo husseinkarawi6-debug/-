@@ -1,0 +1,44 @@
+{
+ "line": "L12",
+ "speaker": "lazy",
+ "text": "Maña",
+ "recognizer": "phonetic",
+ "gated": true,
+ "cues": [
+  {
+   "start": 404,
+   "end": 408,
+   "shape": "X"
+  },
+  {
+   "start": 409,
+   "end": 409,
+   "shape": "C"
+  },
+  {
+   "start": 410,
+   "end": 410,
+   "shape": "D"
+  },
+  {
+   "start": 411,
+   "end": 412,
+   "shape": "C"
+  },
+  {
+   "start": 413,
+   "end": 414,
+   "shape": "B"
+  },
+  {
+   "start": 415,
+   "end": 422,
+   "shape": "E"
+  },
+  {
+   "start": 423,
+   "end": 433,
+   "shape": "B"
+  }
+ ]
+}

@@ -1,0 +1,94 @@
+{
+ "line": "L04",
+ "speaker": "lazy",
+ "text": "Mañana",
+ "recognizer": "phonetic",
+ "gated": true,
+ "cues": [
+  {
+   "start": 165,
+   "end": 169,
+   "shape": "X"
+  },
+  {
+   "start": 170,
+   "end": 174,
+   "shape": "B"
+  },
+  {
+   "start": 175,
+   "end": 182,
+   "shape": "X"
+  },
+  {
+   "start": 183,
+   "end": 185,
+   "shape": "B"
+  },
+  {
+   "start": 186,
+   "end": 188,
+   "shape": "X"
+  },
+  {
+   "start": 189,
+   "end": 189,
+   "shape": "A"
+  },
+  {
+   "start": 190,
+   "end": 190,
+   "shape": "C"
+  },
+  {
+   "start": 191,
+   "end": 191,
+   "shape": "D"
+  },
+  {
+   "start": 192,
+   "end": 201,
+   "shape": "B"
+  },
+  {
+   "start": 202,
+   "end": 214,
+   "shape": "C"
+  },
+  {
+   "start": 215,
+   "end": 221,
+   "shape": "E"
+  },
+  {
+   "start": 222,
+   "end": 225,
+   "shape": "B"
+  },
+  {
+   "start": 226,
+   "end": 228,
+   "shape": "E"
+  },
+  {
+   "start": 229,
+   "end": 238,
+   "shape": "B"
+  },
+  {
+   "start": 239,
+   "end": 239,
+   "shape": "A"
+  },
+  {
+   "start": 240,
+   "end": 242,
+   "shape": "C"
+  },
+  {
+   "start": 243,
+   "end": 245,
+   "shape": "D"
+  }
+ ]
+}

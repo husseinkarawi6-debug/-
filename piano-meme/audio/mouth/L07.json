@@ -1,0 +1,34 @@
+{
+ "line": "L07",
+ "speaker": "learner",
+ "text": "Spider",
+ "recognizer": "pocketSphinx",
+ "gated": true,
+ "cues": [
+  {
+   "start": 291,
+   "end": 292,
+   "shape": "F"
+  },
+  {
+   "start": 293,
+   "end": 295,
+   "shape": "C"
+  },
+  {
+   "start": 296,
+   "end": 305,
+   "shape": "B"
+  },
+  {
+   "start": 306,
+   "end": 309,
+   "shape": "X"
+  },
+  {
+   "start": 310,
+   "end": 310,
+   "shape": "B"
+  }
+ ]
+}

@@ -1,0 +1,54 @@
+{
+ "line": "L19",
+ "speaker": "learner",
+ "text": "Mountain",
+ "recognizer": "pocketSphinx",
+ "gated": true,
+ "cues": [
+  {
+   "start": 585,
+   "end": 586,
+   "shape": "B"
+  },
+  {
+   "start": 587,
+   "end": 589,
+   "shape": "X"
+  },
+  {
+   "start": 590,
+   "end": 590,
+   "shape": "C"
+  },
+  {
+   "start": 591,
+   "end": 592,
+   "shape": "D"
+  },
+  {
+   "start": 593,
+   "end": 597,
+   "shape": "C"
+  },
+  {
+   "start": 598,
+   "end": 599,
+   "shape": "B"
+  },
+  {
+   "start": 600,
+   "end": 602,
+   "shape": "X"
+  },
+  {
+   "start": 603,
+   "end": 603,
+   "shape": "C"
+  },
+  {
+   "start": 604,
+   "end": 604,
+   "shape": "D"
+  }
+ ]
+}

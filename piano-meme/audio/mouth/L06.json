@@ -1,0 +1,39 @@
+{
+ "line": "L06",
+ "speaker": "lazy",
+ "text": "Mañana",
+ "recognizer": "phonetic",
+ "gated": true,
+ "cues": [
+  {
+   "start": 266,
+   "end": 272,
+   "shape": "B"
+  },
+  {
+   "start": 273,
+   "end": 275,
+   "shape": "C"
+  },
+  {
+   "start": 276,
+   "end": 278,
+   "shape": "D"
+  },
+  {
+   "start": 279,
+   "end": 281,
+   "shape": "B"
+  },
+  {
+   "start": 282,
+   "end": 285,
+   "shape": "X"
+  },
+  {
+   "start": 286,
+   "end": 290,
+   "shape": "B"
+  }
+ ]
+}

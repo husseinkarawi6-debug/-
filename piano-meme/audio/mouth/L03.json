@@ -1,0 +1,79 @@
+{
+ "line": "L03",
+ "speaker": "learner",
+ "text": "How do you say tomorrow in Spanish?",
+ "recognizer": "pocketSphinx",
+ "gated": true,
+ "cues": [
+  {
+   "start": 100,
+   "end": 100,
+   "shape": "X"
+  },
+  {
+   "start": 101,
+   "end": 101,
+   "shape": "C"
+  },
+  {
+   "start": 102,
+   "end": 107,
+   "shape": "F"
+  },
+  {
+   "start": 108,
+   "end": 117,
+   "shape": "B"
+  },
+  {
+   "start": 118,
+   "end": 119,
+   "shape": "C"
+  },
+  {
+   "start": 120,
+   "end": 121,
+   "shape": "D"
+  },
+  {
+   "start": 122,
+   "end": 126,
+   "shape": "E"
+  },
+  {
+   "start": 127,
+   "end": 128,
+   "shape": "F"
+  },
+  {
+   "start": 129,
+   "end": 133,
+   "shape": "B"
+  },
+  {
+   "start": 134,
+   "end": 136,
+   "shape": "E"
+  },
+  {
+   "start": 137,
+   "end": 150,
+   "shape": "B"
+  },
+  {
+   "start": 151,
+   "end": 158,
+   "shape": "X"
+  },
+  {
+   "start": 159,
+   "end": 161,
+   "shape": "B"
+  },
+  {
+   "start": 162,
+   "end": 164,
+   "shape": "X"
+  }
+ ]
+}

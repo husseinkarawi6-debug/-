@@ -1,0 +1,39 @@
+{
+ "line": "L17",
+ "speaker": "learner",
+ "text": "Spain",
+ "recognizer": "pocketSphinx",
+ "gated": true,
+ "cues": [
+  {
+   "start": 530,
+   "end": 533,
+   "shape": "C"
+  },
+  {
+   "start": 534,
+   "end": 545,
+   "shape": "B"
+  },
+  {
+   "start": 546,
+   "end": 554,
+   "shape": "X"
+  },
+  {
+   "start": 555,
+   "end": 556,
+   "shape": "F"
+  },
+  {
+   "start": 557,
+   "end": 559,
+   "shape": "B"
+  },
+  {
+   "start": 560,
+   "end": 560,
+   "shape": "X"
+  }
+ ]
+}
