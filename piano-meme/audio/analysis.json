@@ -8291,5 +8291,108 @@
    "frame": 858,
    "on": true
   }
- ]
+ ],
+ "schedules": {
+  "pianistHands": [
+   {
+    "frame": 463,
+    "pose": "hands_1"
+   },
+   {
+    "frame": 467,
+    "pose": "hands_2"
+   },
+   {
+    "frame": 472,
+    "pose": "hands_3"
+   },
+   {
+    "frame": 478,
+    "pose": "hands_1"
+   }
+  ],
+  "dance": [
+   {
+    "frame": 881,
+    "pose": "pose1",
+    "kind": "beat"
+   },
+   {
+    "frame": 894,
+    "pose": "pose2",
+    "kind": "beat"
+   },
+   {
+    "frame": 906,
+    "pose": "pose3",
+    "kind": "beat"
+   },
+   {
+    "frame": 917,
+    "pose": "master",
+    "kind": "beat"
+   },
+   {
+    "frame": 929,
+    "pose": "pose1",
+    "kind": "beat"
+   },
+   {
+    "frame": 942,
+    "pose": "pose2",
+    "kind": "beat"
+   },
+   {
+    "frame": 954,
+    "pose": "pose3",
+    "kind": "beat"
+   },
+   {
+    "frame": 965,
+    "pose": "master",
+    "kind": "beat"
+   },
+   {
+    "frame": 977,
+    "pose": "pose1",
+    "kind": "beat"
+   },
+   {
+    "frame": 990,
+    "pose": "pose2",
+    "kind": "beat"
+   },
+   {
+    "frame": 1002,
+    "pose": "pose3",
+    "kind": "beat"
+   },
+   {
+    "frame": 1014,
+    "pose": "master",
+    "kind": "beat"
+   },
+   {
+    "frame": 1025,
+    "pose": "pose1",
+    "kind": "beat"
+   },
+   {
+    "frame": 1038,
+    "pose": "pose2",
+    "kind": "beat"
+   },
+   {
+    "frame": 1044,
+    "pose": "final",
+    "kind": "lastChord"
+   }
+  ],
+  "mic": {
+   "dropStart": 859,
+   "dropEnd": 880,
+   "settleFrom": 1020,
+   "settleTo": 1045
+  }
+ }
 }

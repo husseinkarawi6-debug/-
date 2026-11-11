@@ -542,6 +542,7 @@ def main():
     # lazy alone = S2 (the pianist S5/S6 replaces lazy shots in the loud-piano
     # section, same frames), both = S7 (finale only).
     pianist = (result.get("pianoSection") or {}).get("pianistShots", [])
+    # (angles are set just below; schedules use them)
     for sh in result["shots"]:
         if sh["speaker"] == "learner":
             sh["angle"] = "S4"
@@ -551,6 +552,35 @@ def main():
             sh["angle"] = "S5" if pianist.index(sh["shot"]) % 2 == 0 else "S6"
         else:
             sh["angle"] = "S2"
+
+    # Schedules (frames the drawings change on), all from the audio:
+    #  pianistHands: a new hand drawing on each piano onset in the S6 shot
+    #  dance: a new dance pose on each beat of the finale (after the mic has
+    #         landed), and the final pose from the last strong chord
+    if result.get("audioPresent"):
+        sched = {}
+        for sh in result["shots"]:
+            if sh["angle"] == "S6":
+                hands, last = [], -99
+                for o in result["onsets"]:
+                    if sh["start"] < o["frame"] <= sh["end"] and o["frame"] - last >= 3:
+                        hands.append({"frame": o["frame"], "pose": f"hands_{len(hands) % 3 + 1}"})
+                        last = o["frame"]
+                sched["pianistHands"] = hands
+            if sh["angle"] == "S7":
+                strong = [o["frame"] for o in result["onsets"]
+                          if o["strong"] and sh["start"] + 40 <= o["frame"] <= sh["end"] - 10]
+                last_chord = strong[-1] if strong else sh["end"] - 20
+                cycle = ["pose1", "pose2", "pose3", "master"]
+                dance = [{"frame": b, "pose": cycle[i % len(cycle)], "kind": "beat"}
+                         for i, b in enumerate([b for b in result["beats"]
+                                                if sh["start"] + 21 <= b < last_chord - 2])]
+                dance.append({"frame": last_chord, "pose": "final", "kind": "lastChord"})
+                sched["dance"] = dance
+                # the mic calms down over the last bars and is still for the last 10 frames
+                sched["mic"] = {"dropStart": sh["start"], "dropEnd": 880,
+                                "settleFrom": max(880, last_chord - 24), "settleTo": sh["end"] - 10}
+        result["schedules"] = sched
 
     ANALYSIS.write_text(json.dumps(result, ensure_ascii=False, indent=1, allow_nan=False))
     print(f"wrote {ANALYSIS.relative_to(ROOT)}: {len(shots)} shots, {len(captions)} captions, "

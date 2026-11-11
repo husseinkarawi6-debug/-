@@ -23,9 +23,18 @@ const ACTING: Record<number, Beat[]> = {
   5: [{ from: 0, eyes: "eyes_down" }, { from: 6 }],
 };
 
+// Line 21: "Try this" to the lazy one, then reads the long sentence from the
+// book, and looks up again at the end.
+ACTING[21] = [{ from: 0 }, { from: 39, eyes: "eyes_down" }, { from: 169 }];
+
+// Every other word shot: a quick look at the book for the word, then up.
+const defaultBeats = (shot: Shot): Beat[] => [
+  { from: 0, eyes: "eyes_down" },
+  { from: 6 + 2 * Math.floor(random(`look-${shot.shot}`) * 3) },
+];
+
 const beatAt = (shot: Shot, local: number): Beat => {
-  const beats = ACTING[shot.shot];
-  if (!beats) return { from: 0 };
+  const beats = ACTING[shot.shot] ?? defaultBeats(shot);
   let cur = beats[0];
   for (const b of beats) if (local >= b.from) cur = b;
   return cur;

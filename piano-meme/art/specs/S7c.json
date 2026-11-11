@@ -1,0 +1,226 @@
+{
+ "master": "art/masters/S7c.png",
+ "refs": [
+  "art/charsheet.png"
+ ],
+ "quality": "medium",
+ "feather": 6,
+ "editPrompt": "The FIRST image is a crop of a hand-drawn ink illustration on plain old paper (rough dip-pen lines, cross-hatching): two small men singing and dancing - on the left the lazy one (dark grey hoodie, messy hair, round glasses, beard), on the right the learner (buttoned shirt, knitted wool vest, combed hair, round glasses, beard, small dark-red dictionary). The second image is their character sheet. Edit ONLY the transparent (masked) area: {CHANGE} Keep both men the same size, at the same places on the page, with their feet near the same spots. Same faces, same clothes, same ink style and line weight. Correct hands with five fingers. Nothing else on the page: plain paper, no microphone, no text.",
+ "crops": {
+  "figures": [
+   680,
+   1340,
+   1360
+  ],
+  "heads": [
+   680,
+   1090,
+   900
+  ]
+ },
+ "variants": [
+  {
+   "id": "pose1",
+   "crop": "figures",
+   "mask": [
+    [
+     "ellipse",
+     300,
+     1215,
+     340,
+     590
+    ],
+    [
+     "ellipse",
+     905,
+     1520,
+     430,
+     540
+    ]
+   ],
+   "prompt": "both sway to the LEFT of the picture like dancing cats, singing with mouths wide open and eyes shut: the lazy one pumps one fist up toward the top-left with his other hand on his heart; the learner tilts his head the other way, one arm raised high, the other hand holding the shut dictionary at his hip.",
+   "feather": 28
+  },
+  {
+   "id": "pose2",
+   "crop": "figures",
+   "mask": [
+    [
+     "ellipse",
+     300,
+     1215,
+     340,
+     590
+    ],
+    [
+     "ellipse",
+     905,
+     1520,
+     430,
+     540
+    ]
+   ],
+   "prompt": "both sway to the RIGHT of the picture, singing with mouths wide open: the lazy one stretches both arms out to the sides, head tilted, eyes shut; the learner does a little dance step with one knee lifted, elbows bent out to the sides, the shut dictionary tucked under one arm.",
+   "feather": 28
+  },
+  {
+   "id": "pose3",
+   "crop": "figures",
+   "mask": [
+    [
+     "ellipse",
+     300,
+     1215,
+     340,
+     590
+    ],
+    [
+     "ellipse",
+     905,
+     1520,
+     430,
+     540
+    ]
+   ],
+   "prompt": "a funny moment of the dance, both singing with mouths open: the lazy one cups both hands around his mouth and sings up to the top-left; the learner shrugs both shoulders up and wiggles his hips, arms bent, eyes closed happily, the shut dictionary in one hand.",
+   "feather": 28
+  },
+  {
+   "id": "final",
+   "crop": "figures",
+   "mask": [
+    [
+     "ellipse",
+     300,
+     1215,
+     340,
+     590
+    ],
+    [
+     "ellipse",
+     905,
+     1520,
+     430,
+     540
+    ]
+   ],
+   "prompt": "the triumphant final pose on the last note: both throw their arms up high and wide, chests out, heads back, mouths wide open on the final note; the learner holds the shut dark-red dictionary up high in one hand like a trophy.",
+   "feather": 28,
+   "inkMatch": true
+  },
+  {
+   "id": "closed_master",
+   "crop": "heads",
+   "feather": 4,
+   "mask": [
+    [
+     "ellipse",
+     361,
+     966,
+     36,
+     30
+    ],
+    [
+     "ellipse",
+     974,
+     1198,
+     36,
+     30
+    ]
+   ],
+   "prompt": "only the two mouths change: both men have closed their mouths for a moment between two sung phrases, lips together inside the beard, still happy and eyes shut. Faces, heads and everything else unchanged."
+  },
+  {
+   "id": "closed_pose1",
+   "crop": "heads",
+   "feather": 4,
+   "mask": [
+    [
+     "ellipse",
+     368,
+     975,
+     36,
+     30
+    ],
+    [
+     "ellipse",
+     952,
+     1159,
+     36,
+     30
+    ]
+   ],
+   "prompt": "only the two mouths change: both men have closed their mouths for a moment between two sung phrases, lips together inside the beard, still happy and eyes shut. Faces, heads and everything else unchanged.",
+   "base": "pose1"
+  },
+  {
+   "id": "closed_pose2",
+   "crop": "heads",
+   "feather": 4,
+   "mask": [
+    [
+     "ellipse",
+     495,
+     989,
+     36,
+     30
+    ],
+    [
+     "ellipse",
+     1033,
+     1206,
+     36,
+     30
+    ]
+   ],
+   "prompt": "only the two mouths change: both men have closed their mouths for a moment between two sung phrases, lips together inside the beard, still happy and eyes shut. Faces, heads and everything else unchanged.",
+   "base": "pose2"
+  },
+  {
+   "id": "closed_pose3",
+   "crop": "heads",
+   "feather": 4,
+   "mask": [
+    [
+     "ellipse",
+     354,
+     956,
+     36,
+     30
+    ],
+    [
+     "ellipse",
+     996,
+     1198,
+     36,
+     30
+    ]
+   ],
+   "prompt": "only the two mouths change: both men have closed their mouths for a moment between two sung phrases, lips together inside the beard, still happy and eyes shut. Faces, heads and everything else unchanged.",
+   "base": "pose3"
+  },
+  {
+   "id": "closed_final",
+   "crop": "heads",
+   "feather": 4,
+   "mask": [
+    [
+     "ellipse",
+     347,
+     967,
+     36,
+     30
+    ],
+    [
+     "ellipse",
+     977,
+     1226,
+     36,
+     30
+    ]
+   ],
+   "prompt": "only the two mouths change: both men have closed their mouths for a moment between two sung phrases, lips together inside the beard, still happy and eyes shut. Faces, heads and everything else unchanged.",
+   "base": "final"
+  }
+ ]
+}

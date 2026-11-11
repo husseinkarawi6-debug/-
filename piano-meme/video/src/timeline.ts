@@ -28,6 +28,11 @@ type Analysis = {
   tempo?: number;
   beats?: number[];
   onsets?: Onset[];
+  schedules?: {
+    pianistHands?: { frame: number; pose: string }[];
+    dance?: { frame: number; pose: string; kind: string }[];
+    mic?: { dropStart: number; dropEnd: number; settleFrom: number; settleTo: number };
+  };
   pianoSection?: { loudWindow: [number, number]; start: number; end: number; shots: number[]; pianistShots: number[] };
 };
 
@@ -43,3 +48,12 @@ export const onsets = analysis.onsets ?? [];
 export const beatFrames = analysis.tempo ? (60 / analysis.tempo) * analysis.fps : 15;
 
 export const lineForShot = (shot: number) => lines.find((l) => l.shot === shot);
+
+export const schedules = analysis.schedules ?? {};
+
+/** The entry of a schedule in force at frame g (null before the first one). */
+export const scheduleAt = <T extends { frame: number }>(list: T[] | undefined, g: number): T | null => {
+  let cur: T | null = null;
+  for (const e of list ?? []) if (g >= e.frame) cur = e;
+  return cur;
+};

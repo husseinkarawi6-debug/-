@@ -145,13 +145,31 @@ def post(spec, var, work, angle, feather):
     m = shape_mask(ch, cw, var["mask"], x0, y0, 1.0)
     outside = cv2.erode(255 - m, np.ones((25, 25), np.uint8)) > 0
     before = float(np.abs(edit.astype(int) - crop.astype(int))[outside].mean())
+    raw = edit.copy()
     edit, warp = align(edit, crop, outside)
+    # On plain paper there is nothing to lock onto and ECC can drift: keep the
+    # warp only if it really brings the drawing closer to the master.
+    aligned = float(np.abs(edit.astype(int) - crop.astype(int))[outside].mean())
+    if aligned > before * 0.95:
+        edit, warp = raw, np.eye(2, 3, dtype=np.float32)
     # colour match on a ring just outside the mask
     ring = (cv2.dilate(m, np.ones((41, 41), np.uint8)) > 0) & outside
     for c in range(3):
         e, t = edit[..., c][ring].astype(float), crop[..., c][ring].astype(float)
         if e.std() > 1:
             edit[..., c] = np.clip((edit[..., c] - e.mean()) * (t.std() / e.std()) + t.mean(), 0, 255)
+    if var.get("inkMatch") and (m > 0).any():
+        # the model drew this one paler: per colour channel, match the ink (dark
+        # end) and the paper (median) inside the mask to the master's
+        out = edit.astype(float)
+        for ch in range(3):
+            e_in, t_in = out[..., ch][m > 0], crop[..., ch][m > 0].astype(float)
+            e_lo, e_mid = np.percentile(e_in, 3), np.percentile(e_in, 50)
+            t_lo, t_mid = np.percentile(t_in, 3), np.percentile(t_in, 50)
+            k = (t_mid - t_lo) / max(1.0, e_mid - e_lo)
+            low = out[..., ch] < e_mid  # only darken the ink side; the paper stays as matched
+            out[..., ch] = np.where(low, (out[..., ch] - e_mid) * k + e_mid, out[..., ch])
+        edit = np.clip(out, 0, 255).astype(np.uint8)
     after = float(np.abs(edit.astype(int) - crop.astype(int))[outside].mean())
     inside = float(np.abs(edit.astype(int) - crop.astype(int))[m > 0].mean()) if (m > 0).any() else 0.0
     # soft-edged patch
@@ -235,7 +253,7 @@ def write_patches(spec, vars_, work, angle, quiet=False):
     for v in sorted(vars_, key=lambda v: bool(v.get("base"))):
         if not (work / f"{v['id']}_edit.png").exists():
             continue
-        r = post(spec, v, work, angle, spec.get("feather", 5))
+        r = post(spec, v, work, angle, v.get("feather", spec.get("feather", 5)))
         manifest["patches"][v["id"]] = {k: r[k] for k in ("x", "y", "w", "h")}
         report[v["id"]] = r
         ok = r["shiftPx"] < 3 and r["scaleError"] < 0.01 and r["diffOutsideAfterAlign"] < 15

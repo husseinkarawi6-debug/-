@@ -27,7 +27,8 @@ export const Caption: React.FC<{
   lang: "en" | "es";
   from: number;
   anchor?: "top" | "block";
-}> = ({ text, lang, from, anchor = "top" }) => {
+  align?: "center" | "right";
+}> = ({ text, lang, from, anchor = "top", align = "center" }) => {
   const frame = useCurrentFrame();
   const scale = frame === from ? 1.03 : 1;
   const seedKey = text.slice(0, 24);
@@ -38,8 +39,8 @@ export const Caption: React.FC<{
     <div
       style={{
         position: "absolute",
-        left: 0,
-        width: W,
+        left: align === "right" ? W * 0.36 : 0,
+        width: align === "right" ? W * 0.6 : W,
         top: centreY,
         display: "flex",
         justifyContent: "center",
@@ -48,7 +49,7 @@ export const Caption: React.FC<{
     >
       <div
         style={{
-          maxWidth: anchor === "top" ? W * 0.8 : W * 0.6,
+          maxWidth: anchor === "top" ? W * 0.8 : W * 0.56,
           transform: `scale(${scale}) rotate(${tilt}deg)`,
           filter: `drop-shadow(0 0 0.8px ${C.ink}) drop-shadow(2px 3px 0px rgba(20,18,16,0.35))`,
         }}

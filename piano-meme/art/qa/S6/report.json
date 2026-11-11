@@ -1,0 +1,77 @@
+{
+ "hands_1": {
+  "id": "hands_1",
+  "x": 548,
+  "y": 808,
+  "w": 595,
+  "h": 420,
+  "compositeDiffOutsideMask": 0.012,
+  "shiftPx": 0.81,
+  "scaleError": 0.0005,
+  "diffOutsideBeforeAlign": 8.72,
+  "diffOutsideAfterAlign": 12.49,
+  "changeInside": 42.49,
+  "warp": [
+   [
+    0.9995,
+    0.0001,
+    -0.2607
+   ],
+   [
+    -0.0001,
+    1.0005,
+    -0.8106
+   ]
+  ]
+ },
+ "hands_2": {
+  "id": "hands_2",
+  "x": 608,
+  "y": 1258,
+  "w": 545,
+  "h": 505,
+  "compositeDiffOutsideMask": 0.005,
+  "shiftPx": 0.52,
+  "scaleError": 0.0012,
+  "diffOutsideBeforeAlign": 10.24,
+  "diffOutsideAfterAlign": 13.89,
+  "changeInside": 46.93,
+  "warp": [
+   [
+    0.9988,
+    -0.0004,
+    0.5159
+   ],
+   [
+    -0.0007,
+    1.0001,
+    0.0372
+   ]
+  ]
+ },
+ "hands_3": {
+  "id": "hands_3",
+  "x": 548,
+  "y": 808,
+  "w": 605,
+  "h": 955,
+  "compositeDiffOutsideMask": 0.027,
+  "shiftPx": 0.71,
+  "scaleError": 0.0005,
+  "diffOutsideBeforeAlign": 9.79,
+  "diffOutsideAfterAlign": 9.66,
+  "changeInside": 36.13,
+  "warp": [
+   [
+    0.9995,
+    0.0002,
+    -0.7114
+   ],
+   [
+    -0.0005,
+    1.0002,
+    -0.09
+   ]
+  ]
+ }
+}

@@ -1,1 +1,152 @@
-{}
+{
+ "mouth_A": {
+  "id": "mouth_A",
+  "x": 431,
+  "y": 1008,
+  "w": 79,
+  "h": 55,
+  "compositeDiffOutsideMask": 0.011,
+  "shiftPx": 0.19,
+  "scaleError": 0.0008,
+  "diffOutsideBeforeAlign": 5.7,
+  "diffOutsideAfterAlign": 6.6,
+  "changeInside": 14.68,
+  "warp": [
+   [
+    1.0,
+    0.0013,
+    -0.0497
+   ],
+   [
+    -0.0002,
+    1.0008,
+    -0.1917
+   ]
+  ]
+ },
+ "mouth_B": {
+  "id": "mouth_B",
+  "x": 431,
+  "y": 1008,
+  "w": 79,
+  "h": 55,
+  "compositeDiffOutsideMask": 0.007,
+  "shiftPx": 0.15,
+  "scaleError": 0.0009,
+  "diffOutsideBeforeAlign": 5.44,
+  "diffOutsideAfterAlign": 5.23,
+  "changeInside": 9.62,
+  "warp": [
+   [
+    0.9995,
+    0.0006,
+    0.1512
+   ],
+   [
+    -0.0002,
+    1.0009,
+    -0.0643
+   ]
+  ]
+ },
+ "mouth_C": {
+  "id": "mouth_C",
+  "x": 429,
+  "y": 1006,
+  "w": 83,
+  "h": 63,
+  "compositeDiffOutsideMask": 0.007,
+  "shiftPx": 0.35,
+  "scaleError": 0.0018,
+  "diffOutsideBeforeAlign": 5.87,
+  "diffOutsideAfterAlign": 6.27,
+  "changeInside": 17.65,
+  "warp": [
+   [
+    0.9999,
+    0.0006,
+    0.0796
+   ],
+   [
+    0.0002,
+    1.0018,
+    -0.3497
+   ]
+  ]
+ },
+ "mouth_D": {
+  "id": "mouth_D",
+  "x": 427,
+  "y": 1005,
+  "w": 87,
+  "h": 71,
+  "compositeDiffOutsideMask": 0.009,
+  "shiftPx": 0.47,
+  "scaleError": 0.0015,
+  "diffOutsideBeforeAlign": 6.25,
+  "diffOutsideAfterAlign": 6.98,
+  "changeInside": 21.73,
+  "warp": [
+   [
+    0.9985,
+    -0.0002,
+    0.4657
+   ],
+   [
+    -0.0002,
+    1.0008,
+    0.027
+   ]
+  ]
+ },
+ "mouth_E": {
+  "id": "mouth_E",
+  "x": 429,
+  "y": 1006,
+  "w": 83,
+  "h": 63,
+  "compositeDiffOutsideMask": 0.01,
+  "shiftPx": 0.58,
+  "scaleError": 0.0017,
+  "diffOutsideBeforeAlign": 8.86,
+  "diffOutsideAfterAlign": 8.16,
+  "changeInside": 16.55,
+  "warp": [
+   [
+    0.9983,
+    -0.0007,
+    0.463
+   ],
+   [
+    -0.0022,
+    0.9983,
+    0.5753
+   ]
+  ]
+ },
+ "mouth_F": {
+  "id": "mouth_F",
+  "x": 431,
+  "y": 1008,
+  "w": 79,
+  "h": 55,
+  "compositeDiffOutsideMask": 0.009,
+  "shiftPx": 0.33,
+  "scaleError": 0.0013,
+  "diffOutsideBeforeAlign": 5.93,
+  "diffOutsideAfterAlign": 5.73,
+  "changeInside": 14.65,
+  "warp": [
+   [
+    0.9987,
+    0.0002,
+    0.3319
+   ],
+   [
+    0.0007,
+    1.0012,
+    -0.2818
+   ]
+  ]
+ }
+}

@@ -107,9 +107,12 @@ else:
     print("  · not built yet")
 print("5. dance on the beat")
 if "dance" in sched:
+    onset_frames = [o["frame"] for o in A["onsets"]]
     for p in sched["dance"]:
-        d = min(abs(p["frame"] - b) for b in A["beats"])
-        report(d <= TOL, f"pose change {p['frame']}: {d} frame(s) from a beat")
+        ref = onset_frames if p.get("kind") == "lastChord" else A["beats"]
+        d = min(abs(p["frame"] - b) for b in ref)
+        what = "the last chord" if p.get("kind") == "lastChord" else "a beat"
+        report(d <= TOL, f"{p['pose']} at {p['frame']}: {d} frame(s) from {what}")
 else:
     print("  · not built yet")
 

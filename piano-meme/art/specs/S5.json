@@ -1,1 +1,16 @@
-{"master": "art/masters/S5.png", "variants": [], "crops": {}, "editPrompt": ""}
+{
+  "master": "art/masters/S5.png",
+  "refs": ["art/charsheet.png"],
+  "quality": "medium",
+  "feather": 3,
+  "editPrompt": "The FIRST image is a close crop of a hand-drawn ink illustration (rough dip-pen lines, cross-hatching, old grey-beige paper): a pianist in a black suit playing on a dark stage under a spotlight. The second image is the character sheet (the right figure, 'the pianist', same man as the others). Edit ONLY the transparent (masked) area of the first image: {CHANGE} Keep his serious, deadpan concentration. Everything outside the mask must stay exactly as it is. Same ink style and line weight.",
+  "crops": {"face": [440, 960, 320]},
+  "variants": [
+    {"id": "mouth_A", "crop": "face", "mask": [["ellipse", 470, 1035, 32, 20]], "prompt": "his lips are pressed together, as when saying M, B or P."},
+    {"id": "mouth_B", "crop": "face", "mask": [["ellipse", 470, 1035, 32, 20]], "prompt": "his lips are slightly parted, teeth together, as when saying S or T."},
+    {"id": "mouth_C", "crop": "face", "mask": [["ellipse", 470, 1037, 34, 24]], "prompt": "his mouth is open in a medium opening, as when saying 'eh', dark inside."},
+    {"id": "mouth_D", "crop": "face", "mask": [["ellipse", 470, 1040, 36, 28]], "prompt": "his mouth is open wide, as when singing 'ah', dark inside."},
+    {"id": "mouth_E", "crop": "face", "mask": [["ellipse", 470, 1037, 34, 24]], "prompt": "his mouth is slightly open and rounded, as when saying 'aw'."},
+    {"id": "mouth_F", "crop": "face", "mask": [["ellipse", 470, 1035, 32, 20]], "prompt": "his lips are pushed into a small round pucker, as when saying 'oo'."}
+  ]
+}
