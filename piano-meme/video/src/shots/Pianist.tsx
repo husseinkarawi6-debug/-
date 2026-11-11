@@ -4,21 +4,33 @@ import { useGlobalFrame, twos } from "../ink/frame";
 import { mouthAt } from "../chars/mouth";
 import { lineForShot, scheduleAt, schedules, Shot } from "../timeline";
 
-// The loud-piano section: the lazy one, in a suit, at the grand piano.
-// Fixed framing (no camera moves).
+// The piano part (lazy shots of lines 10–20): the lazy one in a suit at the
+// grand piano. Fixed framing. Fingers go DOWN on every piano note
+// (schedules.pianistHands, from the audio onsets) and lift 4 frames later.
 
-/** S5: wide, on stage. He says the lazy one's word (lips with the voice). */
-export const PianistS5: React.FC<{ shot: Shot }> = ({ shot }) => {
-  const g = twos(useGlobalFrame());
-  const shape = mouthAt(lineForShot(shot.shot)?.id, g);
-  const patches: Record<string, number> = shape !== "X" ? { [`mouth_${shape}`]: 1 } : {};
-  return <Plate angle="S5" camera={{ x: 680, y: 1150, zoom: 1.12 }} patches={patches} />;
+const handPatch = (shot: Shot, g: number, angle: string): string | null => {
+  const list = (schedules.pianistHands ?? []).filter((h) => h.shot === shot.shot);
+  const cur = scheduleAt(list, g);
+  if (!cur) return null;
+  if (angle === "S6") return cur.pose === "press" ? (cur.chord === 0 ? "press_1" : "press_2") : "up";
+  return cur.pose; // "press" | "lift"
 };
 
-/** S6: his hands; a new hand drawing on every piano note (schedules.pianistHands). */
-export const PianistS6: React.FC = () => {
+const mouthPatch = (shot: Shot, g: number): Record<string, number> => {
+  const shape = mouthAt(lineForShot(shot.shot)?.id, g);
+  return shape !== "X" ? { [`mouth_${shape}`]: 1 } : {};
+};
+
+const CAM: Record<string, { x: number; y: number; zoom: number }> = {
+  S5: { x: 680, y: 1150, zoom: 1.12 },
+  S8: { x: 680, y: 1208, zoom: 1.04 },
+  S6: { x: 680, y: 1208, zoom: 1.04 },
+};
+
+export const PianistShot: React.FC<{ shot: Shot; angle: "S5" | "S6" | "S8" }> = ({ shot, angle }) => {
   const g = twos(useGlobalFrame());
-  const cur = scheduleAt(schedules.pianistHands, g);
-  const patches: Record<string, number> = cur ? { [cur.pose]: 1 } : {};
-  return <Plate angle="S6" camera={{ x: 680, y: 1208, zoom: 1.04 }} patches={patches} />;
+  const patches: Record<string, number> = angle === "S6" ? {} : mouthPatch(shot, g);
+  const hand = handPatch(shot, g, angle);
+  if (hand) patches[hand] = 1;
+  return <Plate angle={angle} camera={CAM[angle]} patches={patches} />;
 };

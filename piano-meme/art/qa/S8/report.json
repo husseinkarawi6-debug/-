@@ -1,0 +1,327 @@
+{
+ "mouth_A": {
+  "id": "mouth_A",
+  "x": 532,
+  "y": 920,
+  "w": 107,
+  "h": 71,
+  "compositeDiffOutsideMask": 0.009,
+  "shiftPx": 0.0,
+  "scaleError": 0.0,
+  "diffOutsideBeforeAlign": 6.58,
+  "diffOutsideAfterAlign": 5.99,
+  "changeInside": 16.89,
+  "warp": [
+   [
+    1.0,
+    0.0,
+    0.0
+   ],
+   [
+    0.0,
+    1.0,
+    0.0
+   ]
+  ]
+ },
+ "mouth_B": {
+  "id": "mouth_B",
+  "x": 532,
+  "y": 920,
+  "w": 107,
+  "h": 71,
+  "compositeDiffOutsideMask": 0.009,
+  "shiftPx": 0.2,
+  "scaleError": 0.0002,
+  "diffOutsideBeforeAlign": 6.29,
+  "diffOutsideAfterAlign": 6.15,
+  "changeInside": 11.19,
+  "warp": [
+   [
+    0.9999,
+    -0.0006,
+    0.196
+   ],
+   [
+    -0.0001,
+    0.9998,
+    -0.1638
+   ]
+  ]
+ },
+ "mouth_C": {
+  "id": "mouth_C",
+  "x": 532,
+  "y": 914,
+  "w": 107,
+  "h": 83,
+  "compositeDiffOutsideMask": 0.01,
+  "shiftPx": 0.4,
+  "scaleError": 0.0019,
+  "diffOutsideBeforeAlign": 7.65,
+  "diffOutsideAfterAlign": 7.12,
+  "changeInside": 20.93,
+  "warp": [
+   [
+    0.9997,
+    -0.0005,
+    0.4023
+   ],
+   [
+    -0.0006,
+    1.0019,
+    -0.1091
+   ]
+  ]
+ },
+ "mouth_D": {
+  "id": "mouth_D",
+  "x": 532,
+  "y": 914,
+  "w": 107,
+  "h": 83,
+  "compositeDiffOutsideMask": 0.012,
+  "shiftPx": 0.45,
+  "scaleError": 0.0024,
+  "diffOutsideBeforeAlign": 8.1,
+  "diffOutsideAfterAlign": 8.62,
+  "changeInside": 25.15,
+  "warp": [
+   [
+    0.9998,
+    -0.0005,
+    0.2946
+   ],
+   [
+    0.0002,
+    1.0024,
+    -0.4542
+   ]
+  ]
+ },
+ "mouth_E": {
+  "id": "mouth_E",
+  "x": 532,
+  "y": 914,
+  "w": 107,
+  "h": 83,
+  "compositeDiffOutsideMask": 0.013,
+  "shiftPx": 0.0,
+  "scaleError": 0.0,
+  "diffOutsideBeforeAlign": 6.43,
+  "diffOutsideAfterAlign": 8.29,
+  "changeInside": 14.14,
+  "warp": [
+   [
+    1.0,
+    0.0,
+    0.0
+   ],
+   [
+    0.0,
+    1.0,
+    0.0
+   ]
+  ]
+ },
+ "mouth_F": {
+  "id": "mouth_F",
+  "x": 532,
+  "y": 920,
+  "w": 107,
+  "h": 71,
+  "compositeDiffOutsideMask": 0.012,
+  "shiftPx": 0.45,
+  "scaleError": 0.0009,
+  "diffOutsideBeforeAlign": 6.55,
+  "diffOutsideAfterAlign": 7.98,
+  "changeInside": 16.71,
+  "warp": [
+   [
+    0.9993,
+    -0.0004,
+    0.4481
+   ],
+   [
+    -0.0003,
+    1.0009,
+    -0.0072
+   ]
+  ]
+ },
+ "press": {
+  "id": "press",
+  "x": 604,
+  "y": 1403,
+  "w": 593,
+  "h": 335,
+  "compositeDiffOutsideMask": 0.045,
+  "shiftPx": 0.0,
+  "scaleError": 0.0,
+  "diffOutsideBeforeAlign": 7.17,
+  "diffOutsideAfterAlign": 8.47,
+  "changeInside": 29.04,
+  "warp": [
+   [
+    1.0,
+    0.0,
+    0.0
+   ],
+   [
+    0.0,
+    1.0,
+    0.0
+   ]
+  ]
+ },
+ "lift": {
+  "id": "lift",
+  "x": 604,
+  "y": 1403,
+  "w": 593,
+  "h": 335,
+  "compositeDiffOutsideMask": 0.037,
+  "shiftPx": 0.0,
+  "scaleError": 0.0,
+  "diffOutsideBeforeAlign": 7.84,
+  "diffOutsideAfterAlign": 7.83,
+  "changeInside": 43.52,
+  "warp": [
+   [
+    1.0,
+    0.0,
+    0.0
+   ],
+   [
+    0.0,
+    1.0,
+    0.0
+   ]
+  ]
+ },
+ "hp_play": {
+  "id": "hp_play",
+  "x": 144,
+  "y": 469,
+  "w": 773,
+  "h": 1318,
+  "compositeDiffOutsideMask": 0.025,
+  "shiftPx": 0.0,
+  "scaleError": 0.0,
+  "diffOutsideBeforeAlign": 6.5,
+  "diffOutsideAfterAlign": 6.21,
+  "changeInside": 18.34,
+  "warp": [
+   [
+    1.0,
+    0.0,
+    0.0
+   ],
+   [
+    0.0,
+    1.0,
+    0.0
+   ]
+  ]
+ },
+ "hp_nod": {
+  "id": "hp_nod",
+  "x": 240,
+  "y": 480,
+  "w": 532,
+  "h": 560,
+  "compositeDiffOutsideMask": 0.043,
+  "shiftPx": 25.99,
+  "scaleError": 0.1196,
+  "diffOutsideBeforeAlign": 27.61,
+  "diffOutsideAfterAlign": 18.24,
+  "changeInside": 34.49,
+  "warp": [
+   [
+    0.8804,
+    0.0804,
+    -19.1446
+   ],
+   [
+    0.0061,
+    0.9212,
+    25.9906
+   ]
+  ]
+ },
+ "hp_open": {
+  "id": "hp_open",
+  "x": 385,
+  "y": 700,
+  "w": 387,
+  "h": 400,
+  "compositeDiffOutsideMask": 0.008,
+  "shiftPx": 0.59,
+  "scaleError": 0.002,
+  "diffOutsideBeforeAlign": 6.35,
+  "diffOutsideAfterAlign": 5.25,
+  "changeInside": 22.9,
+  "warp": [
+   [
+    1.0006,
+    -0.0011,
+    0.5881
+   ],
+   [
+    -0.0005,
+    1.002,
+    -0.4194
+   ]
+  ]
+ },
+ "hp_nod_open": {
+  "id": "hp_nod_open",
+  "x": 385,
+  "y": 700,
+  "w": 390,
+  "h": 343,
+  "compositeDiffOutsideMask": 0.004,
+  "shiftPx": 0.32,
+  "scaleError": 0.001,
+  "diffOutsideBeforeAlign": 7.57,
+  "diffOutsideAfterAlign": 7.61,
+  "changeInside": 24.05,
+  "warp": [
+   [
+    1.001,
+    -0.0006,
+    0.3161
+   ],
+   [
+    -0.0009,
+    0.9993,
+    0.2973
+   ]
+  ]
+ },
+ "jacket": {
+  "id": "jacket",
+  "x": 94,
+  "y": 904,
+  "w": 823,
+  "h": 883,
+  "compositeDiffOutsideMask": 0.021,
+  "shiftPx": 0.0,
+  "scaleError": 0.0,
+  "diffOutsideBeforeAlign": 12.07,
+  "diffOutsideAfterAlign": 11.76,
+  "changeInside": 36.42,
+  "warp": [
+   [
+    1.0,
+    0.0,
+    0.0
+   ],
+   [
+    0.0,
+    1.0,
+    0.0
+   ]
+  ]
+ }
+}

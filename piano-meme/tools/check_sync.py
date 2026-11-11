@@ -61,15 +61,10 @@ def onsets(cues):
 
 
 # 2. captions
-print("2. captions start with their voice")
+print("2. captions change on the same frames as the reference")
 for c in A["captions"]:
-    lid = c.get("line")
-    if not lid or c.get("timing", "").startswith("reference"):
-        print(f"  · {c['start']:4d} {c['text'][:34]!r}: silent change, reference frame {c.get('refStart')}")
-        continue
-    ons = onsets(mouths[lid]["cues"])
-    d = min((abs(c["start"] - o) for o in ons), default=999)
-    report(d <= TOL, f"{c['start']:4d} {c['text'][:34]!r}: {d} frame(s) from the voice of {lid}")
+    d = abs(c["start"] - c["refStart"])
+    report(d == 0, f"{c['start']:4d} {c['text'].replace(chr(10), ' ')[:34]!r}: reference {c['refStart']}")
 
 # 3. mouths
 print("3. mouths open only with their own voice")
@@ -101,18 +96,23 @@ print("4. pianist hands on piano onsets")
 if "pianistHands" in sched:
     onset_frames = [o["frame"] for o in A["onsets"]]
     for h in sched["pianistHands"]:
+        if h["pose"] != "press":
+            continue
         d = min(abs(h["frame"] - o) for o in onset_frames)
-        report(d <= TOL, f"hand change {h['frame']}: {d} frame(s) from an onset")
+        report(d <= TOL, f"fingers down at {h['frame']} (shot {h['shot']}): {d} frame(s) from a piano onset")
 else:
     print("  · not built yet")
-print("5. dance on the beat")
-if "dance" in sched:
-    onset_frames = [o["frame"] for o in A["onsets"]]
-    for p in sched["dance"]:
-        ref = onset_frames if p.get("kind") == "lastChord" else A["beats"]
-        d = min(abs(p["frame"] - b) for b in ref)
-        what = "the last chord" if p.get("kind") == "lastChord" else "a beat"
-        report(d <= TOL, f"{p['pose']} at {p['frame']}: {d} frame(s) from {what}")
+print("5. finale: cuts and head nods on the beat")
+if "finale" in sched:
+    fin = sched["finale"]
+    for sub in fin["shots"][1:]:
+        d = min(abs(sub["from"] - b) for b in A["beats"])
+        report(d <= TOL, f"cut to the {sub['view']} at {sub['from']}: {d} frame(s) from a beat")
+    d = min(abs(fin["jacket"] - b) for b in A["beats"])
+    report(d <= TOL, f"jacket opens at {fin['jacket']}: {d} frame(s) from a beat")
+    for n in fin["nods"]:
+        d = min(abs(n - b) for b in A["beats"])
+        report(d <= TOL, f"head nod at {n}: {d} frame(s) from a beat")
 else:
     print("  · not built yet")
 

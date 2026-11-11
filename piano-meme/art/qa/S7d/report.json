@@ -1,0 +1,152 @@
+{
+ "rip": {
+  "id": "rip",
+  "x": 130,
+  "y": 782,
+  "w": 1100,
+  "h": 1557,
+  "compositeDiffOutsideMask": 0.298,
+  "shiftPx": 0.0,
+  "scaleError": 0.0,
+  "diffOutsideBeforeAlign": 7.86,
+  "diffOutsideAfterAlign": 5.51,
+  "changeInside": 11.17,
+  "warp": [
+   [
+    1.0,
+    0.0,
+    0.0
+   ],
+   [
+    0.0,
+    1.0,
+    0.0
+   ]
+  ]
+ },
+ "suit": {
+  "id": "suit",
+  "x": 130,
+  "y": 782,
+  "w": 1100,
+  "h": 1557,
+  "compositeDiffOutsideMask": 0.315,
+  "shiftPx": 0.0,
+  "scaleError": 0.0,
+  "diffOutsideBeforeAlign": 6.92,
+  "diffOutsideAfterAlign": 5.76,
+  "changeInside": 14.01,
+  "warp": [
+   [
+    1.0,
+    0.0,
+    0.0
+   ],
+   [
+    0.0,
+    1.0,
+    0.0
+   ]
+  ]
+ },
+ "move1": {
+  "id": "move1",
+  "x": 130,
+  "y": 782,
+  "w": 1100,
+  "h": 1557,
+  "compositeDiffOutsideMask": 0.356,
+  "shiftPx": 0.0,
+  "scaleError": 0.0,
+  "diffOutsideBeforeAlign": 8.14,
+  "diffOutsideAfterAlign": 7.39,
+  "changeInside": 20.73,
+  "warp": [
+   [
+    1.0,
+    0.0,
+    0.0
+   ],
+   [
+    0.0,
+    1.0,
+    0.0
+   ]
+  ]
+ },
+ "move2": {
+  "id": "move2",
+  "x": 130,
+  "y": 782,
+  "w": 1100,
+  "h": 1557,
+  "compositeDiffOutsideMask": 0.281,
+  "shiftPx": 0.0,
+  "scaleError": 0.0,
+  "diffOutsideBeforeAlign": 9.8,
+  "diffOutsideAfterAlign": 7.96,
+  "changeInside": 14.66,
+  "warp": [
+   [
+    1.0,
+    0.0,
+    0.0
+   ],
+   [
+    0.0,
+    1.0,
+    0.0
+   ]
+  ]
+ },
+ "move3": {
+  "id": "move3",
+  "x": 130,
+  "y": 782,
+  "w": 1100,
+  "h": 1557,
+  "compositeDiffOutsideMask": 0.308,
+  "shiftPx": 0.0,
+  "scaleError": 0.0,
+  "diffOutsideBeforeAlign": 6.95,
+  "diffOutsideAfterAlign": 5.84,
+  "changeInside": 15.86,
+  "warp": [
+   [
+    1.0,
+    0.0,
+    0.0
+   ],
+   [
+    0.0,
+    1.0,
+    0.0
+   ]
+  ]
+ },
+ "final": {
+  "id": "final",
+  "x": 130,
+  "y": 782,
+  "w": 1100,
+  "h": 1557,
+  "compositeDiffOutsideMask": 0.341,
+  "shiftPx": 0.0,
+  "scaleError": 0.0,
+  "diffOutsideBeforeAlign": 8.34,
+  "diffOutsideAfterAlign": 7.88,
+  "changeInside": 14.37,
+  "warp": [
+   [
+    1.0,
+    0.0,
+    0.0
+   ],
+   [
+    0.0,
+    1.0,
+    0.0
+   ]
+  ]
+ }
+}

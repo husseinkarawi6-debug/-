@@ -73,5 +73,80 @@
     -0.09
    ]
   ]
+ },
+ "up": {
+  "id": "up",
+  "x": 548,
+  "y": 808,
+  "w": 605,
+  "h": 955,
+  "compositeDiffOutsideMask": 0.026,
+  "shiftPx": 0.0,
+  "scaleError": 0.0,
+  "diffOutsideBeforeAlign": 10.49,
+  "diffOutsideAfterAlign": 10.35,
+  "changeInside": 31.74,
+  "warp": [
+   [
+    1.0,
+    0.0,
+    0.0
+   ],
+   [
+    0.0,
+    1.0,
+    0.0
+   ]
+  ]
+ },
+ "press_1": {
+  "id": "press_1",
+  "x": 548,
+  "y": 808,
+  "w": 605,
+  "h": 955,
+  "compositeDiffOutsideMask": 0.024,
+  "shiftPx": 0.0,
+  "scaleError": 0.0,
+  "diffOutsideBeforeAlign": 8.46,
+  "diffOutsideAfterAlign": 8.47,
+  "changeInside": 32.17,
+  "warp": [
+   [
+    1.0,
+    0.0,
+    0.0
+   ],
+   [
+    0.0,
+    1.0,
+    0.0
+   ]
+  ]
+ },
+ "press_2": {
+  "id": "press_2",
+  "x": 548,
+  "y": 808,
+  "w": 605,
+  "h": 955,
+  "compositeDiffOutsideMask": 0.021,
+  "shiftPx": 0.0,
+  "scaleError": 0.0,
+  "diffOutsideBeforeAlign": 15.06,
+  "diffOutsideAfterAlign": 14.83,
+  "changeInside": 32.68,
+  "warp": [
+   [
+    1.0,
+    0.0,
+    0.0
+   ],
+   [
+    0.0,
+    1.0,
+    0.0
+   ]
+  ]
  }
 }

@@ -1,0 +1,134 @@
+{
+ "master": "art/masters/S7d.png",
+ "refs": [
+  "art/charsheet.png"
+ ],
+ "quality": "medium",
+ "feather": 26,
+ "editPrompt": "The FIRST image is a crop of a hand-drawn ink illustration (rough dip-pen lines, cross-hatching) of a dark concert stage with a black grand piano and spotlights. On the left stands the lazy one (messy black hair, round glasses, short dense beard), on the right the learner (shirt buttoned to the collar, knitted wool vest, combed hair, round glasses, beard, small dark-red dictionary). The second image is their character sheet. Edit ONLY the transparent (masked) area: {CHANGE} Both men keep the same size and stand at the same places with their feet near the same spots, under the same spotlights. Same faces, same ink style and line weight, correct hands with five fingers. The stage, the piano and the light outside the mask stay exactly as they are. The only reds: the learner's dictionary and the lazy one's tie. No microphone, no text.",
+ "crops": {
+  "stage": [
+   680,
+   1560,
+   1100,
+   1650
+  ]
+ },
+ "variants": [
+  {
+   "id": "rip",
+   "crop": "stage",
+   "mask": [
+    [
+     "ellipse",
+     380,
+     1560,
+     300,
+     720
+    ],
+    [
+     "ellipse",
+     965,
+     1600,
+     235,
+     650
+    ]
+   ],
+   "prompt": "the lazy one rips his grey hoodie open with both hands like a superhero, the hoodie flying open and back off his shoulders, revealing a sharp black suit, white shirt and dark red tie underneath; a cool smirk. The learner, still singing, stares at him in amazement with wide eyes and open mouth."
+  },
+  {
+   "id": "suit",
+   "crop": "stage",
+   "mask": [
+    [
+     "ellipse",
+     380,
+     1560,
+     300,
+     720
+    ],
+    [
+     "ellipse",
+     965,
+     1600,
+     235,
+     650
+    ]
+   ],
+   "prompt": "the lazy one now wears the sharp black suit, white shirt and dark red tie (the grey hoodie lies crumpled on the stage floor behind him) and a black fedora hat; he tilts the brim of the fedora with one hand, the other arm held out to the side, a cool confident pose, mouth open singing. The learner sings with his arms open, the dictionary in one hand."
+  },
+  {
+   "id": "play_1",
+   "crop": "stage",
+   "base": "suit",
+   "mask": [
+    [
+     "ellipse",
+     380,
+     1560,
+     300,
+     720
+    ],
+    [
+     "ellipse",
+     620,
+     1590,
+     220,
+     170
+    ],
+    [
+     "ellipse",
+     965,
+     1600,
+     235,
+     650
+    ]
+   ],
+   "prompt": "the lazy one, in the same black suit, white shirt, dark red tie and black fedora, now sits at the keyboard end of the grand piano behind him and plays it with both hands on the keys, back straight, head tilted back, mouth open singing, cool and elegant; the grey hoodie still lies on the floor. The learner keeps singing with joy, eyes closed, the dark-red dictionary held against his chest."
+  },
+  {
+   "id": "play_2",
+   "crop": "stage",
+   "base": "play_1",
+   "mask": [
+    [
+     "ellipse",
+     470,
+     1450,
+     230,
+     260
+    ]
+   ],
+   "prompt": "only the lazy one at the piano changes: he leans into the keys and strikes a different chord further along the keyboard, eyes shut, mouth wide open singing, fedora on. Correct hands with five fingers."
+  },
+  {
+   "id": "final",
+   "crop": "stage",
+   "base": "play_1",
+   "mask": [
+    [
+     "ellipse",
+     380,
+     1560,
+     300,
+     720
+    ],
+    [
+     "ellipse",
+     620,
+     1590,
+     220,
+     170
+    ],
+    [
+     "ellipse",
+     965,
+     1600,
+     235,
+     650
+    ]
+   ],
+   "prompt": "the big finish: at the piano, the lazy one slams the final chord with both hands and throws his head back, mouth wide open on the last note, fedora tilted. The learner throws his arms wide in triumph, the dark-red dictionary raised high in one hand, mouth open on the last note."
+  }
+ ]
+}

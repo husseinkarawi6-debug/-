@@ -21,7 +21,7 @@ export const PianoMeme: React.FC<InkProps> = ({ boil, grain, withAudio }) => {
           ))}
           {captions.map((c) => (
             <Sequence key={`${c.start}-${c.text}`} from={c.start} durationInFrames={c.end - c.start + 1} name={`Caption: ${c.text.slice(0, 20)}`}>
-              <Caption text={c.text} lang={c.lang} from={0} anchor={c.text.length > 60 ? "block" : "top"} align={c.start >= 858 ? "right" : "center"} />
+              <Caption text={c.text} lang={c.lang} from={0} anchor={c.text.split("\n").length > 2 ? "block" : "top"} align={c.start >= 858 ? "right" : "center"} />
             </Sequence>
           ))}
         </HandDrawn>

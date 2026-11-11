@@ -3,7 +3,7 @@ import { Shot } from "../timeline";
 import { Placeholder } from "./Placeholder";
 import { LazyS2 } from "./LazyS2";
 import { LearnerS4 } from "./LearnerS4";
-import { PianistS5, PianistS6 } from "./Pianist";
+import { PianistShot } from "./Pianist";
 import { FinaleS7 } from "./Finale";
 
 // Who is on screen comes from analysis.json (shot.angle), made by
@@ -15,8 +15,7 @@ export const ShotView: React.FC<{ shot: Shot }> = ({ shot }) => {
   const angle = angleFor(shot);
   if (angle === "S2") return <LazyS2 shot={shot} />;
   if (angle === "S4") return <LearnerS4 shot={shot} />;
-  if (angle === "S5") return <PianistS5 shot={shot} />;
-  if (angle === "S6") return <PianistS6 />;
+  if (angle === "S5" || angle === "S6" || angle === "S8") return <PianistShot shot={shot} angle={angle} />;
   if (angle === "S7") return <FinaleS7 shot={shot} />;
   return <Placeholder label={`${shot.shot} · ${angle}`} sub="" />;
 };

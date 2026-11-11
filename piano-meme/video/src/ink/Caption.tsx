@@ -1,7 +1,7 @@
 import React from "react";
 import { random, useCurrentFrame } from "remotion";
 import { fellFamily as fontFamily } from "./font";
-import { C, H, W } from "../config";
+import { C, H, SAFE_TOP, W } from "../config";
 
 // Torn paper edge as a CSS polygon: positions in %, tears in px, so the tear
 // size stays the same whatever the slip size is.
@@ -33,23 +33,25 @@ export const Caption: React.FC<{
   const scale = frame === from ? 1.03 : 1;
   const seedKey = text.slice(0, 24);
   const tilt = (random(`tilt-${seedKey}`) - 0.5) * 1.6;
-  const centreY = anchor === "top" ? H * 0.18 : H * 0.245;
+  // one or two lines: centred at 18 % of the height; longer blocks hang
+  // from the top of the safe area (14 %) so they never go above it
+  const centreY = anchor === "top" ? H * 0.18 : SAFE_TOP + 6;
 
   return (
     <div
       style={{
         position: "absolute",
-        left: align === "right" ? W * 0.36 : 0,
-        width: align === "right" ? W * 0.6 : W,
+        left: align === "right" ? W * 0.44 : 0, // finale: block on the right, the mic hangs on the left
+        width: align === "right" ? W * 0.54 : W,
         top: centreY,
         display: "flex",
         justifyContent: "center",
-        transform: "translateY(-50%)",
+        transform: anchor === "top" ? "translateY(-50%)" : "none",
       }}
     >
       <div
         style={{
-          maxWidth: anchor === "top" ? W * 0.8 : W * 0.56,
+          maxWidth: W * 0.8,
           transform: `scale(${scale}) rotate(${tilt}deg)`,
           filter: `drop-shadow(0 0 0.8px ${C.ink}) drop-shadow(2px 3px 0px rgba(20,18,16,0.35))`,
         }}
@@ -64,6 +66,7 @@ export const Caption: React.FC<{
             lineHeight: 1.16,
             textAlign: "center",
             color: lang === "es" ? C.red : C.ink,
+            whiteSpace: "pre-line", // the reference's own line breaks
           }}
         >
           {text}

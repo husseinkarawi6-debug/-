@@ -50,13 +50,13 @@ SENTENCE_ES = ("Mañana por la mañana, la extraña araña de España "
 # (start, end, text, lang). end is inclusive. Empty gaps = no caption.
 CAPTIONS = [
     (8, 63, "Spanish is easy, right?", "en"),
-    (104, 164, "How do you say “tomorrow” in Spanish?", "en"),
+    (104, 164, "How do you say tomorrow\nin Spanish?", "en"),
     (192, 234, "Mañana", "es"),
     # rows 5–20: one word per shot, full shot length (filled from the table)
     (632, 673, "Try this", "en"),
-    (674, 740, SENTENCE_EN_1, "en"),
-    (741, 853, SENTENCE_EN_1 + " " + SENTENCE_EN_2, "en"),
-    (854, 1055, SENTENCE_ES, "es"),
+    (674, 740, "Tomorrow morning, the\nstrange spider from Spain", "en"),
+    (741, 853, "Tomorrow morning, the\nstrange spider from Spain\nskillfully scratches the\nspiderweb on the mountain", "en"),
+    (854, 1055, "Mañana por la\nmañana, la extraña\naraña de España\naraña con maña la\ntelaraña de la\nmontaña", "es"),
 ]
 
 # Spanish words drawn in red inside captions
@@ -199,17 +199,10 @@ def time_captions(caps: list[dict], events: list[dict]) -> list[dict]:
         ref = ons[i]["frame"]
         c = dict(c, refStart=ref, tableStart=c["start"])
         lid = CAPTION_LINE.get(i)
-        cands = [f for f in voice_onsets(lid)] if lid else []
-        first_of_line = lid and all(CAPTION_LINE.get(k) != lid for k in range(i))
-        if first_of_line and cands:
-            cands = cands[:1]  # a line's first caption comes with its first sound
-        near = [f for f in cands if abs(f - ref) <= SNAP_WINDOW]
-        if near:
-            c["start"] = min(near, key=lambda f: abs(f - ref))
-            c["timing"] = f"voice onset of {lid}"
-        else:
-            c["start"] = ref
-            c["timing"] = "reference frame"
+        # on screen = the reference at the same moment: the caption changes on
+        # the exact frame the reference caption changes
+        c["start"] = ref
+        c["timing"] = "reference frame"
         c["line"] = lid
         out.append(c)
     for i, c in enumerate(out):
@@ -528,28 +521,25 @@ def main():
         run_rhubarb(mono, lines, result["curves"]["vocalsDb"])
         result["referenceCaptionEvents"] = measure_reference_captions()
         result["captions"] = time_captions(captions, result["referenceCaptionEvents"])
-        # rule 4: a one-word caption (lines 5-20) never leaves its own shot
-        by_shot = {r["shot"]: r for r in rows}
-        for c in result["captions"]:
-            lid = c.get("line") or ""
-            if lid and 5 <= int(lid[1:]) <= 20:
-                r = by_shot[int(lid[1:])]
-                if c["start"] < r["start"]:
-                    c["start"], c["timing"] = r["start"], "shot start"
-                c["end"] = min(c["end"], r["end"])
-
     # Who is on screen in each shot (rules in timing.md): learner alone = S4,
     # lazy alone = S2 (the pianist S5/S6 replaces lazy shots in the loud-piano
     # section, same frames), both = S7 (finale only).
-    pianist = (result.get("pianoSection") or {}).get("pianistShots", [])
-    # (angles are set just below; schedules use them)
+    # Hussein asked for a longer piano part: the pianist takes every lazy shot
+    # from line 10 to line 20 (the loud-piano window 417-476 sits inside it).
+    PIANO_FROM, PIANO_TO = 10, 20
+    pianist = [sh["shot"] for sh in result["shots"] if sh["speaker"] == "lazy" and PIANO_FROM <= sh["shot"] <= PIANO_TO]
+    if result.get("pianoSection"):
+        result["pianoSection"].update(shots=list(range(PIANO_FROM, PIANO_TO + 1)), pianistShots=pianist,
+                                      start=next(sh["start"] for sh in result["shots"] if sh["shot"] == PIANO_FROM),
+                                      end=next(sh["end"] for sh in result["shots"] if sh["shot"] == PIANO_TO))
+    PIANO_ANGLES = ["S5", "S8", "S6", "S8", "S6", "S5"]  # wide, medium, hands, medium, hands, wide
     for sh in result["shots"]:
         if sh["speaker"] == "learner":
             sh["angle"] = "S4"
         elif sh["speaker"] == "both":
             sh["angle"] = "S7"
         elif sh["shot"] in pianist:
-            sh["angle"] = "S5" if pianist.index(sh["shot"]) % 2 == 0 else "S6"
+            sh["angle"] = PIANO_ANGLES[pianist.index(sh["shot"]) % len(PIANO_ANGLES)]
         else:
             sh["angle"] = "S2"
 
@@ -559,25 +549,49 @@ def main():
     #         landed), and the final pose from the last strong chord
     if result.get("audioPresent"):
         sched = {}
+        presses = []
         for sh in result["shots"]:
-            if sh["angle"] == "S6":
-                hands, last = [], -99
+            if sh["angle"] in ("S5", "S6", "S8"):
+                last, k = -99, 0
                 for o in result["onsets"]:
-                    if sh["start"] < o["frame"] <= sh["end"] and o["frame"] - last >= 3:
-                        hands.append({"frame": o["frame"], "pose": f"hands_{len(hands) % 3 + 1}"})
-                        last = o["frame"]
-                sched["pianistHands"] = hands
+                    if sh["start"] <= o["frame"] <= sh["end"] and o["frame"] - last >= 4:
+                        # a chord: fingers down on the onset, up again 4 frames later
+                        presses.append({"frame": o["frame"], "pose": "press", "chord": k % 2, "shot": sh["shot"]})
+                        presses.append({"frame": o["frame"] + 4, "pose": "lift", "chord": k % 2, "shot": sh["shot"]})
+                        last, k = o["frame"], k + 1
+        sched["pianistHands"] = presses
+        for sh in result["shots"]:
             if sh["angle"] == "S7":
+                # Finale (line 23): five strong shots, cut every third beat.
+                #   wide   : the pianist (S5) plays, the mic drops to his mouth, he sings
+                #   medium : close on him (S8) singing into the mic; on a beat he
+                #            pulls his jacket open
+                #   couch  : the lazy one on the couch, headphones on, hand on the
+                #            ear cup, nodding on every beat, singing along
+                #   hands  : his fingers on the keys, down on every note
+                #   wide   : back wide; the mic calms on the last chord, hold
                 strong = [o["frame"] for o in result["onsets"]
                           if o["strong"] and sh["start"] + 40 <= o["frame"] <= sh["end"] - 10]
                 last_chord = strong[-1] if strong else sh["end"] - 20
-                cycle = ["pose1", "pose2", "pose3", "master"]
-                dance = [{"frame": b, "pose": cycle[i % len(cycle)], "kind": "beat"}
-                         for i, b in enumerate([b for b in result["beats"]
-                                                if sh["start"] + 21 <= b < last_chord - 2])]
-                dance.append({"frame": last_chord, "pose": "final", "kind": "lastChord"})
-                sched["dance"] = dance
-                # the mic calms down over the last bars and is still for the last 10 frames
+                bs = [b for b in result["beats"] if b >= sh["start"] + 30]
+                cuts = [bs[0], bs[3], bs[6], bs[9]]
+                views = ["wide", "medium", "couch", "hands", "wide"]
+                bounds = [sh["start"]] + cuts + [sh["end"] + 1]
+                shots_f = [{"from": bounds[i], "to": bounds[i + 1] - 1, "view": views[i]} for i in range(5)]
+                med = shots_f[1]
+                sched["finale"] = {
+                    "shots": shots_f,
+                    "jacket": next(b for b in result["beats"] if b >= med["from"] + 20),
+                    "nods": [b for b in result["beats"] if shots_f[2]["from"] <= b <= shots_f[2]["to"]],
+                    "lastChord": last_chord,
+                }
+                hs = shots_f[3]
+                last, k = -99, 0
+                for o in result["onsets"]:
+                    if hs["from"] <= o["frame"] <= hs["to"] and o["frame"] - last >= 4:
+                        presses.append({"frame": o["frame"], "pose": "press", "chord": k % 2, "shot": sh["shot"]})
+                        presses.append({"frame": o["frame"] + 4, "pose": "lift", "chord": k % 2, "shot": sh["shot"]})
+                        last, k = o["frame"], k + 1
                 sched["mic"] = {"dropStart": sh["start"], "dropEnd": 880,
                                 "settleFrom": max(880, last_chord - 24), "settleTo": sh["end"] - 10}
         result["schedules"] = sched

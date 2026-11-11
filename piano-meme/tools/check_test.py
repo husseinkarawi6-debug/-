@@ -122,6 +122,10 @@ def main():
     ap.add_argument("--compare")
     a = ap.parse_args()
     starts = table_starts()
+    # cuts inside the finale (line 23), asked for by Hussein: from analysis.json
+    import json
+    A = json.loads((ROOT / "audio/analysis.json").read_text())
+    starts = sorted(set(starts + [x["from"] for x in A.get("schedules", {}).get("finale", {}).get("shots", [])[1:]]))
 
     print(f"== {a.video}")
     dur = check_audio(a.video, "test")

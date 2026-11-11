@@ -1,24 +1,300 @@
 {
-  "master": "art/masters/S2.png",
-  "refs": ["art/charsheet.png"],
-  "quality": "medium",
-  "feather": 5,
-  "editPrompt": "The FIRST image is a close crop of a hand-drawn ink illustration (rough dip-pen lines, cross-hatching, old grey-beige paper). The second image is the character sheet of the same man (the left figure, 'the lazy one'). Edit ONLY the transparent (masked) area of the first image: {CHANGE} Everything outside the mask must stay exactly as it is: same drawing, same lines, same hatching, same light from the left, same framing and scale. Keep the same man, same short dense black beard, same thin round metal glasses, same bored deadpan mood. Same ink style and line weight. No colour except the paper and ink greys.",
-  "crops": {
-    "face": [585, 1040, 600],
-    "hands": [590, 1560, 640]
-  },
-  "variants": [
-    {"id": "mouth_A", "crop": "face", "mask": [["ellipse", 590, 1168, 100, 58]], "prompt": "his lips are pressed firmly together, as when saying M, B or P."},
-    {"id": "mouth_B", "crop": "face", "mask": [["ellipse", 590, 1168, 100, 58]], "prompt": "his lips are slightly parted with the teeth together and just visible, as when saying S or T."},
-    {"id": "mouth_C", "crop": "face", "mask": [["ellipse", 590, 1172, 100, 64]], "prompt": "his mouth is open in a relaxed medium opening, as when saying 'eh', dark inside the mouth, lazy and bored."},
-    {"id": "mouth_D", "crop": "face", "mask": [["ellipse", 590, 1180, 104, 74]], "prompt": "his mouth is open wide, jaw dropped, as when saying 'ah', dark inside, still bored."},
-    {"id": "mouth_E", "crop": "face", "mask": [["ellipse", 590, 1172, 100, 64]], "prompt": "his mouth is slightly open and slightly rounded, as when saying 'aw' or 'er'."},
-    {"id": "mouth_F", "crop": "face", "mask": [["ellipse", 590, 1168, 100, 58]], "prompt": "his lips are pushed forward into a small round pucker, as when saying 'oo' or 'w'."},
-    {"id": "eyes_closed", "crop": "face", "mask": [["ellipse", 650, 982, 64, 36], ["ellipse", 478, 1022, 52, 34]], "prompt": "both of his eyes are fully closed in a calm blink: each eye is a single curved eyelid line with lashes, inside the same glasses."},
-    {"id": "eyes_right", "crop": "face", "mask": [["ellipse", 650, 982, 64, 36], ["ellipse", 478, 1022, 52, 34]], "prompt": "his eyes stay half-closed and bored, but both pupils have turned to look sideways toward the RIGHT edge of the picture."},
-    {"id": "brow_raise", "crop": "face", "mask": [["ellipse", 632, 925, 92, 46], ["ellipse", 650, 982, 64, 36]], "prompt": "his eyebrow on the RIGHT side of the picture is raised high in sceptical disbelief and that eye is a little more open; the other eyebrow stays low. Bored, unimpressed."},
-    {"id": "thumbs_1", "crop": "hands", "mask": [["ellipse", 458, 1515, 66, 50]], "prompt": "the thumb of his hand on the LEFT side of the picture is pressed down hard on a button of the game controller, bent at the joint."},
-    {"id": "thumbs_2", "crop": "hands", "mask": [["ellipse", 700, 1540, 66, 50]], "prompt": "the thumb of his hand on the RIGHT side of the picture is pushing the joystick of the game controller sideways."}
+ "master": "art/masters/S2.png",
+ "refs": [
+  "art/charsheet.png"
+ ],
+ "quality": "medium",
+ "feather": 5,
+ "editPrompt": "The FIRST image is a close crop of a hand-drawn ink illustration (rough dip-pen lines, cross-hatching, old grey-beige paper). The second image is the character sheet of the same man (the left figure, 'the lazy one'). Edit ONLY the transparent (masked) area of the first image: {CHANGE} Everything outside the mask must stay exactly as it is: same drawing, same lines, same hatching, same light from the left, same framing and scale. Keep the same man, same short dense black beard, same thin round metal glasses, same bored deadpan mood. Same ink style and line weight. No colour except the paper and ink greys.",
+ "crops": {
+  "face": [
+   585,
+   1040,
+   600
+  ],
+  "hands": [
+   590,
+   1560,
+   640
+  ],
+  "hp": [
+   735,
+   1170,
+   900,
+   1350
+  ],
+  "head": [
+   600,
+   990,
+   700
   ]
+ },
+ "variants": [
+  {
+   "id": "mouth_A",
+   "crop": "face",
+   "mask": [
+    [
+     "ellipse",
+     590,
+     1168,
+     100,
+     58
+    ]
+   ],
+   "prompt": "his lips are pressed firmly together, as when saying M, B or P."
+  },
+  {
+   "id": "mouth_B",
+   "crop": "face",
+   "mask": [
+    [
+     "ellipse",
+     590,
+     1168,
+     100,
+     58
+    ]
+   ],
+   "prompt": "his lips are slightly parted with the teeth together and just visible, as when saying S or T."
+  },
+  {
+   "id": "mouth_C",
+   "crop": "face",
+   "mask": [
+    [
+     "ellipse",
+     590,
+     1172,
+     100,
+     64
+    ]
+   ],
+   "prompt": "his mouth is open in a relaxed medium opening, as when saying 'eh', dark inside the mouth, lazy and bored."
+  },
+  {
+   "id": "mouth_D",
+   "crop": "face",
+   "mask": [
+    [
+     "ellipse",
+     590,
+     1180,
+     104,
+     74
+    ]
+   ],
+   "prompt": "his mouth is open wide, jaw dropped, as when saying 'ah', dark inside, still bored."
+  },
+  {
+   "id": "mouth_E",
+   "crop": "face",
+   "mask": [
+    [
+     "ellipse",
+     590,
+     1172,
+     100,
+     64
+    ]
+   ],
+   "prompt": "his mouth is slightly open and slightly rounded, as when saying 'aw' or 'er'."
+  },
+  {
+   "id": "mouth_F",
+   "crop": "face",
+   "mask": [
+    [
+     "ellipse",
+     590,
+     1168,
+     100,
+     58
+    ]
+   ],
+   "prompt": "his lips are pushed forward into a small round pucker, as when saying 'oo' or 'w'."
+  },
+  {
+   "id": "eyes_closed",
+   "crop": "face",
+   "mask": [
+    [
+     "ellipse",
+     650,
+     982,
+     64,
+     36
+    ],
+    [
+     "ellipse",
+     478,
+     1022,
+     52,
+     34
+    ]
+   ],
+   "prompt": "both of his eyes are fully closed in a calm blink: each eye is a single curved eyelid line with lashes, inside the same glasses."
+  },
+  {
+   "id": "eyes_right",
+   "crop": "face",
+   "mask": [
+    [
+     "ellipse",
+     650,
+     982,
+     64,
+     36
+    ],
+    [
+     "ellipse",
+     478,
+     1022,
+     52,
+     34
+    ]
+   ],
+   "prompt": "his eyes stay half-closed and bored, but both pupils have turned to look sideways toward the RIGHT edge of the picture."
+  },
+  {
+   "id": "brow_raise",
+   "crop": "face",
+   "mask": [
+    [
+     "ellipse",
+     632,
+     925,
+     92,
+     46
+    ],
+    [
+     "ellipse",
+     650,
+     982,
+     64,
+     36
+    ]
+   ],
+   "prompt": "his eyebrow on the RIGHT side of the picture is raised high in sceptical disbelief and that eye is a little more open; the other eyebrow stays low. Bored, unimpressed."
+  },
+  {
+   "id": "thumbs_1",
+   "crop": "hands",
+   "mask": [
+    [
+     "ellipse",
+     458,
+     1515,
+     66,
+     50
+    ]
+   ],
+   "prompt": "the thumb of his hand on the LEFT side of the picture is pressed down hard on a button of the game controller, bent at the joint."
+  },
+  {
+   "id": "thumbs_2",
+   "crop": "hands",
+   "mask": [
+    [
+     "ellipse",
+     700,
+     1540,
+     66,
+     50
+    ]
+   ],
+   "prompt": "the thumb of his hand on the RIGHT side of the picture is pushing the joystick of the game controller sideways."
+  },
+  {
+   "id": "hp_base",
+   "crop": "hp",
+   "feather": 6,
+   "mask": [
+    [
+     "ellipse",
+     620,
+     700,
+     290,
+     125
+    ],
+    [
+     "ellipse",
+     370,
+     1005,
+     62,
+     88
+    ],
+    [
+     "poly",
+     [
+      [
+       820,
+       930
+      ],
+      [
+       1000,
+       930
+      ],
+      [
+       1180,
+       1350
+      ],
+      [
+       1180,
+       1760
+      ],
+      [
+       640,
+       1760
+      ],
+      [
+       640,
+       1490
+      ],
+      [
+       860,
+       1400
+      ],
+      [
+       830,
+       1150
+      ]
+     ]
+    ]
+   ],
+   "prompt": "he now wears big over-ear headphones: a dark headband over his messy hair and round ear cups over both ears. His hand on the RIGHT side of the picture has left the game controller and holds the right ear cup of the headphones, elbow down along his side; his other hand still holds the controller exactly as before. He enjoys the song. Correct hand with five fingers, same hoodie sleeve."
+  },
+  {
+   "id": "hp_down",
+   "crop": "head",
+   "base": "hp_base",
+   "feather": 6,
+   "mask": [
+    [
+     "ellipse",
+     600,
+     985,
+     330,
+     335
+    ]
+   ],
+   "prompt": "he nods his head down a little to the beat, eyes closed, enjoying the music with a calm deadpan smile, mouth closed; same headphones, same hand holding the ear cup, same glasses, beard and hair."
+  },
+  {
+   "id": "hp_down_open",
+   "crop": "face",
+   "base": "hp_down",
+   "feather": 4,
+   "mask": [
+    [
+     "ellipse",
+     595,
+     1200,
+     105,
+     80
+    ]
+   ],
+   "prompt": "only his mouth changes: it is open, singing along with the song, relaxed."
+  }
+ ]
 }

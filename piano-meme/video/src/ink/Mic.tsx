@@ -17,7 +17,9 @@ export const HangingMic: React.FC<{
   beatFrames: number;
   settleFrom: number;
   settleTo: number;
-}> = ({ frame, pivotX, cordLength, dropEnd, beatFrames, settleFrom, settleTo }) => {
+  swingDeg?: number;
+  scale?: number; // size of the mic body (the cord stays a line)
+}> = ({ frame, pivotX, cordLength, dropEnd, beatFrames, settleFrom, settleTo, swingDeg = 9, scale = 1 }) => {
   // Drop: from above the frame to full cord length, with a small bounce.
   const drop = spring({ frame, fps: FPS, durationInFrames: dropEnd, config: { damping: 9, stiffness: 140, mass: 0.7 } });
   const len = interpolate(drop, [0, 1], [-420, cordLength]);
@@ -26,13 +28,13 @@ export const HangingMic: React.FC<{
   const t = Math.max(0, frame - dropEnd);
   const grow = interpolate(t, [0, beatFrames], [0, 1], { extrapolateRight: "clamp", easing: Easing.out(Easing.quad) });
   const calm = interpolate(frame, [settleFrom, settleTo], [1, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp", easing: Easing.inOut(Easing.quad) });
-  const angle = 9 * grow * calm * Math.sin((2 * Math.PI * t) / (2 * beatFrames));
+  const angle = swingDeg * grow * calm * Math.sin((2 * Math.PI * t) / (2 * beatFrames));
 
   return (
     <svg width={1080} height={1920} style={{ position: "absolute", inset: 0, overflow: "visible" }}>
       <g transform={`translate(${pivotX} -30) rotate(${angle})`}>
         <Cord length={Math.max(0, len + 30)} />
-        <g transform={`translate(0 ${len + 30})`}>
+        <g transform={`translate(0 ${len + 30}) scale(${scale})`}>
           <MicBody />
         </g>
       </g>

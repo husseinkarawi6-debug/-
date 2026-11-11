@@ -1,13 +1,166 @@
 {
-  "master": "art/masters/S6.png",
-  "refs": ["art/charsheet.png"],
-  "quality": "medium",
-  "feather": 5,
-  "editPrompt": "The FIRST image is a crop of a hand-drawn ink illustration (rough dip-pen lines, cross-hatching): the pianist's two hands in white shirt cuffs and black suit sleeves playing the keys of a black grand piano. Edit ONLY the transparent (masked) area of the first image: {CHANGE} The keys, the cuffs, the sleeves and everything outside the mask stay exactly as they are, the keys stay straight and aligned. Correct hands with five fingers. Same ink style and line weight.",
-  "crops": {"hands": [745, 1260, 900, 1350]},
-  "variants": [
-    {"id": "hands_1", "crop": "hands", "mask": [["poly", [[560, 820], [1130, 820], [1130, 1215], [560, 1215]]]], "prompt": "the fingers of the UPPER hand press a different chord: two fingers pushed down hard on the keys, the others lifted and curved above the keys."},
-    {"id": "hands_2", "crop": "hands", "mask": [["poly", [[620, 1270], [1140, 1270], [1140, 1750], [620, 1750]]]], "prompt": "the fingers of the LOWER hand press a different chord further along the keys: thumb and little finger stretched wide pressing two keys, middle fingers lifted."},
-    {"id": "hands_3", "crop": "hands", "mask": [["poly", [[560, 820], [1130, 820], [1130, 1215], [560, 1215]]], ["poly", [[620, 1270], [1140, 1270], [1140, 1750], [620, 1750]]]], "prompt": "both hands strike a strong chord: on each hand three fingers press down firmly, wrists slightly raised, the other fingers curved above the keys."}
+ "master": "art/masters/S6.png",
+ "refs": [
+  "art/charsheet.png"
+ ],
+ "quality": "medium",
+ "feather": 5,
+ "editPrompt": "The FIRST image is a crop of a hand-drawn ink illustration (rough dip-pen lines, cross-hatching): the pianist's two hands in white shirt cuffs and black suit sleeves playing the keys of a black grand piano. Edit ONLY the transparent (masked) area of the first image: {CHANGE} The keys, the cuffs, the sleeves and everything outside the mask stay exactly as they are, the keys stay straight and aligned. Correct hands with five fingers. Same ink style and line weight.",
+ "crops": {
+  "hands": [
+   745,
+   1260,
+   900,
+   1350
   ]
+ },
+ "variants": [
+  {
+   "id": "up",
+   "crop": "hands",
+   "mask": [
+    [
+     "poly",
+     [
+      [
+       560,
+       820
+      ],
+      [
+       1130,
+       820
+      ],
+      [
+       1130,
+       1215
+      ],
+      [
+       560,
+       1215
+      ]
+     ]
+    ],
+    [
+     "poly",
+     [
+      [
+       620,
+       1270
+      ],
+      [
+       1140,
+       1270
+      ],
+      [
+       1140,
+       1750
+      ],
+      [
+       620,
+       1750
+      ]
+     ]
+    ]
+   ],
+   "prompt": "between two chords both hands lift slightly: every finger curved and raised a few millimetres above the keys, relaxed, wrists level. Anatomically correct: each hand has exactly five fingers in natural order (thumb, index, middle, ring, little), knuckles and nails drawn correctly."
+  },
+  {
+   "id": "press_1",
+   "crop": "hands",
+   "mask": [
+    [
+     "poly",
+     [
+      [
+       560,
+       820
+      ],
+      [
+       1130,
+       820
+      ],
+      [
+       1130,
+       1215
+      ],
+      [
+       560,
+       1215
+      ]
+     ]
+    ],
+    [
+     "poly",
+     [
+      [
+       620,
+       1270
+      ],
+      [
+       1140,
+       1270
+      ],
+      [
+       1140,
+       1750
+      ],
+      [
+       620,
+       1750
+      ]
+     ]
+    ]
+   ],
+   "prompt": "both hands strike a chord: on each hand the thumb, middle finger and little finger press their keys down (those keys sink a little), the index and ring fingers stay curved just above the keys. Anatomically correct: each hand has exactly five fingers in natural order, knuckles bend naturally, nails visible."
+  },
+  {
+   "id": "press_2",
+   "crop": "hands",
+   "mask": [
+    [
+     "poly",
+     [
+      [
+       560,
+       820
+      ],
+      [
+       1130,
+       820
+      ],
+      [
+       1130,
+       1215
+      ],
+      [
+       560,
+       1215
+      ]
+     ]
+    ],
+    [
+     "poly",
+     [
+      [
+       620,
+       1270
+      ],
+      [
+       1140,
+       1270
+      ],
+      [
+       1140,
+       1750
+      ],
+      [
+       620,
+       1750
+      ]
+     ]
+    ]
+   ],
+   "prompt": "both hands strike a different chord a little further to the right along the keyboard: on each hand the thumb, index and ring finger press their keys down (those keys sink a little), the middle and little fingers curved above. Anatomically correct: each hand has exactly five fingers in natural order, knuckles bend naturally, nails visible."
+  }
+ ]
 }

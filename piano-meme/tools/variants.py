@@ -227,15 +227,19 @@ def main():
 
     if not a.post_only:
         todo = [v for v in vars_ if a.only or not (work / f"{v['id']}_edit.png").exists()]
-        for phase in (False, True):  # plain edits first, then edits of an edit
-            batch = [v for v in todo if bool(v.get("base")) == phase]
+        byid = {v["id"]: v for v in spec["variants"]}
+        def depth(v):
+            return 0 if not v.get("base") else 1 + depth(byid[v["base"]])
+        for level in range(0, 1 + max((depth(v) for v in todo), default=0)):
+            batch = [v for v in todo if depth(v) == level]
+            if level > 0:  # edits of an edit need their base patches on disk
+                write_patches(spec, [v for v in spec["variants"] if depth(v) < level
+                                     and (work / f"{v['id']}_edit.png").exists()], work, a.angle, quiet=True)
             for v in batch:
                 prepare(spec, v, work, a.angle)
             with cf.ThreadPoolExecutor(a.jobs) as ex:
                 for msg in ex.map(lambda v: generate(spec, v, work, a.angle), batch):
                     print(msg, flush=True)
-            if not phase:  # chained edits need their base patches on disk
-                write_patches(spec, [v for v in spec["variants"] if not v.get("base")], work, a.angle, quiet=True)
 
     write_patches(spec, vars_, work, a.angle)
 
@@ -250,7 +254,10 @@ def write_patches(spec, vars_, work, angle, quiet=False):
     manifest.setdefault("patches", {})
     report_path = ROOT / "art/qa" / angle / "report.json"
     report = json.loads(report_path.read_text()) if report_path.exists() else {}
-    for v in sorted(vars_, key=lambda v: bool(v.get("base"))):
+    byid = {v["id"]: v for v in spec["variants"]}
+    def depth(v):
+        return 0 if not v.get("base") else 1 + depth(byid[v["base"]])
+    for v in sorted(vars_, key=depth):
         if not (work / f"{v['id']}_edit.png").exists():
             continue
         r = post(spec, v, work, angle, v.get("feather", spec.get("feather", 5)))

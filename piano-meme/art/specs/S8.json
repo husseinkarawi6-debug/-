@@ -1,0 +1,206 @@
+{
+ "master": "art/masters/S8.png",
+ "refs": [
+  "art/charsheet.png"
+ ],
+ "quality": "medium",
+ "feather": 4,
+ "editPrompt": "The FIRST image is a crop of a hand-drawn ink illustration (rough dip-pen lines, cross-hatching, dark stage): the pianist in a black suit, white shirt and dark red tie at a black grand piano. The second image is the character sheet (the right figure, 'the pianist'). Edit ONLY the transparent (masked) area of the first image: {CHANGE} Keep his serious, deadpan concentration. Everything outside the mask stays exactly as it is. Same ink style and line weight.",
+ "crops": {
+  "face": [
+   585,
+   900,
+   400
+  ],
+  "hands": [
+   900,
+   1570,
+   640
+  ],
+  "hpbody": [
+   640,
+   1160,
+   1050,
+   1575
+  ],
+  "head": [
+   520,
+   760,
+   560
+  ],
+  "jacket": [
+   560,
+   1240,
+   1000,
+   1500
+  ]
+ },
+ "variants": [
+  {
+   "id": "mouth_A",
+   "crop": "face",
+   "mask": [
+    [
+     "ellipse",
+     585,
+     955,
+     44,
+     26
+    ]
+   ],
+   "prompt": "his lips are pressed together, as when saying M, B or P."
+  },
+  {
+   "id": "mouth_B",
+   "crop": "face",
+   "mask": [
+    [
+     "ellipse",
+     585,
+     955,
+     44,
+     26
+    ]
+   ],
+   "prompt": "his lips are slightly parted, teeth together, as when saying S or T."
+  },
+  {
+   "id": "mouth_C",
+   "crop": "face",
+   "mask": [
+    [
+     "ellipse",
+     585,
+     955,
+     44,
+     32
+    ]
+   ],
+   "prompt": "his mouth is open in a medium opening, as when saying 'eh', dark inside."
+  },
+  {
+   "id": "mouth_D",
+   "crop": "face",
+   "mask": [
+    [
+     "ellipse",
+     585,
+     955,
+     44,
+     32
+    ]
+   ],
+   "prompt": "his mouth is open wide, as when singing 'ah', dark inside."
+  },
+  {
+   "id": "mouth_E",
+   "crop": "face",
+   "mask": [
+    [
+     "ellipse",
+     585,
+     955,
+     44,
+     32
+    ]
+   ],
+   "prompt": "his mouth is slightly open and rounded, as when saying 'aw'."
+  },
+  {
+   "id": "mouth_F",
+   "crop": "face",
+   "mask": [
+    [
+     "ellipse",
+     585,
+     955,
+     44,
+     26
+    ]
+   ],
+   "prompt": "his lips are pushed into a small round pucker, as when saying 'oo'."
+  },
+  {
+   "id": "press",
+   "crop": "hands",
+   "feather": 5,
+   "mask": [
+    [
+     "ellipse",
+     900,
+     1570,
+     285,
+     155
+    ]
+   ],
+   "prompt": "both hands press a chord firmly into the keys: on each hand three fingertips push their keys down (the keys sink a little), wrists dropped a little, the other fingers curved just above. Anatomically correct hands, exactly five fingers each in natural order, the keys straight."
+  },
+  {
+   "id": "lift",
+   "crop": "hands",
+   "feather": 5,
+   "mask": [
+    [
+     "ellipse",
+     900,
+     1570,
+     285,
+     155
+    ]
+   ],
+   "prompt": "between two chords both hands lift a little above the keys, fingers curved and relaxed, wrists slightly raised, ready to strike. Anatomically correct hands, exactly five fingers each in natural order, the keys straight."
+  },
+  {
+   "id": "jacket",
+   "crop": "jacket",
+   "feather": 7,
+   "mask": [
+    [
+     "poly",
+     [
+      [
+       160,
+       980
+      ],
+      [
+       560,
+       960
+      ],
+      [
+       700,
+       1180
+      ],
+      [
+       900,
+       1540
+      ],
+      [
+       900,
+       1770
+      ],
+      [
+       330,
+       1770
+      ],
+      [
+       110,
+       1450
+      ],
+      [
+       110,
+       1100
+      ]
+     ]
+    ],
+    [
+     "ellipse",
+     585,
+     960,
+     60,
+     40
+    ]
+   ],
+   "prompt": "like a showman, his near hand (the lower one, on the LEFT side of the picture) has left the keys and pulls the lapel of his black suit jacket wide open, showing the crisp white shirt and the dark red tie; his other hand stays on the keys exactly as before; his mouth is open, singing with passion, eyes half-closed, cool. Correct hand with five fingers. Same suit, same tie colour."
+  }
+ ]
+}
