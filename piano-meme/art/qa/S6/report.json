@@ -148,5 +148,105 @@
     0.0
    ]
   ]
+ },
+ "lift_a": {
+  "id": "lift_a",
+  "x": 883,
+  "y": 953,
+  "w": 255,
+  "h": 235,
+  "compositeDiffOutsideMask": 0.013,
+  "shiftPx": 0.0,
+  "scaleError": 0.0,
+  "diffOutsideBeforeAlign": 13.5,
+  "diffOutsideAfterAlign": 0.02,
+  "changeInside": 34.84,
+  "warp": [
+   [
+    1.0,
+    0.0,
+    0.0
+   ],
+   [
+    0.0,
+    1.0,
+    0.0
+   ]
+  ]
+ },
+ "lift_b": {
+  "id": "lift_b",
+  "x": 873,
+  "y": 1473,
+  "w": 275,
+  "h": 235,
+  "compositeDiffOutsideMask": 0.015,
+  "shiftPx": 0.0,
+  "scaleError": 0.0,
+  "diffOutsideBeforeAlign": 17.14,
+  "diffOutsideAfterAlign": 0.01,
+  "changeInside": 26.31,
+  "warp": [
+   [
+    1.0,
+    0.0,
+    0.0
+   ],
+   [
+    0.0,
+    1.0,
+    0.0
+   ]
+  ]
+ },
+ "lift_c": {
+  "id": "lift_c",
+  "x": 711,
+  "y": 1069,
+  "w": 189,
+  "h": 163,
+  "compositeDiffOutsideMask": 0.009,
+  "shiftPx": 0.0,
+  "scaleError": 0.0,
+  "diffOutsideBeforeAlign": 13.45,
+  "diffOutsideAfterAlign": 0.0,
+  "changeInside": 35.16,
+  "warp": [
+   [
+    1.0,
+    0.0,
+    0.0
+   ],
+   [
+    0.0,
+    1.0,
+    0.0
+   ]
+  ]
+ },
+ "lift_d": {
+  "id": "lift_d",
+  "x": 676,
+  "y": 1606,
+  "w": 189,
+  "h": 179,
+  "compositeDiffOutsideMask": 0.011,
+  "shiftPx": 0.0,
+  "scaleError": 0.0,
+  "diffOutsideBeforeAlign": 9.47,
+  "diffOutsideAfterAlign": 0.0,
+  "changeInside": 33.39,
+  "warp": [
+   [
+    1.0,
+    0.0,
+    0.0
+   ],
+   [
+    0.0,
+    1.0,
+    0.0
+   ]
+  ]
  }
 }

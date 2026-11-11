@@ -1,0 +1,12 @@
+{
+ "master": "art/masters/S9.png",
+ "refs": ["art/charsheet.png"],
+ "quality": "medium",
+ "feather": 3,
+ "blend": "poisson",
+ "editPrompt": "The FIRST image is a close crop of a hand-drawn ink illustration (rough dip-pen lines, cross-hatching): a bearded man in a suit singing with his head tilted back, eyes closed. Edit ONLY the transparent (masked) area of the first image: {CHANGE} Everything outside the mask stays exactly as it is. Same ink style and line weight.",
+ "crops": {"face": [440, 590, 400]},
+ "variants": [
+  {"id": "closed", "crop": "face", "mask": [["ellipse", 462, 590, 36, 34]], "prompt": "his mouth is closed for a moment between two sung phrases: lips together inside the beard, head still tilted back, eyes still closed."}
+ ]
+}

@@ -155,12 +155,12 @@
   "y": 1403,
   "w": 593,
   "h": 335,
-  "compositeDiffOutsideMask": 0.045,
+  "compositeDiffOutsideMask": 0.037,
   "shiftPx": 0.0,
   "scaleError": 0.0,
   "diffOutsideBeforeAlign": 7.17,
-  "diffOutsideAfterAlign": 8.47,
-  "changeInside": 29.04,
+  "diffOutsideAfterAlign": 0.13,
+  "changeInside": 27.23,
   "warp": [
    [
     1.0,
@@ -180,12 +180,12 @@
   "y": 1403,
   "w": 593,
   "h": 335,
-  "compositeDiffOutsideMask": 0.037,
+  "compositeDiffOutsideMask": 0.044,
   "shiftPx": 0.0,
   "scaleError": 0.0,
   "diffOutsideBeforeAlign": 7.84,
-  "diffOutsideAfterAlign": 7.83,
-  "changeInside": 43.52,
+  "diffOutsideAfterAlign": 0.15,
+  "changeInside": 41.38,
   "warp": [
    [
     1.0,

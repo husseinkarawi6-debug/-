@@ -108,8 +108,6 @@ if "finale" in sched:
     for sub in fin["shots"][1:]:
         d = min(abs(sub["from"] - b) for b in A["beats"])
         report(d <= TOL, f"cut to the {sub['view']} at {sub['from']}: {d} frame(s) from a beat")
-    d = min(abs(fin["jacket"] - b) for b in A["beats"])
-    report(d <= TOL, f"jacket opens at {fin['jacket']}: {d} frame(s) from a beat")
     for n in fin["nods"]:
         d = min(abs(n - b) for b in A["beats"])
         report(d <= TOL, f"head nod at {n}: {d} frame(s) from a beat")

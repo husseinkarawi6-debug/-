@@ -280,12 +280,12 @@
   "y": 561,
   "w": 891,
   "h": 1214,
-  "compositeDiffOutsideMask": 0.037,
+  "compositeDiffOutsideMask": 0.036,
   "shiftPx": 0.0,
   "scaleError": 0.0,
   "diffOutsideBeforeAlign": 8.79,
-  "diffOutsideAfterAlign": 9.26,
-  "changeInside": 22.4,
+  "diffOutsideAfterAlign": 0.97,
+  "changeInside": 21.02,
   "warp": [
    [
     1.0,
@@ -305,12 +305,12 @@
   "y": 640,
   "w": 694,
   "h": 700,
-  "compositeDiffOutsideMask": 0.124,
+  "compositeDiffOutsideMask": 0.131,
   "shiftPx": 0.0,
   "scaleError": 0.0,
-  "diffOutsideBeforeAlign": 12.67,
-  "diffOutsideAfterAlign": 12.47,
-  "changeInside": 25.3,
+  "diffOutsideBeforeAlign": 13.01,
+  "diffOutsideAfterAlign": 0.74,
+  "changeInside": 24.08,
   "warp": [
    [
     1.0,
@@ -331,21 +331,21 @@
   "w": 600,
   "h": 600,
   "compositeDiffOutsideMask": 0.0,
-  "shiftPx": 0.44,
+  "shiftPx": 0.41,
   "scaleError": 0.0006,
-  "diffOutsideBeforeAlign": 8.6,
-  "diffOutsideAfterAlign": 7.05,
-  "changeInside": 32.72,
+  "diffOutsideBeforeAlign": 7.99,
+  "diffOutsideAfterAlign": 0.0,
+  "changeInside": 29.91,
   "warp": [
    [
     0.9996,
-    0.0,
-    0.4367
+    0.0002,
+    0.4098
    ],
    [
-    0.0003,
+    0.0002,
     1.0006,
-    -0.1504
+    -0.1045
    ]
   ]
  }

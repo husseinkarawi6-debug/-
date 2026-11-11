@@ -262,7 +262,8 @@
      ]
     ]
    ],
-   "prompt": "he now wears big over-ear headphones: a dark headband over his messy hair and round ear cups over both ears. His hand on the RIGHT side of the picture has left the game controller and holds the right ear cup of the headphones, elbow down along his side; his other hand still holds the controller exactly as before. He enjoys the song. Correct hand with five fingers, same hoodie sleeve."
+   "prompt": "he now wears big over-ear headphones: a dark headband over his messy hair and round ear cups over both ears. His hand on the RIGHT side of the picture has left the game controller and holds the right ear cup of the headphones, elbow down along his side; his other hand still holds the controller exactly as before. He enjoys the song. Correct hand with five fingers, same hoodie sleeve.",
+   "blend": "poisson"
   },
   {
    "id": "hp_down",
@@ -278,7 +279,8 @@
      335
     ]
    ],
-   "prompt": "he nods his head down a little to the beat, eyes closed, enjoying the music with a calm deadpan smile, mouth closed; same headphones, same hand holding the ear cup, same glasses, beard and hair."
+   "prompt": "he nods his head down a little to the beat, eyes closed, enjoying the music with a calm deadpan smile, mouth closed; same headphones, same hand holding the ear cup, same glasses, beard and hair.",
+   "blend": "poisson"
   },
   {
    "id": "hp_down_open",
@@ -294,7 +296,8 @@
      80
     ]
    ],
-   "prompt": "only his mouth changes: it is open, singing along with the song, relaxed."
+   "prompt": "only his mouth changes: it is open, singing along with the song, relaxed.",
+   "blend": "poisson"
   }
  ]
 }

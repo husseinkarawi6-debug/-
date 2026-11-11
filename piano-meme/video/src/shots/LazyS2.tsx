@@ -35,12 +35,13 @@ export const lazyPatches = (shot: Shot, g: number): Record<string, number> => {
     eyesBusy = true;
   }
   if (!eyesBusy) {
-    // seeded blinks, about one every 2–3 s, never in the first 6 frames of a shot
+    // one seeded blink per shot at most, never in the first 6 frames
     const len = shot.end - shot.start + 1;
     for (let k = 0; k < 3; k++) {
       if (random(`blink-on-${shot.shot}-${k}`) > 0.55) continue;
       const at = shot.start + 6 + Math.floor(random(`blink-at-${shot.shot}-${k}`) * Math.max(1, len - 12));
       if (g >= twos(at) && g < twos(at) + 4) p.eyes_closed = 1;
+      break; // one blink per shot at most (two in under a second read as sleepy)
     }
   }
 

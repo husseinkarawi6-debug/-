@@ -4,6 +4,7 @@ import S4b from "./S4b.json";
 import S5 from "./S5.json";
 import S6 from "./S6.json";
 import S8 from "./S8.json";
+import S9 from "./S9.json";
 
 export type Patch = { x: number; y: number; w: number; h: number };
 export type Manifest = {
@@ -20,6 +21,7 @@ export const ART: Record<string, Manifest> = {
   S5: S5 as Manifest, // pianist, wide stage (+ "empty" stage for the finale)
   S6: S6 as Manifest, // pianist's hands
   S8: S8 as Manifest, // pianist, medium: face and hands
+  S9: S9 as Manifest, // pianist, hero: standing, jacket flung open
 };
 
 export const patchSrc = (angle: string, id: string) => `art/${angle}/${id}.png`;

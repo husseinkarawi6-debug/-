@@ -132,7 +132,8 @@
      85
     ]
    ],
-   "prompt": "his fingers press a chord firmly down into the keys: on each hand three fingertips push the keys down, wrists dropped a little, the other fingers curved just above the keys. Anatomically correct hands with five fingers, the keys straight."
+   "prompt": "his fingers press a chord firmly down into the keys: on each hand three fingertips push the keys down, wrists dropped a little, the other fingers curved just above the keys. Anatomically correct hands with five fingers, the keys straight.",
+   "blend": "poisson"
   },
   {
    "id": "lift",
@@ -146,44 +147,8 @@
      85
     ]
    ],
-   "prompt": "between two chords his fingers lift a little above the keys, curved and relaxed, wrists slightly raised, ready to strike. Anatomically correct hands with five fingers, the keys straight."
-  },
-  {
-   "id": "empty",
-   "crop": "body",
-   "feather": 8,
-   "mask": [
-    [
-     "poly",
-     [
-      [
-       110,
-       780
-      ],
-      [
-       570,
-       780
-      ],
-      [
-       790,
-       1240
-      ],
-      [
-       870,
-       1560
-      ],
-      [
-       880,
-       2090
-      ],
-      [
-       90,
-       2090
-      ]
-     ]
-    ]
-   ],
-   "prompt": "remove the pianist completely - his whole body, legs, feet and shoes - and his piano bench: only the empty stage floor in the spotlight remains where he sat, and the keyboard of the grand piano is visible and untouched, its white and black keys straight. Nothing else changes."
+   "prompt": "between two chords his fingers lift a little above the keys, curved and relaxed, wrists slightly raised, ready to strike. Anatomically correct hands with five fingers, the keys straight.",
+   "blend": "poisson"
   }
  ]
 }

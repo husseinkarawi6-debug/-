@@ -170,6 +170,13 @@ def post(spec, var, work, angle, feather):
             low = out[..., ch] < e_mid  # only darken the ink side; the paper stays as matched
             out[..., ch] = np.where(low, (out[..., ch] - e_mid) * k + e_mid, out[..., ch])
         edit = np.clip(out, 0, 255).astype(np.uint8)
+    if var.get("blend", spec.get("blend")) == "poisson" and (m > 0).any():
+        # gradient-domain blend: the redraw takes the master's tones at the
+        # edge of the mask, so no seam and no "pasted" look
+        mk = cv2.erode(m, np.ones((3, 3), np.uint8))
+        mk[:3, :] = 0; mk[-3:, :] = 0; mk[:, :3] = 0; mk[:, -3:] = 0
+        bx, by, bw, bh = cv2.boundingRect(mk)
+        edit = cv2.seamlessClone(edit, crop, mk, (bx + bw // 2, by + bh // 2), cv2.NORMAL_CLONE)
     after = float(np.abs(edit.astype(int) - crop.astype(int))[outside].mean())
     inside = float(np.abs(edit.astype(int) - crop.astype(int))[m > 0].mean()) if (m > 0).any() else 0.0
     # soft-edged patch

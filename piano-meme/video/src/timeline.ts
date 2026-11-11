@@ -30,7 +30,7 @@ type Analysis = {
   onsets?: Onset[];
   schedules?: {
     pianistHands?: { frame: number; pose: string; chord: number; shot: number }[];
-    finale?: { shots: { from: number; to: number; view: string }[]; jacket: number; nods: number[]; lastChord: number };
+    finale?: { shots: { from: number; to: number; view: string }[]; nods: number[]; lastChord: number };
     mic?: { dropStart: number; dropEnd: number; settleFrom: number; settleTo: number };
   };
   pianoSection?: { loudWindow: [number, number]; start: number; end: number; shots: number[]; pianistShots: number[] };

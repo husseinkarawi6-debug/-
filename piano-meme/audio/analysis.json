@@ -81,7 +81,7 @@
    "end": 385,
    "speaker": "lazy",
    "silent": false,
-   "angle": "S5"
+   "angle": "S2"
   },
   {
    "shot": 11,
@@ -97,7 +97,7 @@
    "end": 433,
    "speaker": "lazy",
    "silent": false,
-   "angle": "S8"
+   "angle": "S2"
   },
   {
    "shot": 13,
@@ -113,7 +113,7 @@
    "end": 481,
    "speaker": "lazy",
    "silent": false,
-   "angle": "S6"
+   "angle": "S2"
   },
   {
    "shot": 15,
@@ -129,7 +129,7 @@
    "end": 529,
    "speaker": "lazy",
    "silent": false,
-   "angle": "S8"
+   "angle": "S2"
   },
   {
    "shot": 17,
@@ -145,7 +145,7 @@
    "end": 584,
    "speaker": "lazy",
    "silent": false,
-   "angle": "S6"
+   "angle": "S2"
   },
   {
    "shot": 19,
@@ -161,7 +161,7 @@
    "end": 631,
    "speaker": "lazy",
    "silent": false,
-   "angle": "S5"
+   "angle": "S2"
   },
   {
    "shot": 21,
@@ -8148,29 +8148,11 @@
    476
   ],
   "loudWindowDb": -20.63,
-  "start": 361,
-  "end": 631,
-  "shots": [
-   10,
-   11,
-   12,
-   13,
-   14,
-   15,
-   16,
-   17,
-   18,
-   19,
-   20
-  ],
-  "pianistShots": [
-   10,
-   12,
-   14,
-   16,
-   18,
-   20
-  ]
+  "start": 404,
+  "end": 481,
+  "shots": [],
+  "pianistShots": [],
+  "note": "measured only: the piano is shown in the finale"
  },
  "referenceCaptionEvents": [
   {
@@ -8305,307 +8287,52 @@
   }
  ],
  "schedules": {
+  "finale": {
+   "shots": [
+    {
+     "from": 859,
+     "to": 893,
+     "view": "couch"
+    },
+    {
+     "from": 894,
+     "to": 928,
+     "view": "wide"
+    },
+    {
+     "from": 929,
+     "to": 964,
+     "view": "medium"
+    },
+    {
+     "from": 965,
+     "to": 989,
+     "view": "hands"
+    },
+    {
+     "from": 990,
+     "to": 1024,
+     "view": "hero"
+    },
+    {
+     "from": 1025,
+     "to": 1055,
+     "view": "wide"
+    }
+   ],
+   "nods": [
+    870,
+    881
+   ],
+   "lastChord": 1044
+  },
+  "mic": {
+   "dropStart": 894,
+   "dropEnd": 915,
+   "settleFrom": 1020,
+   "settleTo": 1045
+  },
   "pianistHands": [
-   {
-    "frame": 366,
-    "pose": "press",
-    "chord": 0,
-    "shot": 10
-   },
-   {
-    "frame": 370,
-    "pose": "lift",
-    "chord": 0,
-    "shot": 10
-   },
-   {
-    "frame": 371,
-    "pose": "press",
-    "chord": 1,
-    "shot": 10
-   },
-   {
-    "frame": 375,
-    "pose": "lift",
-    "chord": 1,
-    "shot": 10
-   },
-   {
-    "frame": 376,
-    "pose": "press",
-    "chord": 0,
-    "shot": 10
-   },
-   {
-    "frame": 380,
-    "pose": "lift",
-    "chord": 0,
-    "shot": 10
-   },
-   {
-    "frame": 382,
-    "pose": "press",
-    "chord": 1,
-    "shot": 10
-   },
-   {
-    "frame": 386,
-    "pose": "lift",
-    "chord": 1,
-    "shot": 10
-   },
-   {
-    "frame": 409,
-    "pose": "press",
-    "chord": 0,
-    "shot": 12
-   },
-   {
-    "frame": 413,
-    "pose": "lift",
-    "chord": 0,
-    "shot": 12
-   },
-   {
-    "frame": 415,
-    "pose": "press",
-    "chord": 1,
-    "shot": 12
-   },
-   {
-    "frame": 419,
-    "pose": "lift",
-    "chord": 1,
-    "shot": 12
-   },
-   {
-    "frame": 426,
-    "pose": "press",
-    "chord": 0,
-    "shot": 12
-   },
-   {
-    "frame": 430,
-    "pose": "lift",
-    "chord": 0,
-    "shot": 12
-   },
-   {
-    "frame": 432,
-    "pose": "press",
-    "chord": 1,
-    "shot": 12
-   },
-   {
-    "frame": 436,
-    "pose": "lift",
-    "chord": 1,
-    "shot": 12
-   },
-   {
-    "frame": 463,
-    "pose": "press",
-    "chord": 0,
-    "shot": 14
-   },
-   {
-    "frame": 467,
-    "pose": "lift",
-    "chord": 0,
-    "shot": 14
-   },
-   {
-    "frame": 467,
-    "pose": "press",
-    "chord": 1,
-    "shot": 14
-   },
-   {
-    "frame": 471,
-    "pose": "lift",
-    "chord": 1,
-    "shot": 14
-   },
-   {
-    "frame": 472,
-    "pose": "press",
-    "chord": 0,
-    "shot": 14
-   },
-   {
-    "frame": 476,
-    "pose": "lift",
-    "chord": 0,
-    "shot": 14
-   },
-   {
-    "frame": 478,
-    "pose": "press",
-    "chord": 1,
-    "shot": 14
-   },
-   {
-    "frame": 482,
-    "pose": "lift",
-    "chord": 1,
-    "shot": 14
-   },
-   {
-    "frame": 504,
-    "pose": "press",
-    "chord": 0,
-    "shot": 16
-   },
-   {
-    "frame": 508,
-    "pose": "lift",
-    "chord": 0,
-    "shot": 16
-   },
-   {
-    "frame": 509,
-    "pose": "press",
-    "chord": 1,
-    "shot": 16
-   },
-   {
-    "frame": 513,
-    "pose": "lift",
-    "chord": 1,
-    "shot": 16
-   },
-   {
-    "frame": 513,
-    "pose": "press",
-    "chord": 0,
-    "shot": 16
-   },
-   {
-    "frame": 517,
-    "pose": "lift",
-    "chord": 0,
-    "shot": 16
-   },
-   {
-    "frame": 521,
-    "pose": "press",
-    "chord": 1,
-    "shot": 16
-   },
-   {
-    "frame": 525,
-    "pose": "lift",
-    "chord": 1,
-    "shot": 16
-   },
-   {
-    "frame": 527,
-    "pose": "press",
-    "chord": 0,
-    "shot": 16
-   },
-   {
-    "frame": 531,
-    "pose": "lift",
-    "chord": 0,
-    "shot": 16
-   },
-   {
-    "frame": 564,
-    "pose": "press",
-    "chord": 0,
-    "shot": 18
-   },
-   {
-    "frame": 568,
-    "pose": "lift",
-    "chord": 0,
-    "shot": 18
-   },
-   {
-    "frame": 568,
-    "pose": "press",
-    "chord": 1,
-    "shot": 18
-   },
-   {
-    "frame": 572,
-    "pose": "lift",
-    "chord": 1,
-    "shot": 18
-   },
-   {
-    "frame": 574,
-    "pose": "press",
-    "chord": 0,
-    "shot": 18
-   },
-   {
-    "frame": 578,
-    "pose": "lift",
-    "chord": 0,
-    "shot": 18
-   },
-   {
-    "frame": 578,
-    "pose": "press",
-    "chord": 1,
-    "shot": 18
-   },
-   {
-    "frame": 582,
-    "pose": "lift",
-    "chord": 1,
-    "shot": 18
-   },
-   {
-    "frame": 584,
-    "pose": "press",
-    "chord": 0,
-    "shot": 18
-   },
-   {
-    "frame": 588,
-    "pose": "lift",
-    "chord": 0,
-    "shot": 18
-   },
-   {
-    "frame": 605,
-    "pose": "press",
-    "chord": 0,
-    "shot": 20
-   },
-   {
-    "frame": 609,
-    "pose": "lift",
-    "chord": 0,
-    "shot": 20
-   },
-   {
-    "frame": 612,
-    "pose": "press",
-    "chord": 1,
-    "shot": 20
-   },
-   {
-    "frame": 616,
-    "pose": "lift",
-    "chord": 1,
-    "shot": 20
-   },
-   {
-    "frame": 618,
-    "pose": "press",
-    "chord": 0,
-    "shot": 20
-   },
-   {
-    "frame": 622,
-    "pose": "lift",
-    "chord": 0,
-    "shot": 20
-   },
    {
     "frame": 968,
     "pose": "press",
@@ -8619,107 +8346,29 @@
     "shot": 23
    },
    {
-    "frame": 972,
-    "pose": "press",
-    "chord": 1,
-    "shot": 23
-   },
-   {
-    "frame": 976,
-    "pose": "lift",
-    "chord": 1,
-    "shot": 23
-   },
-   {
     "frame": 979,
     "pose": "press",
-    "chord": 0,
+    "chord": 1,
     "shot": 23
    },
    {
     "frame": 983,
     "pose": "lift",
-    "chord": 0,
+    "chord": 1,
     "shot": 23
    },
    {
     "frame": 984,
     "pose": "press",
-    "chord": 1,
+    "chord": 2,
     "shot": 23
    },
    {
     "frame": 988,
     "pose": "lift",
-    "chord": 1,
-    "shot": 23
-   },
-   {
-    "frame": 990,
-    "pose": "press",
-    "chord": 0,
-    "shot": 23
-   },
-   {
-    "frame": 994,
-    "pose": "lift",
-    "chord": 0,
-    "shot": 23
-   },
-   {
-    "frame": 996,
-    "pose": "press",
-    "chord": 1,
-    "shot": 23
-   },
-   {
-    "frame": 1000,
-    "pose": "lift",
-    "chord": 1,
+    "chord": 2,
     "shot": 23
    }
-  ],
-  "finale": {
-   "shots": [
-    {
-     "from": 859,
-     "to": 893,
-     "view": "wide"
-    },
-    {
-     "from": 894,
-     "to": 928,
-     "view": "medium"
-    },
-    {
-     "from": 929,
-     "to": 964,
-     "view": "couch"
-    },
-    {
-     "from": 965,
-     "to": 1001,
-     "view": "hands"
-    },
-    {
-     "from": 1002,
-     "to": 1055,
-     "view": "wide"
-    }
-   ],
-   "jacket": 917,
-   "nods": [
-    929,
-    942,
-    954
-   ],
-   "lastChord": 1044
-  },
-  "mic": {
-   "dropStart": 859,
-   "dropEnd": 880,
-   "settleFrom": 1020,
-   "settleTo": 1045
-  }
+  ]
  }
 }

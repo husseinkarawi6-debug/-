@@ -524,76 +524,58 @@ def main():
     # Who is on screen in each shot (rules in timing.md): learner alone = S4,
     # lazy alone = S2 (the pianist S5/S6 replaces lazy shots in the loud-piano
     # section, same frames), both = S7 (finale only).
-    # Hussein asked for a longer piano part: the pianist takes every lazy shot
-    # from line 10 to line 20 (the loud-piano window 417-476 sits inside it).
-    PIANO_FROM, PIANO_TO = 10, 20
-    pianist = [sh["shot"] for sh in result["shots"] if sh["speaker"] == "lazy" and PIANO_FROM <= sh["shot"] <= PIANO_TO]
+    # The piano belongs to the finale (Hussein: "the piano appears at the end,
+    # when he sings in Spanish"). Every lazy line is the lazy one on the couch
+    # (S2), every learner line the learner (S4), line 23 is the finale (S7).
     if result.get("pianoSection"):
-        result["pianoSection"].update(shots=list(range(PIANO_FROM, PIANO_TO + 1)), pianistShots=pianist,
-                                      start=next(sh["start"] for sh in result["shots"] if sh["shot"] == PIANO_FROM),
-                                      end=next(sh["end"] for sh in result["shots"] if sh["shot"] == PIANO_TO))
-    PIANO_ANGLES = ["S5", "S8", "S6", "S8", "S6", "S5"]  # wide, medium, hands, medium, hands, wide
+        result["pianoSection"].update(pianistShots=[], shots=[],
+                                      note="measured only: the piano is shown in the finale")
     for sh in result["shots"]:
-        if sh["speaker"] == "learner":
-            sh["angle"] = "S4"
-        elif sh["speaker"] == "both":
-            sh["angle"] = "S7"
-        elif sh["shot"] in pianist:
-            sh["angle"] = PIANO_ANGLES[pianist.index(sh["shot"]) % len(PIANO_ANGLES)]
-        else:
-            sh["angle"] = "S2"
+        sh["angle"] = {"learner": "S4", "both": "S7"}.get(sh["speaker"], "S2")
 
-    # Schedules (frames the drawings change on), all from the audio:
-    #  pianistHands: a new hand drawing on each piano onset in the S6 shot
-    #  dance: a new dance pose on each beat of the finale (after the mic has
-    #         landed), and the final pose from the last strong chord
+    # Schedules (frames the drawings change on), all from the audio.
     if result.get("audioPresent"):
         sched = {}
         presses = []
         for sh in result["shots"]:
-            if sh["angle"] in ("S5", "S6", "S8"):
+            if sh["angle"] != "S7":
+                continue
+            # Finale (line 23): six shots cut on the beat.
+            #   couch  : the lazy one puts his headphones on, hand on the ear cup,
+            #            nods on the beat and starts to sing along
+            #   wide   : ...and he is the pianist on stage: the mic drops from
+            #            above to his mouth, he plays and sings
+            #   medium : close on him singing into the mic
+            #   hands  : his fingers on the keys, one finger at a time, on the notes
+            #   hero   : he rises, jacket flung open, singing (one whole drawing)
+            #   wide   : back wide; the mic calms on the last chord, hold
+            strong = [o["frame"] for o in result["onsets"]
+                      if o["strong"] and sh["start"] + 40 <= o["frame"] <= sh["end"] - 10]
+            last_chord = strong[-1] if strong else sh["end"] - 20
+            bs = [b for b in result["beats"] if b >= sh["start"] + 30]
+            cuts = [bs[0], bs[3], bs[6], bs[8], bs[11]]
+            views = ["couch", "wide", "medium", "hands", "hero", "wide"]
+            bounds = [sh["start"]] + cuts + [sh["end"] + 1]
+            shots_f = [{"from": bounds[i], "to": bounds[i + 1] - 1, "view": views[i]} for i in range(len(views))]
+            sched["finale"] = {
+                "shots": shots_f,
+                "nods": [b for b in result["beats"] if shots_f[0]["from"] <= b <= shots_f[0]["to"]],
+                "lastChord": last_chord,
+            }
+            for sub in shots_f:
+                if sub["view"] != "hands":  # the playing is shown in the close-up only
+                    continue
                 last, k = -99, 0
                 for o in result["onsets"]:
-                    if sh["start"] <= o["frame"] <= sh["end"] and o["frame"] - last >= 4:
-                        # a chord: fingers down on the onset, up again 4 frames later
-                        presses.append({"frame": o["frame"], "pose": "press", "chord": k % 2, "shot": sh["shot"]})
-                        presses.append({"frame": o["frame"] + 4, "pose": "lift", "chord": k % 2, "shot": sh["shot"]})
+                    if sub["from"] <= o["frame"] <= sub["to"] - 2 and o["frame"] - last >= 5:
+                        # a note: fingers down on the onset, a finger lifts 4 frames later
+                        presses.append({"frame": o["frame"], "pose": "press", "chord": k % 4, "shot": sh["shot"]})
+                        presses.append({"frame": o["frame"] + 4, "pose": "lift", "chord": k % 4, "shot": sh["shot"]})
                         last, k = o["frame"], k + 1
+            mic_from = shots_f[1]["from"]
+            sched["mic"] = {"dropStart": mic_from, "dropEnd": mic_from + 21,
+                            "settleFrom": max(mic_from + 21, last_chord - 24), "settleTo": sh["end"] - 10}
         sched["pianistHands"] = presses
-        for sh in result["shots"]:
-            if sh["angle"] == "S7":
-                # Finale (line 23): five strong shots, cut every third beat.
-                #   wide   : the pianist (S5) plays, the mic drops to his mouth, he sings
-                #   medium : close on him (S8) singing into the mic; on a beat he
-                #            pulls his jacket open
-                #   couch  : the lazy one on the couch, headphones on, hand on the
-                #            ear cup, nodding on every beat, singing along
-                #   hands  : his fingers on the keys, down on every note
-                #   wide   : back wide; the mic calms on the last chord, hold
-                strong = [o["frame"] for o in result["onsets"]
-                          if o["strong"] and sh["start"] + 40 <= o["frame"] <= sh["end"] - 10]
-                last_chord = strong[-1] if strong else sh["end"] - 20
-                bs = [b for b in result["beats"] if b >= sh["start"] + 30]
-                cuts = [bs[0], bs[3], bs[6], bs[9]]
-                views = ["wide", "medium", "couch", "hands", "wide"]
-                bounds = [sh["start"]] + cuts + [sh["end"] + 1]
-                shots_f = [{"from": bounds[i], "to": bounds[i + 1] - 1, "view": views[i]} for i in range(5)]
-                med = shots_f[1]
-                sched["finale"] = {
-                    "shots": shots_f,
-                    "jacket": next(b for b in result["beats"] if b >= med["from"] + 20),
-                    "nods": [b for b in result["beats"] if shots_f[2]["from"] <= b <= shots_f[2]["to"]],
-                    "lastChord": last_chord,
-                }
-                hs = shots_f[3]
-                last, k = -99, 0
-                for o in result["onsets"]:
-                    if hs["from"] <= o["frame"] <= hs["to"] and o["frame"] - last >= 4:
-                        presses.append({"frame": o["frame"], "pose": "press", "chord": k % 2, "shot": sh["shot"]})
-                        presses.append({"frame": o["frame"] + 4, "pose": "lift", "chord": k % 2, "shot": sh["shot"]})
-                        last, k = o["frame"], k + 1
-                sched["mic"] = {"dropStart": sh["start"], "dropEnd": 880,
-                                "settleFrom": max(880, last_chord - 24), "settleTo": sh["end"] - 10}
         result["schedules"] = sched
 
     ANALYSIS.write_text(json.dumps(result, ensure_ascii=False, indent=1, allow_nan=False))

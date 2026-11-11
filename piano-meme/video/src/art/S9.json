@@ -1,0 +1,13 @@
+{
+ "master": "art/S9/master.jpg",
+ "width": 1360,
+ "height": 2416,
+ "patches": {
+  "closed": {
+   "x": 419,
+   "y": 549,
+   "w": 87,
+   "h": 83
+  }
+ }
+}

@@ -1,0 +1,27 @@
+{
+ "closed": {
+  "id": "closed",
+  "x": 419,
+  "y": 549,
+  "w": 87,
+  "h": 83,
+  "compositeDiffOutsideMask": 0.007,
+  "shiftPx": 0.0,
+  "scaleError": 0.0,
+  "diffOutsideBeforeAlign": 6.58,
+  "diffOutsideAfterAlign": 0.0,
+  "changeInside": 31.16,
+  "warp": [
+   [
+    1.0,
+    0.0,
+    0.0
+   ],
+   [
+    0.0,
+    1.0,
+    0.0
+   ]
+  ]
+ }
+}
