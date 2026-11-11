@@ -7,7 +7,7 @@ import { lineForShot, Shot } from "../timeline";
 
 // S4: the learner alone, close, distracted face (master S4b). The framing is
 // fixed: no camera move, no sway. Everything that moves is a drawing:
-// mouth, eyes, blink, the head scratch. The book is always the same drawing.
+// mouth, eyes and blink. The pose and the book are always the same drawing.
 const PLATE = "S4b";
 const CAMERA = { x: 680, y: 1110, zoom: 1.04 };
 
@@ -15,16 +15,8 @@ type Beat = { from: number; pose?: string; eyes?: string }; // from = frame insi
 
 // The learner's story (timing.md), told with drawings only.
 const ACTING: Record<number, Beat[]> = {
-  // 1: looks into the book and scratches his head, then looks up at the lazy one
-  1: [
-    { from: 0, pose: "scratch_A", eyes: "eyes_down" },
-    { from: 4, pose: "scratch_B", eyes: "eyes_down" },
-    { from: 8, pose: "scratch_A", eyes: "eyes_down" },
-    { from: 12, pose: "scratch_B", eyes: "eyes_down" },
-    { from: 16, pose: "scratch_A", eyes: "eyes_down" },
-    { from: 20, pose: "scratch_B", eyes: "eyes_down" },
-    { from: 24 }, // hand back on the book, eyes up to the lazy one
-  ],
+  // 1: looks into the book (no hand move: the drawing stays as it is), then up at the lazy one
+  1: [{ from: 0, eyes: "eyes_down" }, { from: 24 }],
   // 3: looks for the word in the book, then up at the lazy one to ask
   3: [{ from: 0, eyes: "eyes_down" }, { from: 20 }],
   // 5: reads the new word in the book, then looks up and asks the next one
