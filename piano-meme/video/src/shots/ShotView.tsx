@@ -6,12 +6,12 @@ import { twos } from "../ink/frame";
 import { beatFrames, beats, Shot } from "../timeline";
 import { Placeholder } from "./Placeholder";
 import { LazyS2 } from "./LazyS2";
+import { LearnerS4 } from "./LearnerS4";
 import { PlateShot } from "./PlateShot";
-import { analysis } from "../timeline";
 
 // Camera angle per shot. Shots 5–20 alternate learner / lazy; the loud-piano
 // shots (S5/S6) get filled in after audio/analyze.py finds the loud section.
-const ANGLE: Record<number, string> = { 1: "S1", 2: "S2", 3: "S3", 4: "S2", 21: "S4", 22: "S2", 23: "S7" };
+const ANGLE: Record<number, string> = { 1: "S4", 2: "S2", 3: "S4", 4: "S2", 21: "S4", 22: "S2", 23: "S7" };
 const NAMES: Record<string, string> = {
   S1: "wide living room",
   S2: "lazy one, close",
@@ -22,23 +22,17 @@ const NAMES: Record<string, string> = {
   S7: "finale, both",
 };
 
-// The loud-piano section (from analysis.json): its lazy shots become the pianist.
-const PIANO = analysis.pianoSection;
-const pianistAngle = (s: Shot) => {
-  if (!PIANO || !PIANO.pianistShots.includes(s.shot)) return null;
-  return PIANO.pianistShots.indexOf(s.shot) === 0 ? "S5" : "S6";
-};
+// Who is on screen comes from analysis.json (shot.angle), made by
+// audio/analyze.py from timing.md: learner alone = S4, lazy alone = S2,
+// pianist S5/S6 only in lazy shots of the loud-piano section, both = S7.
+export const angleFor = (s: Shot) => s.angle ?? ANGLE[s.shot] ?? (s.speaker === "lazy" ? "S2" : "S4");
 
-export const angleFor = (s: Shot) =>
-  pianistAngle(s) ?? ANGLE[s.shot] ?? (s.speaker === "lazy" ? "S2" : s.shot % 4 === 1 ? "S4" : "S3");
-
-export const ShotView: React.FC<{ shot: Shot; forceAngle?: string }> = ({ shot, forceAngle }) => {
-  const angle = forceAngle ?? angleFor(shot);
+export const ShotView: React.FC<{ shot: Shot }> = ({ shot }) => {
+  const angle = angleFor(shot);
   const len = shot.end - shot.start + 1;
   let body: React.ReactNode;
   if (angle === "S2") body = <LazyS2 shot={shot} />;
-  else if (angle === "S1")
-    body = <PlateShot angle="S1" length={len} from={{ x: 680, y: 1180, zoom: 1.04 }} to={{ x: 820, y: 900, zoom: 1.22 }} />;
+  else if (angle === "S4") body = <LearnerS4 shot={shot} />;
   else if (angle === "S5")
     body = <PlateShot angle="S5" length={len} from={{ x: 900, y: 1300, zoom: 1.25 }} to={{ x: 480, y: 1000, zoom: 1.12 }} />;
   else body = <Placeholder label={`${shot.shot} · ${angle}`} sub={NAMES[angle]} />;

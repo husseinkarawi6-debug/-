@@ -17,11 +17,16 @@
   },
   {
    "start": 276,
-   "end": 278,
+   "end": 276,
    "shape": "D"
   },
   {
-   "start": 279,
+   "start": 277,
+   "end": 277,
+   "shape": "F"
+  },
+  {
+   "start": 278,
    "end": 281,
    "shape": "B"
   },

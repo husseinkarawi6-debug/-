@@ -13,7 +13,7 @@
   {
    "start": 565,
    "end": 567,
-   "shape": "C"
+   "shape": "B"
   },
   {
    "start": 568,
@@ -33,12 +33,12 @@
   {
    "start": 575,
    "end": 576,
-   "shape": "D"
+   "shape": "E"
   },
   {
    "start": 577,
    "end": 581,
-   "shape": "B"
+   "shape": "F"
   },
   {
    "start": 582,
@@ -48,7 +48,7 @@
   {
    "start": 584,
    "end": 584,
-   "shape": "B"
+   "shape": "F"
   }
  ]
 }

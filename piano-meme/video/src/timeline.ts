@@ -3,7 +3,7 @@
 import analysisJson from "../../audio/analysis.json";
 
 export type Speaker = "learner" | "lazy" | "both";
-export type Shot = { shot: number; start: number; end: number; speaker: Speaker; silent: boolean };
+export type Shot = { shot: number; start: number; end: number; speaker: Speaker; silent: boolean; angle?: string };
 export type CaptionEntry = { start: number; end: number; text: string; lang: "en" | "es" };
 export type Line = {
   id: string;

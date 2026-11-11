@@ -38,6 +38,12 @@ export const Plate: React.FC<{
         }}
       >
         <Img src={staticFile(m.master)} style={{ position: "absolute", left: 0, top: 0, width: m.width, height: m.height }} />
+        {m.top ? (
+          <Img
+            src={staticFile(`art/${angle}/top.jpg`)}
+            style={{ position: "absolute", left: 0, top: -m.top.h, width: m.width, height: m.top.h + m.top.overlap }}
+          />
+        ) : null}
         {Object.entries(patches).map(([id, op]) => {
           const p = m.patches[id];
           if (!p || op <= 0) return null;

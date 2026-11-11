@@ -57,27 +57,50 @@ def shape_mask(h, w, shapes, ox=0, oy=0, scale=1.0):
     return m
 
 
-def prepare(spec, var, work):
-    master = load(ROOT / spec["master"])
-    cx, cy, size = spec["crops"][var["crop"]]
-    x0, y0 = int(cx - size // 2), int(cy - size // 2)
-    crop = master[y0:y0 + size, x0:x0 + size]
-    big = cv2.resize(crop, (EDIT, EDIT), interpolation=cv2.INTER_LANCZOS4)
-    m = shape_mask(EDIT, EDIT, var["mask"], x0, y0, EDIT / size)
+def crop_box(spec, var):
+    c = spec["crops"][var["crop"]]
+    cx, cy, w = c[0], c[1], c[2]
+    h = c[3] if len(c) > 3 else w
+    ew, eh = (1024, 1536) if h > w else ((1536, 1024) if w > h else (1024, 1024))
+    if abs((h / w) - (eh / ew)) > 0.02:
+        sys.exit(f"crop {var['crop']}: aspect must be 1:1, 2:3 or 3:2")
+    return int(cx - w // 2), int(cy - h // 2), int(w), int(h), ew, eh
+
+
+def source_image(spec, var, angle):
+    """The master, or the master with another patch on it (chained edits)."""
+    img = load(ROOT / spec["master"]).astype(np.float32)
+    base = var.get("base")
+    if base:
+        man = json.loads((ROOT / "video/src/art" / f"{angle}.json").read_text())
+        p = man["patches"][base]
+        patch = cv2.imread(str(ROOT / "video/public/art" / angle / f"{base}.png"), cv2.IMREAD_UNCHANGED)
+        a = patch[..., 3:4].astype(np.float32) / 255
+        roi = img[p["y"]:p["y"] + p["h"], p["x"]:p["x"] + p["w"]]
+        img[p["y"]:p["y"] + p["h"], p["x"]:p["x"] + p["w"]] = patch[..., :3] * a + roi * (1 - a)
+    return np.clip(img, 0, 255).astype(np.uint8)
+
+
+def prepare(spec, var, work, angle):
+    master = source_image(spec, var, angle)
+    x0, y0, cw, ch, ew, eh = crop_box(spec, var)
+    crop = master[y0:y0 + ch, x0:x0 + cw]
+    big = cv2.resize(crop, (ew, eh), interpolation=cv2.INTER_LANCZOS4)
+    m = shape_mask(eh, ew, var["mask"], x0, y0, ew / cw)
     m = cv2.dilate(m, np.ones((9, 9), np.uint8))
     rgba = np.dstack([np.zeros_like(big), 255 - m])  # transparent where we edit
     cv2.imwrite(str(work / f"{var['id']}_crop.png"), big)
     cv2.imwrite(str(work / f"{var['id']}_mask.png"), rgba)
-    return x0, y0, size
+    return x0, y0, cw, ch
 
 
-def generate(spec, var, work):
+def generate(spec, var, work, angle):
     prompt = (spec["editPrompt"].replace("{CHANGE}", var["prompt"]))
     pf = work / f"{var['id']}_prompt.txt"
     pf.write_text(prompt, encoding="utf-8")
     cmd = [sys.executable, str(ROOT / "tools/oai_image.py"), str(work / f"{var['id']}_edit.png"),
            "--prompt-file", str(pf), "--image", str(work / f"{var['id']}_crop.png"),
-           "--mask", str(work / f"{var['id']}_mask.png"), "--size", f"{EDIT}x{EDIT}",
+           "--mask", str(work / f"{var['id']}_mask.png"), "--size", "{}x{}".format(*crop_box(spec, var)[4:]),
            "--quality", spec.get("quality", "medium")]
     for r in spec.get("refs", []):
         cmd += ["--ref", str(ROOT / r)]
@@ -104,13 +127,14 @@ def align(src, dst, valid):
 
 
 def post(spec, var, work, angle, feather):
-    master = load(ROOT / spec["master"])
-    cx, cy, size = spec["crops"][var["crop"]]
-    x0, y0 = int(cx - size // 2), int(cy - size // 2)
-    crop = master[y0:y0 + size, x0:x0 + size]
+    master0 = load(ROOT / spec["master"])
+    master = source_image(spec, var, angle)
+    x0, y0, cw, ch, _, _ = crop_box(spec, var)
+    crop = master[y0:y0 + ch, x0:x0 + cw]
+    crop0 = master0[y0:y0 + ch, x0:x0 + cw]
     edit = load(work / f"{var['id']}_edit.png")
-    edit = cv2.resize(edit, (size, size), interpolation=cv2.INTER_AREA)
-    m = shape_mask(size, size, var["mask"], x0, y0, 1.0)
+    edit = cv2.resize(edit, (cw, ch), interpolation=cv2.INTER_AREA)
+    m = shape_mask(ch, cw, var["mask"], x0, y0, 1.0)
     outside = cv2.erode(255 - m, np.ones((25, 25), np.uint8)) > 0
     before = float(np.abs(edit.astype(int) - crop.astype(int))[outside].mean())
     edit, warp = align(edit, crop, outside)
@@ -125,24 +149,29 @@ def post(spec, var, work, angle, feather):
     # soft-edged patch
     alpha = cv2.GaussianBlur(m.astype(np.float32), (0, 0), feather)
     alpha = np.clip(alpha * 1.15, 0, 255).astype(np.uint8)
+    if var.get("base"):
+        # chained edit: the patch also carries what the base patch changed
+        diff_base = (np.abs(crop.astype(int) - crop0.astype(int)).sum(2) > 0).astype(np.uint8) * 255
+        base_alpha = cv2.GaussianBlur(diff_base.astype(np.float32), (0, 0), 1.0)
+        alpha = np.maximum(alpha, np.clip(base_alpha * 4, 0, 255).astype(np.uint8))
+    # the new drawing over the base (= master, or master + base patch)
+    a_new = (cv2.GaussianBlur(m.astype(np.float32), (0, 0), feather) * 1.15 / 255).clip(0, 1)[..., None]
+    comp = (edit * a_new + crop.astype(float) * (1 - a_new)).astype(np.uint8)
     ys, xs = np.where(alpha > 2)
     bx0, bx1, by0, by1 = xs.min(), xs.max() + 1, ys.min(), ys.max() + 1
-    patch = np.dstack([edit[by0:by1, bx0:bx1], alpha[by0:by1, bx0:bx1]])
+    patch = np.dstack([comp[by0:by1, bx0:bx1], alpha[by0:by1, bx0:bx1]])
     out_dir = ROOT / "video/public/art" / angle
     out_dir.mkdir(parents=True, exist_ok=True)
     cv2.imwrite(str(out_dir / f"{var['id']}.png"), patch)
     # QA strip: master | edit | composite
-    comp = crop.copy().astype(float)
-    a3 = (alpha.astype(float) / 255)[..., None]
-    comp = (edit * a3 + comp * (1 - a3)).astype(np.uint8)
     qa = ROOT / "art/qa" / angle
     qa.mkdir(parents=True, exist_ok=True)
-    strip = np.hstack([crop, edit, comp])
-    s = 360 / size
-    cv2.imwrite(str(qa / f"{var['id']}.png"), cv2.resize(strip, (int(strip.shape[1] * s), 360)))
+    strip = np.hstack([crop0, edit, comp])
+    sc = 360 / ch
+    cv2.imwrite(str(qa / f"{var['id']}.png"), cv2.resize(strip, (int(strip.shape[1] * sc), 360)))
     # the composite is the master wherever alpha == 0: measure it to prove it
     hard_out = alpha == 0
-    composite_out = float(np.abs(comp.astype(int) - crop.astype(int))[hard_out].mean()) if hard_out.any() else 0.0
+    composite_out = float(np.abs(comp.astype(int) - crop0.astype(int))[hard_out].mean()) if hard_out.any() else 0.0
     shift = float(max(abs(warp[0, 2]), abs(warp[1, 2])))
     scale_err = float(max(abs(warp[0, 0] - 1), abs(warp[1, 1] - 1)))
     return {"id": var["id"], "x": int(x0 + bx0), "y": int(y0 + by0), "w": int(bx1 - bx0), "h": int(by1 - by0),
@@ -172,28 +201,39 @@ def main():
 
     if not a.post_only:
         todo = [v for v in vars_ if a.only or not (work / f"{v['id']}_edit.png").exists()]
-        for v in todo:
-            prepare(spec, v, work)
-        with cf.ThreadPoolExecutor(a.jobs) as ex:
-            for msg in ex.map(lambda v: generate(spec, v, work), todo):
-                print(msg, flush=True)
+        for phase in (False, True):  # plain edits first, then edits of an edit
+            batch = [v for v in todo if bool(v.get("base")) == phase]
+            for v in batch:
+                prepare(spec, v, work, a.angle)
+            with cf.ThreadPoolExecutor(a.jobs) as ex:
+                for msg in ex.map(lambda v: generate(spec, v, work, a.angle), batch):
+                    print(msg, flush=True)
+            if not phase:  # chained edits need their base patches on disk
+                write_patches(spec, [v for v in spec["variants"] if not v.get("base")], work, a.angle, quiet=True)
 
-    man_path = ROOT / "video/src/art" / f"{a.angle}.json"
+    write_patches(spec, vars_, work, a.angle)
+
+
+def write_patches(spec, vars_, work, angle, quiet=False):
+    master = load(ROOT / spec["master"])
+    man_path = ROOT / "video/src/art" / f"{angle}.json"
     man_path.parent.mkdir(parents=True, exist_ok=True)
     manifest = json.loads(man_path.read_text()) if man_path.exists() else {}
-    manifest.update({"master": f"art/{a.angle}/master.jpg", "width": int(master.shape[1]),
+    manifest.update({"master": f"art/{angle}/master.jpg", "width": int(master.shape[1]),
                      "height": int(master.shape[0])})
     manifest.setdefault("patches", {})
-    report_path = ROOT / "art/qa" / a.angle / "report.json"
+    report_path = ROOT / "art/qa" / angle / "report.json"
     report = json.loads(report_path.read_text()) if report_path.exists() else {}
-    for v in vars_:
+    for v in sorted(vars_, key=lambda v: bool(v.get("base"))):
         if not (work / f"{v['id']}_edit.png").exists():
             continue
-        r = post(spec, v, work, a.angle, spec.get("feather", 5))
+        r = post(spec, v, work, angle, spec.get("feather", 5))
         manifest["patches"][v["id"]] = {k: r[k] for k in ("x", "y", "w", "h")}
         report[v["id"]] = r
         ok = r["shiftPx"] < 3 and r["scaleError"] < 0.01 and r["diffOutsideAfterAlign"] < 15
-        print(f"{'OK ' if ok else 'CHECK'} {v['id']}: shift {r['shiftPx']} px, raw redraw outside "
+        man_path.write_text(json.dumps(manifest, indent=1))  # chained edits read it
+        if not quiet:
+            print(f"{'OK ' if ok else 'CHECK'} {v['id']}: shift {r['shiftPx']} px, raw redraw outside "
               f"{r['diffOutsideAfterAlign']}, final composite outside {r['compositeDiffOutsideMask']}, "
               f"change inside {r['changeInside']}")
     man_path.write_text(json.dumps(manifest, indent=1))

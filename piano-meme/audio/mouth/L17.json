@@ -7,11 +7,11 @@
  "cues": [
   {
    "start": 530,
-   "end": 533,
+   "end": 535,
    "shape": "C"
   },
   {
-   "start": 534,
+   "start": 536,
    "end": 545,
    "shape": "B"
   },
@@ -22,11 +22,6 @@
   },
   {
    "start": 555,
-   "end": 556,
-   "shape": "F"
-  },
-  {
-   "start": 557,
    "end": 559,
    "shape": "B"
   },

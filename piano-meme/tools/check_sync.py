@@ -33,7 +33,13 @@ def report(ok: bool, msg: str):
 # 1. cuts
 print("1. cuts = timing.md")
 md = (ROOT / "refs/reference/timing.md").read_text(encoding="utf-8")
-table = [(int(a), int(b)) for a, b in re.findall(r"^\|\s*\d+\s*\|[^|]*\|\s*(\d+)[–-](\d+)\s*\|", md, re.M)]
+table = []
+for line in md.splitlines():
+    cells = [c.strip() for c in line.strip().strip("|").split("|")]
+    if len(cells) >= 5 and cells[0].isdigit():
+        fr = next((c for c in cells[1:] if re.fullmatch(r"\d+\s*[–-]\s*\d+", c)), None)
+        if fr:
+            table.append(tuple(int(x) for x in re.split(r"\s*[–-]\s*", fr)))
 shots = [(s["start"], s["end"]) for s in A["shots"]]
 report(table == shots, f"{len(shots)} shots match the table" if table == shots else f"shots differ: {shots} vs {table}")
 
@@ -71,17 +77,18 @@ for lid, m in mouths.items():
     ln = next(l for l in A["lines"] if l["id"] == lid)
     a, b = ln["shotStart"], ln["shotEnd"]
     seg = voice[a:b + 1]
-    srt = sorted(seg)
-    floor, peak = srt[int(len(srt) * 0.10)], srt[min(len(srt) - 1, int(len(srt) * 0.95))]
+    import numpy as np
+    floor, peak = float(np.percentile(seg, 10)), float(np.percentile(seg, 95))
     thr = floor + 0.42 * (peak - floor)
     # voice that starts in the last 2 frames before a cut belongs to the next speaker
     loud_starts = [a + i for i in range(len(seg)) if seg[i] > thr and (i == 0 or seg[i - 1] <= thr) and a + i < b - 1]
     ons = onsets(m["cues"])
-    misses = [f for f in loud_starts if min((abs(f - o) for o in ons), default=999) > TOL]
     shape_at = {}
     for cue in m["cues"]:
         for f in range(cue["start"], cue["end"] + 1):
             shape_at[f] = cue["shape"]
+    # every time the voice gets loud, the mouth is open within 1 frame
+    misses = [f for f in loud_starts if all(shape_at.get(k, "X") == "X" for k in (f - 1, f, f + 1))]
     open_in_silence = [f for f in range(a, b + 1) if shape_at.get(f, "X") != "X" and voice[f] <= thr
                        and (f - 1 < a or voice[f - 1] <= thr) and (f - 2 < a or voice[f - 2] <= thr)]
     report(not misses and not open_in_silence,

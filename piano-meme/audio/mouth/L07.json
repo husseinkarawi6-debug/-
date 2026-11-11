@@ -7,11 +7,6 @@
  "cues": [
   {
    "start": 291,
-   "end": 292,
-   "shape": "F"
-  },
-  {
-   "start": 293,
    "end": 295,
    "shape": "C"
   },

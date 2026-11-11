@@ -25,6 +25,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 REF_VIDEO = ROOT / "refs/reference/reference.mp4"
+REF_AUDIO = ROOT / "refs/reference/audio.wav"  # the soundtrack, used exactly as it is
 TIMING_MD = ROOT / "refs/reference/timing.md"
 WAV_OUT = ROOT / "video/public/audio/meme.wav"
 ANALYSIS = ROOT / "audio/analysis.json"
@@ -74,25 +75,33 @@ SPOKEN = {
 
 
 def parse_timing_md() -> list[dict]:
+    """Rows of the table in timing.md. Works with the file-name format
+    (| # | file | seconds | frames | who | caption | action |): the frames are
+    the first 'int–int' cell, the speaker and 'silent' come from the file name."""
     rows = []
-    pat = re.compile(r"^\|\s*(\d+)\s*\|\s*([\d.]+)[–-]([\d.]+)\s*\|\s*(\d+)[–-](\d+)\s*\|\s*([^|]+)\|\s*(.*)\|\s*$")
     for line in TIMING_MD.read_text(encoding="utf-8").splitlines():
-        m = pat.match(line)
-        if not m:
+        cells = [c.strip() for c in line.strip().strip("|").split("|")]
+        if len(cells) < 5 or not cells[0].isdigit():
             continue
-        n, _s0, _s1, f0, f1, who, cap = m.groups()
-        who = who.strip()
-        speaker = "both" if "+" in who else ("learner" if who.startswith("A") else "lazy")
-        rows.append({"shot": int(n), "start": int(f0), "end": int(f1),
-                     "speaker": speaker, "silent": "silent" in who,
-                     "captionCell": cap.strip()})
+        frames = next((c for c in cells[1:] if re.fullmatch(r"\d+\s*[–-]\s*\d+", c)), None)
+        if not frames:
+            continue
+        f0, f1 = [int(x) for x in re.split(r"\s*[–-]\s*", frames)]
+        fname = next((c for c in cells[1:] if re.fullmatch(r"\d\d_[a-z]+_[\w-]+", c)), "")
+        role = fname.split("_")[1] if fname else ""
+        speaker = {"learner": "learner", "lazy": "lazy", "both": "both"}.get(role)
+        if speaker is None:
+            sys.exit(f"timing.md: cannot tell who speaks in row {cells[0]}")
+        idx = cells.index(frames)
+        cap = cells[idx + 2] if len(cells) > idx + 2 else ""
+        rows.append({"shot": int(cells[0]), "start": f0, "end": f1, "speaker": speaker,
+                     "silent": ("silent" in fname or "stare" in fname), "file": fname,
+                     "captionCell": cap})
     if len(rows) != 23:
         sys.exit(f"timing.md: expected 23 rows, found {len(rows)}")
     if rows[-1]["end"] != TOTAL - 1:
         sys.exit("timing.md: last shot must end on frame 1055")
     return rows
-
-
 
 def measure_reference_captions() -> list[dict]:
     """Exact caption change frames in reference.mp4 (24 fps), converted to
@@ -211,15 +220,14 @@ def time_captions(caps: list[dict], events: list[dict]) -> list[dict]:
 # ---------------------------------------------------------------------------
 
 def extract_audio():
+    """The soundtrack is refs/reference/audio.wav, copied unchanged (BRIEF.md).
+    A 22 kHz mono copy is made only for the analysis."""
+    import shutil
     WAV_OUT.parent.mkdir(parents=True, exist_ok=True)
     WORK.mkdir(parents=True, exist_ok=True)
-    # Full-quality soundtrack, trimmed/padded to exactly 35.2 s.
-    subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", str(REF_VIDEO), "-vn",
-                    "-af", f"apad=whole_dur={TOTAL / FPS}", "-t", f"{TOTAL / FPS}",
-                    "-ar", "48000", "-ac", "2", "-c:a", "pcm_s16le", str(WAV_OUT)],
-                   check=True)
+    shutil.copyfile(REF_AUDIO, WAV_OUT)
     mono = WORK / "mono22k.wav"
-    subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", str(WAV_OUT),
+    subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", str(REF_AUDIO),
                     "-ac", "1", "-ar", "22050", str(mono)], check=True)
     return mono
 
@@ -309,9 +317,15 @@ def analyse_audio(mono: Path, lines: list[dict], rows: list[dict]) -> dict:
     yv = yv / (np.abs(yv).max() + 1e-9) * 0.9
     sf.write(str(WORK / "vocals22k.wav"), yv, sr)
 
-    # Loud piano in the middle: loudest 2 s window inside shots 5–20,
-    # then snapped to the shots it touches.
-    lin = 10 ** (piano_db / 20)
+    # Piano loudness the way BRIEF.md asks: librosa HPSS, RMS of the harmonic
+    # part, per frame, smoothed over ~0.5 s.
+    y_harm, _ = librosa.effects.hpss(y)
+    harm_db = 20 * np.log10(np.maximum(per_frame(y_harm, sr, rms), 1e-6))
+    harm_db = smooth(harm_db, 15)
+
+    # Loud piano in the middle: loudest 2 s window of the harmonic RMS inside
+    # shots 5–20, then snapped to the shots it touches.
+    lin = 10 ** (harm_db / 20)
     L = 60
     best = max(range(246, 632 - L + 1), key=lambda a: lin[a:a + L].mean())
     win = [best, best + L - 1]
@@ -366,6 +380,7 @@ def analyse_audio(mono: Path, lines: list[dict], rows: list[dict]) -> dict:
         "curves": {
             "full": [round(float(v), 5) for v in full_rms],
             "pianoDb": [round(float(v), 2) for v in piano_db],
+            "harmonicDb": [round(float(v), 2) for v in harm_db],
             "piano": [round(float(v), 4) for v in piano_norm],
             "voiceDb": [round(float(v), 2) for v in voice_db],
         },
@@ -470,16 +485,40 @@ def main():
               "spanishWords": SPANISH_WORDS}
 
     if not args.no_audio:
-        if not REF_VIDEO.exists():
-            sys.exit(f"missing file: {REF_VIDEO.relative_to(ROOT)}")
+        for need in (REF_VIDEO, REF_AUDIO):
+            if not need.exists():
+                sys.exit(f"missing file: {need.relative_to(ROOT)}")
         mono = extract_audio()
         result.update(analyse_audio(mono, lines, rows))
         result["audioPresent"] = True
         run_rhubarb(mono, lines, result["curves"]["voiceDb"])
         result["referenceCaptionEvents"] = measure_reference_captions()
         result["captions"] = time_captions(captions, result["referenceCaptionEvents"])
+        # rule 4: a one-word caption (lines 5-20) never leaves its own shot
+        by_shot = {r["shot"]: r for r in rows}
+        for c in result["captions"]:
+            lid = c.get("line") or ""
+            if lid and 5 <= int(lid[1:]) <= 20:
+                r = by_shot[int(lid[1:])]
+                if c["start"] < r["start"]:
+                    c["start"], c["timing"] = r["start"], "shot start"
+                c["end"] = min(c["end"], r["end"])
 
-    ANALYSIS.write_text(json.dumps(result, ensure_ascii=False, indent=1))
+    # Who is on screen in each shot (rules in timing.md): learner alone = S4,
+    # lazy alone = S2 (the pianist S5/S6 replaces lazy shots in the loud-piano
+    # section, same frames), both = S7 (finale only).
+    pianist = (result.get("pianoSection") or {}).get("pianistShots", [])
+    for sh in result["shots"]:
+        if sh["speaker"] == "learner":
+            sh["angle"] = "S4"
+        elif sh["speaker"] == "both":
+            sh["angle"] = "S7"
+        elif sh["shot"] in pianist:
+            sh["angle"] = "S5" if pianist.index(sh["shot"]) % 2 == 0 else "S6"
+        else:
+            sh["angle"] = "S2"
+
+    ANALYSIS.write_text(json.dumps(result, ensure_ascii=False, indent=1, allow_nan=False))
     print(f"wrote {ANALYSIS.relative_to(ROOT)}: {len(shots)} shots, {len(captions)} captions, "
           f"{len(lines)} spoken lines, audio={'yes' if result['audioPresent'] else 'no'}")
     ps = result.get("pianoSection")

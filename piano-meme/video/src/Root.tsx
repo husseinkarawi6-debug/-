@@ -2,7 +2,7 @@ import React from "react";
 import { Composition } from "remotion";
 import { defaultInkProps, FPS, H, inkSchema, TOTAL, W } from "./config";
 import { PianoMeme } from "./PianoMeme";
-import { LookTest } from "./LookTest";
+import { LookTest, LOOK_FRAMES } from "./LookTest";
 
 export const RemotionRoot: React.FC = () => {
   return (
@@ -20,7 +20,7 @@ export const RemotionRoot: React.FC = () => {
       <Composition
         id="LookTest"
         component={LookTest}
-        durationInFrames={120}
+        durationInFrames={LOOK_FRAMES}
         fps={FPS}
         width={W}
         height={H}

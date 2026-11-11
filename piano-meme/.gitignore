@@ -27,3 +27,5 @@ art/gen/*.png
 
 # videos that carry the reference soundtrack stay local (sent through the app)
 out/*.mp4
+refs/reference/audio.wav
+refs/reference/lines/

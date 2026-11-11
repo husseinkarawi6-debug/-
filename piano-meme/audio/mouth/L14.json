@@ -7,13 +7,13 @@
  "cues": [
   {
    "start": 461,
-   "end": 462,
-   "shape": "B"
+   "end": 461,
+   "shape": "C"
   },
   {
-   "start": 463,
+   "start": 462,
    "end": 463,
-   "shape": "C"
+   "shape": "B"
   },
   {
    "start": 464,
@@ -27,11 +27,11 @@
   },
   {
    "start": 468,
-   "end": 470,
+   "end": 471,
    "shape": "F"
   },
   {
-   "start": 471,
+   "start": 472,
    "end": 472,
    "shape": "B"
   },
