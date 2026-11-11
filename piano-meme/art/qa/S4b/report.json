@@ -1,0 +1,252 @@
+{
+ "mouth_A": {
+  "id": "mouth_A",
+  "x": 466,
+  "y": 818,
+  "w": 199,
+  "h": 125,
+  "compositeDiffOutsideMask": 0.011,
+  "shiftPx": 0.27,
+  "scaleError": 0.0002,
+  "diffOutsideBeforeAlign": 5.55,
+  "diffOutsideAfterAlign": 5.24,
+  "changeInside": 9.65,
+  "warp": [
+   [
+    1.0002,
+    0.0003,
+    -0.1162
+   ],
+   [
+    0.0004,
+    0.9998,
+    -0.2676
+   ]
+  ]
+ },
+ "mouth_B": {
+  "id": "mouth_B",
+  "x": 466,
+  "y": 818,
+  "w": 199,
+  "h": 125,
+  "compositeDiffOutsideMask": 0.012,
+  "shiftPx": 0.07,
+  "scaleError": 0.001,
+  "diffOutsideBeforeAlign": 8.51,
+  "diffOutsideAfterAlign": 9.45,
+  "changeInside": 14.99,
+  "warp": [
+   [
+    1.0005,
+    0.0002,
+    0.0042
+   ],
+   [
+    0.0,
+    1.001,
+    -0.0713
+   ]
+  ]
+ },
+ "mouth_C": {
+  "id": "mouth_C",
+  "x": 464,
+  "y": 814,
+  "w": 203,
+  "h": 141,
+  "compositeDiffOutsideMask": 0.014,
+  "shiftPx": 0.27,
+  "scaleError": 0.0013,
+  "diffOutsideBeforeAlign": 8.37,
+  "diffOutsideAfterAlign": 12.0,
+  "changeInside": 27.95,
+  "warp": [
+   [
+    1.001,
+    0.0008,
+    -0.268
+   ],
+   [
+    0.0001,
+    1.0013,
+    -0.1997
+   ]
+  ]
+ },
+ "mouth_D": {
+  "id": "mouth_D",
+  "x": 462,
+  "y": 814,
+  "w": 207,
+  "h": 153,
+  "compositeDiffOutsideMask": 0.014,
+  "shiftPx": 0.09,
+  "scaleError": 0.0003,
+  "diffOutsideBeforeAlign": 6.78,
+  "diffOutsideAfterAlign": 9.3,
+  "changeInside": 29.24,
+  "warp": [
+   [
+    1.0001,
+    0.0006,
+    -0.0493
+   ],
+   [
+    -0.0005,
+    1.0003,
+    0.0856
+   ]
+  ]
+ },
+ "mouth_E": {
+  "id": "mouth_E",
+  "x": 464,
+  "y": 814,
+  "w": 203,
+  "h": 141,
+  "compositeDiffOutsideMask": 0.013,
+  "shiftPx": 0.05,
+  "scaleError": 0.0007,
+  "diffOutsideBeforeAlign": 6.14,
+  "diffOutsideAfterAlign": 6.66,
+  "changeInside": 19.95,
+  "warp": [
+   [
+    0.9994,
+    0.0003,
+    0.0185
+   ],
+   [
+    -0.0,
+    1.0007,
+    -0.0528
+   ]
+  ]
+ },
+ "mouth_F": {
+  "id": "mouth_F",
+  "x": 466,
+  "y": 818,
+  "w": 199,
+  "h": 125,
+  "compositeDiffOutsideMask": 0.008,
+  "shiftPx": 0.47,
+  "scaleError": 0.0019,
+  "diffOutsideBeforeAlign": 8.08,
+  "diffOutsideAfterAlign": 7.48,
+  "changeInside": 25.49,
+  "warp": [
+   [
+    1.0007,
+    0.0004,
+    -0.2594
+   ],
+   [
+    0.0002,
+    1.0019,
+    -0.472
+   ]
+  ]
+ },
+ "eyes_closed": {
+  "id": "eyes_closed",
+  "x": 425,
+  "y": 682,
+  "w": 267,
+  "h": 120,
+  "compositeDiffOutsideMask": 0.016,
+  "shiftPx": 0.4,
+  "scaleError": 0.0006,
+  "diffOutsideBeforeAlign": 8.23,
+  "diffOutsideAfterAlign": 7.98,
+  "changeInside": 24.86,
+  "warp": [
+   [
+    1.0006,
+    0.0001,
+    0.1992
+   ],
+   [
+    0.0001,
+    0.9995,
+    0.4027
+   ]
+  ]
+ },
+ "eyes_down": {
+  "id": "eyes_down",
+  "x": 425,
+  "y": 682,
+  "w": 267,
+  "h": 120,
+  "compositeDiffOutsideMask": 0.015,
+  "shiftPx": 0.12,
+  "scaleError": 0.0002,
+  "diffOutsideBeforeAlign": 7.01,
+  "diffOutsideAfterAlign": 6.49,
+  "changeInside": 25.65,
+  "warp": [
+   [
+    0.9998,
+    0.0005,
+    -0.0387
+   ],
+   [
+    0.0003,
+    1.0001,
+    0.1225
+   ]
+  ]
+ },
+ "scratch_A": {
+  "id": "scratch_A",
+  "x": 0,
+  "y": 495,
+  "w": 743,
+  "h": 1350,
+  "compositeDiffOutsideMask": 0.02,
+  "shiftPx": 1.38,
+  "scaleError": 0.002,
+  "diffOutsideBeforeAlign": 11.94,
+  "diffOutsideAfterAlign": 14.36,
+  "changeInside": 36.05,
+  "warp": [
+   [
+    0.998,
+    -0.0003,
+    1.2641
+   ],
+   [
+    0.002,
+    0.9988,
+    -1.3783
+   ]
+  ]
+ },
+ "scratch_B": {
+  "id": "scratch_B",
+  "x": 0,
+  "y": 495,
+  "w": 746,
+  "h": 1350,
+  "compositeDiffOutsideMask": 0.001,
+  "shiftPx": 0.24,
+  "scaleError": 0.0006,
+  "diffOutsideBeforeAlign": 8.07,
+  "diffOutsideAfterAlign": 6.46,
+  "changeInside": 21.76,
+  "warp": [
+   [
+    0.9994,
+    -0.0001,
+    0.2369
+   ],
+   [
+    -0.0,
+    1.0002,
+    0.0682
+   ]
+  ]
+ }
+}

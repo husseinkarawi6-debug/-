@@ -7,46 +7,26 @@
  "cues": [
   {
    "start": 165,
-   "end": 169,
-   "shape": "X"
-  },
-  {
-   "start": 170,
-   "end": 174,
-   "shape": "B"
-  },
-  {
-   "start": 175,
-   "end": 182,
-   "shape": "X"
-  },
-  {
-   "start": 183,
-   "end": 185,
-   "shape": "B"
-  },
-  {
-   "start": 186,
-   "end": 188,
-   "shape": "X"
-  },
-  {
-   "start": 189,
-   "end": 189,
-   "shape": "A"
-  },
-  {
-   "start": 190,
    "end": 190,
-   "shape": "C"
+   "shape": "X"
   },
   {
    "start": 191,
    "end": 191,
-   "shape": "D"
+   "shape": "C"
   },
   {
    "start": 192,
+   "end": 192,
+   "shape": "B"
+  },
+  {
+   "start": 193,
+   "end": 195,
+   "shape": "X"
+  },
+  {
+   "start": 196,
    "end": 198,
    "shape": "B"
   },
@@ -57,43 +37,53 @@
   },
   {
    "start": 201,
-   "end": 213,
-   "shape": "C"
-  },
-  {
-   "start": 214,
-   "end": 221,
-   "shape": "E"
-  },
-  {
-   "start": 222,
-   "end": 225,
+   "end": 201,
    "shape": "B"
   },
   {
-   "start": 226,
-   "end": 229,
+   "start": 202,
+   "end": 207,
+   "shape": "X"
+  },
+  {
+   "start": 208,
+   "end": 208,
+   "shape": "B"
+  },
+  {
+   "start": 209,
+   "end": 214,
+   "shape": "X"
+  },
+  {
+   "start": 215,
+   "end": 215,
    "shape": "E"
+  },
+  {
+   "start": 216,
+   "end": 218,
+   "shape": "X"
+  },
+  {
+   "start": 219,
+   "end": 220,
+   "shape": "E"
+  },
+  {
+   "start": 221,
+   "end": 229,
+   "shape": "X"
   },
   {
    "start": 230,
-   "end": 238,
+   "end": 231,
    "shape": "B"
   },
   {
-   "start": 239,
-   "end": 239,
-   "shape": "A"
-  },
-  {
-   "start": 240,
-   "end": 242,
-   "shape": "C"
-  },
-  {
-   "start": 243,
+   "start": 232,
    "end": 245,
-   "shape": "D"
+   "shape": "X"
   }
  ]
 }

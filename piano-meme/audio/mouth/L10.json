@@ -12,28 +12,33 @@
   },
   {
    "start": 362,
-   "end": 366,
+   "end": 365,
    "shape": "C"
   },
   {
-   "start": 367,
-   "end": 370,
-   "shape": "F"
-  },
-  {
-   "start": 371,
-   "end": 376,
-   "shape": "B"
-  },
-  {
-   "start": 377,
-   "end": 381,
+   "start": 366,
+   "end": 373,
    "shape": "X"
   },
   {
-   "start": 382,
-   "end": 385,
+   "start": 374,
+   "end": 375,
    "shape": "B"
+  },
+  {
+   "start": 376,
+   "end": 382,
+   "shape": "X"
+  },
+  {
+   "start": 383,
+   "end": 384,
+   "shape": "B"
+  },
+  {
+   "start": 385,
+   "end": 385,
+   "shape": "X"
   }
  ]
 }

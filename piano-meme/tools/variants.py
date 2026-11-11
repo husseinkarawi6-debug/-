@@ -51,6 +51,12 @@ def shape_mask(h, w, shapes, ox=0, oy=0, scale=1.0):
             ang = s[5] if len(s) > 5 else 0
             cv2.ellipse(m, (int(round((cx - ox) * scale)), int(round((cy - oy) * scale))),
                         (int(round(rx * scale)), int(round(ry * scale))), ang, 0, 360, 255, -1, cv2.LINE_AA)
+        elif kind == "file":  # white = may change, in master coordinates
+            f = cv2.imread(str(ROOT / s[1]), cv2.IMREAD_GRAYSCALE)
+            f = f[int(oy):, int(ox):]
+            f = cv2.resize(f, (int(round(f.shape[1] * scale)), int(round(f.shape[0] * scale))))
+            hh, ww = min(h, f.shape[0]), min(w, f.shape[1])
+            m[:hh, :ww] = np.maximum(m[:hh, :ww], f[:hh, :ww])
         elif kind == "poly":
             pts = np.array([[(x - ox) * scale, (y - oy) * scale] for x, y in s[1]], np.int32)
             cv2.fillPoly(m, [pts], 255, cv2.LINE_AA)
@@ -61,6 +67,8 @@ def crop_box(spec, var):
     c = spec["crops"][var["crop"]]
     cx, cy, w = c[0], c[1], c[2]
     h = c[3] if len(c) > 3 else w
+    if len(c) > 4 and c[4] == "native":  # send the crop at its own size (multiples of 16)
+        return int(cx - w // 2), int(cy - h // 2), int(w), int(h), int(w), int(h)
     ew, eh = (1024, 1536) if h > w else ((1536, 1024) if w > h else (1024, 1024))
     if abs((h / w) - (eh / ew)) > 0.02:
         sys.exit(f"crop {var['crop']}: aspect must be 1:1, 2:3 or 3:2")

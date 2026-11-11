@@ -7,38 +7,28 @@
  "cues": [
   {
    "start": 266,
+   "end": 270,
+   "shape": "X"
+  },
+  {
+   "start": 271,
    "end": 272,
    "shape": "B"
   },
   {
    "start": 273,
-   "end": 275,
-   "shape": "C"
-  },
-  {
-   "start": 276,
-   "end": 276,
-   "shape": "D"
-  },
-  {
-   "start": 277,
    "end": 277,
-   "shape": "F"
-  },
-  {
-   "start": 278,
-   "end": 281,
-   "shape": "B"
-  },
-  {
-   "start": 282,
-   "end": 285,
    "shape": "X"
   },
   {
-   "start": 286,
-   "end": 290,
+   "start": 278,
+   "end": 279,
    "shape": "B"
+  },
+  {
+   "start": 280,
+   "end": 290,
+   "shape": "X"
   }
  ]
 }

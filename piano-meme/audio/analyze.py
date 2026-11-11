@@ -200,6 +200,9 @@ def time_captions(caps: list[dict], events: list[dict]) -> list[dict]:
         c = dict(c, refStart=ref, tableStart=c["start"])
         lid = CAPTION_LINE.get(i)
         cands = [f for f in voice_onsets(lid)] if lid else []
+        first_of_line = lid and all(CAPTION_LINE.get(k) != lid for k in range(i))
+        if first_of_line and cands:
+            cands = cands[:1]  # a line's first caption comes with its first sound
         near = [f for f in cands if abs(f - ref) <= SNAP_WINDOW]
         if near:
             c["start"] = min(near, key=lambda f: abs(f - ref))
@@ -316,6 +319,11 @@ def analyse_audio(mono: Path, lines: list[dict], rows: list[dict]) -> dict:
     yv = librosa.istft(sp["D"] * sp["voice_mask"], hop_length=sp["hop"], length=len(y))
     yv = yv / (np.abs(yv).max() + 1e-9) * 0.9
     sf.write(str(WORK / "vocals22k.wav"), yv, sr)
+    # the level of the separated voice in the speech band: this decides when
+    # a mouth may be open (bass drops and chords stay out of it)
+    import scipy.signal as sps
+    bb, ab = sps.butter(4, [300 / (sr / 2), 3400 / (sr / 2)], btype="band")
+    vocals_db = 20 * np.log10(np.maximum(per_frame(sps.filtfilt(bb, ab, yv), sr, rms), 1e-6))
 
     # Piano loudness the way BRIEF.md asks: librosa HPSS, RMS of the harmonic
     # part, per frame, smoothed over ~0.5 s.
@@ -383,6 +391,7 @@ def analyse_audio(mono: Path, lines: list[dict], rows: list[dict]) -> dict:
             "harmonicDb": [round(float(v), 2) for v in harm_db],
             "piano": [round(float(v), 4) for v in piano_norm],
             "voiceDb": [round(float(v), 2) for v in voice_db],
+            "vocalsDb": [round(float(v), 2) for v in vocals_db],
         },
         "pianoSection": section,
     }
@@ -393,31 +402,55 @@ def analyse_audio(mono: Path, lines: list[dict], rows: list[dict]) -> dict:
 # ---------------------------------------------------------------------------
 
 
-def gate_cues(cues, ln, voice_db):
-    """Make the mouth follow the voice: closed (X) when the voice is quiet,
-    never closed for long while it is loud. Rhubarb picks the shape, the
-    voice level decides open / closed."""
+VOICE_FLOOR_DB = -31.0   # separated voice louder than this = someone is talking
+VOICE_RANGE_DB = 20.0    # ...and within 20 dB of the line's loudest moment
+SPILL_FRAMES = 6         # voice running over a cut belongs to the next speaker
+
+
+def voice_active(ln, vocals_db, next_start=None):
+    """Frames (inside the line's shot) where THIS speaker's voice sounds.
+    Voice that is still sounding at the cut and carries on into the next shot
+    is the next speaker starting early: it is not ours."""
+    import numpy as np
+    a, b = ln["shotStart"], ln["shotEnd"]
+    seg = np.array(vocals_db[a:b + 1], float)
+    thr = max(VOICE_FLOOR_DB, float(np.percentile(seg, 97)) - VOICE_RANGE_DB)
+    on = seg > thr
+    if next_start is not None and next_start == b + 1 and b + 1 < len(vocals_db):
+        nxt_on = vocals_db[b + 1] > thr
+        if on[-1] and nxt_on:
+            i = len(on) - 1
+            while i >= 0 and on[i] and (len(on) - 1 - i) < SPILL_FRAMES:
+                on[i] = False
+                i -= 1
+    # bridge 1-frame gaps (a syllable boundary is not a closed mouth)
+    for i in range(1, len(on) - 1):
+        if not on[i] and on[i - 1] and on[i + 1]:
+            on[i] = True
+    return on, thr
+
+
+def gate_cues(cues, ln, vocals_db, next_start=None):
+    """Mouth open ONLY while this speaker's voice sounds; Rhubarb picks the
+    shape, the voice level how wide it opens; closed (X) everywhere else."""
     import numpy as np
     a, b = ln["shotStart"], ln["shotEnd"]
     per = {}
     for c in cues:
         for f in range(c["start"], c["end"] + 1):
             per[f] = c["shape"]
-    seg = np.array(voice_db[a:b + 1])
-    floor, peak = np.percentile(seg, 10), np.percentile(seg, 95)
-    on = seg > floor + 0.42 * (peak - floor)
-    # 1-frame hangover so short dips do not snap the jaw shut
-    on = on | np.r_[False, on[:-1]]
+    on, thr = voice_active(ln, vocals_db, next_start)
+    seg = np.array(vocals_db[a:b + 1], float)
+    peak = float(seg.max())
     out = []
     for i, f in enumerate(range(a, b + 1)):
-        level = (seg[i] - floor) / max(1e-6, peak - floor)
-        shape = per.get(f, "X")
         if not on[i]:
-            shape = "X"
-        elif shape in ("X", "A") and level > 0.65:
-            shape = "D" if level > 0.9 else "C"
-        elif shape == "X":
-            shape = "B"
+            out.append("X")
+            continue
+        level = (seg[i] - thr) / max(1e-6, peak - thr)
+        shape = per.get(f, "X")
+        if shape in ("X", "A"):  # voice sounds but Rhubarb shut the mouth
+            shape = "D" if level > 0.85 else ("C" if level > 0.45 else "B")
         out.append(shape)
     merged = []
     for i, sh in enumerate(out):
@@ -459,7 +492,8 @@ def run_rhubarb(mono: Path, lines: list[dict], voice_db=None):
             if f1 >= f0:
                 frames.append({"start": f0, "end": f1, "shape": c["value"]})
         if voice_db is not None:
-            frames = gate_cues(frames, ln, voice_db)
+            nxt = next((l["shotStart"] for l in lines if l["shotStart"] > ln["shotStart"]), None)
+            frames = gate_cues(frames, ln, voice_db, nxt)
         res = {"line": ln["id"], "speaker": ln["speaker"], "text": ln["text"],
                "recognizer": rec, "gated": voice_db is not None, "cues": frames}
         (MOUTH_DIR / f"{ln['id']}.json").write_text(json.dumps(res, ensure_ascii=False, indent=1))
@@ -491,7 +525,7 @@ def main():
         mono = extract_audio()
         result.update(analyse_audio(mono, lines, rows))
         result["audioPresent"] = True
-        run_rhubarb(mono, lines, result["curves"]["voiceDb"])
+        run_rhubarb(mono, lines, result["curves"]["vocalsDb"])
         result["referenceCaptionEvents"] = measure_reference_captions()
         result["captions"] = time_captions(captions, result["referenceCaptionEvents"])
         # rule 4: a one-word caption (lines 5-20) never leaves its own shot

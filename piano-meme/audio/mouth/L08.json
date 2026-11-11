@@ -17,33 +17,23 @@
   },
   {
    "start": 317,
-   "end": 318,
+   "end": 317,
    "shape": "B"
   },
   {
-   "start": 319,
-   "end": 319,
-   "shape": "A"
-  },
-  {
-   "start": 320,
-   "end": 323,
+   "start": 318,
+   "end": 325,
    "shape": "X"
   },
   {
-   "start": 324,
-   "end": 328,
+   "start": 326,
+   "end": 327,
    "shape": "B"
   },
   {
-   "start": 329,
-   "end": 333,
-   "shape": "X"
-  },
-  {
-   "start": 334,
+   "start": 328,
    "end": 334,
-   "shape": "B"
+   "shape": "X"
   }
  ]
 }

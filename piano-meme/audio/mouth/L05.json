@@ -12,21 +12,21 @@
   },
   {
    "start": 247,
-   "end": 257,
+   "end": 255,
    "shape": "B"
   },
   {
-   "start": 258,
-   "end": 262,
+   "start": 256,
+   "end": 261,
    "shape": "X"
   },
   {
-   "start": 263,
-   "end": 264,
+   "start": 262,
+   "end": 263,
    "shape": "B"
   },
   {
-   "start": 265,
+   "start": 264,
    "end": 265,
    "shape": "X"
   }

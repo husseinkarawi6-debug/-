@@ -72,27 +72,28 @@ for c in A["captions"]:
     report(d <= TOL, f"{c['start']:4d} {c['text'][:34]!r}: {d} frame(s) from the voice of {lid}")
 
 # 3. mouths
-print("3. mouths follow the voice")
+print("3. mouths open only with their own voice")
+sys.path.insert(0, str(ROOT / "audio"))
+from analyze import voice_active  # the same rule the mouths were made with
+
+vocals = A["curves"]["vocalsDb"]
 for lid, m in mouths.items():
     ln = next(l for l in A["lines"] if l["id"] == lid)
-    a, b = ln["shotStart"], ln["shotEnd"]
-    seg = voice[a:b + 1]
-    import numpy as np
-    floor, peak = float(np.percentile(seg, 10)), float(np.percentile(seg, 95))
-    thr = floor + 0.42 * (peak - floor)
-    # voice that starts in the last 2 frames before a cut belongs to the next speaker
-    loud_starts = [a + i for i in range(len(seg)) if seg[i] > thr and (i == 0 or seg[i - 1] <= thr) and a + i < b - 1]
-    ons = onsets(m["cues"])
+    nxt = next((l["shotStart"] for l in A["lines"] if l["shotStart"] > ln["shotStart"]), None)
+    on, _ = voice_active(ln, vocals, nxt)
+    a = ln["shotStart"]
     shape_at = {}
     for cue in m["cues"]:
         for f in range(cue["start"], cue["end"] + 1):
             shape_at[f] = cue["shape"]
-    # every time the voice gets loud, the mouth is open within 1 frame
-    misses = [f for f in loud_starts if all(shape_at.get(k, "X") == "X" for k in (f - 1, f, f + 1))]
-    open_in_silence = [f for f in range(a, b + 1) if shape_at.get(f, "X") != "X" and voice[f] <= thr
-                       and (f - 1 < a or voice[f - 1] <= thr) and (f - 2 < a or voice[f - 2] <= thr)]
-    report(not misses and not open_in_silence,
-           f"{lid}: {len(ons)} openings; late/early: {misses or 'none'}; open in silence: {open_in_silence[:6] or 'none'}")
+    # voice starts -> mouth open within 1 frame
+    starts = [a + i for i in range(len(on)) if on[i] and (i == 0 or not on[i - 1])]
+    late = [f for f in starts if all(shape_at.get(k, "X") == "X" for k in (f - 1, f, f + 1))]
+    # mouth open with no voice (more than 1 frame away from any voice)
+    silent_open = [a + i for i in range(len(on)) if shape_at.get(a + i, "X") != "X"
+                   and not any(on[j] for j in range(max(0, i - 1), min(len(on), i + 2)))]
+    report(not late and not silent_open,
+           f"{lid}: {len(starts)} voice starts; mouth late: {late or 'none'}; open without voice: {silent_open[:8] or 'none'}")
 
 # 4/5. schedules
 sched = A.get("schedules", {})

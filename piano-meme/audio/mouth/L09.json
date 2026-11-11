@@ -18,22 +18,17 @@
   {
    "start": 343,
    "end": 344,
-   "shape": "B"
-  },
-  {
-   "start": 345,
-   "end": 352,
-   "shape": "F"
-  },
-  {
-   "start": 353,
-   "end": 357,
    "shape": "X"
   },
   {
-   "start": 358,
+   "start": 345,
+   "end": 351,
+   "shape": "F"
+  },
+  {
+   "start": 352,
    "end": 360,
-   "shape": "B"
+   "shape": "X"
   }
  ]
 }

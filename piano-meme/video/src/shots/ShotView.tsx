@@ -34,7 +34,7 @@ export const ShotView: React.FC<{ shot: Shot }> = ({ shot }) => {
   if (angle === "S2") body = <LazyS2 shot={shot} />;
   else if (angle === "S4") body = <LearnerS4 shot={shot} />;
   else if (angle === "S5")
-    body = <PlateShot angle="S5" length={len} from={{ x: 900, y: 1300, zoom: 1.25 }} to={{ x: 480, y: 1000, zoom: 1.12 }} />;
+    body = <PlateShot angle="S5" length={len} from={{ x: 680, y: 1150, zoom: 1.12 }} to={{ x: 680, y: 1150, zoom: 1.12 }} />; // fixed
   else body = <Placeholder label={`${shot.shot} · ${angle}`} sub={NAMES[angle]} />;
   return (
     <>

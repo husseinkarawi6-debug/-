@@ -2,13 +2,11 @@ import React from "react";
 import { random } from "remotion";
 import { Plate } from "../plate/Plate";
 import { useGlobalFrame, twos } from "../ink/frame";
-import { firstOpening, lastOpening, mouthAt } from "../chars/mouth";
-import { breathAmount } from "../chars/breath";
+import { mouthAt } from "../chars/mouth";
 import { lineForShot, Shot } from "../timeline";
 
 // S2: the lazy one, close. Same framing in every shot (the repetition is the joke).
 export const S2_CAMERA = { x: 680, y: 1196, zoom: 1.045 };
-const CHEST = { x: 590, y: 1420 };
 
 /** Which patches are on at global frame g (already on twos). */
 export const lazyPatches = (shot: Shot, g: number): Record<string, number> => {
@@ -57,11 +55,8 @@ export const lazyPatches = (shot: Shot, g: number): Record<string, number> => {
   return p;
 };
 
+// Fixed framing: no camera move, no sway, no whole-picture breathing.
 export const LazyS2: React.FC<{ shot: Shot }> = ({ shot }) => {
   const g = twos(useGlobalFrame());
-  const line = shot.speaker === "lazy" ? lineForShot(shot.shot) : undefined;
-  const amount = breathAmount(g, firstOpening(line?.id), lastOpening(line?.id), shot.shot);
-  return (
-    <Plate angle="S2" camera={S2_CAMERA} patches={lazyPatches(shot, g)} breath={{ amount, ...CHEST }} />
-  );
+  return <Plate angle="S2" camera={S2_CAMERA} patches={lazyPatches(shot, g)} />;
 };

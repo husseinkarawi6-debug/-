@@ -2,6 +2,7 @@
 import S1 from "./S1.json";
 import S2 from "./S2.json";
 import S4 from "./S4.json";
+import S4b from "./S4b.json";
 import S5 from "./S5.json";
 
 export type Patch = { x: number; y: number; w: number; h: number };
@@ -17,6 +18,7 @@ export const ART: Record<string, Manifest> = {
   S1: S1 as Manifest,
   S2: S2 as Manifest,
   S4: S4 as Manifest,
+  S4b: S4b as Manifest, // the learner with the distracted face (current)
   S5: S5 as Manifest,
 };
 

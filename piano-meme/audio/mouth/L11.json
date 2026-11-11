@@ -7,21 +7,16 @@
  "cues": [
   {
    "start": 386,
+   "end": 386,
+   "shape": "X"
+  },
+  {
+   "start": 387,
    "end": 395,
    "shape": "B"
   },
   {
    "start": 396,
-   "end": 396,
-   "shape": "C"
-  },
-  {
-   "start": 397,
-   "end": 398,
-   "shape": "B"
-  },
-  {
-   "start": 399,
    "end": 403,
    "shape": "X"
   }

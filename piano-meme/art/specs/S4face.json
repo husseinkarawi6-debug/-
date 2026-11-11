@@ -1,0 +1,12 @@
+{
+  "master": "art/masters/S4.png",
+  "refs": ["art/charsheet.png"],
+  "quality": "medium",
+  "feather": 7,
+  "editPrompt": "The FIRST image is a crop of a hand-drawn ink illustration (rough dip-pen lines, cross-hatching, old grey-beige paper). The second image is the character sheet of the same man (the middle figure). Edit ONLY the transparent (masked) area of the first image: {CHANGE} Keep the same man: same face shape, same round thin metal glasses, same short dense black beard, same hair. Everything outside the mask must stay exactly as it is. Same ink style and line weight.",
+  "crops": {"face": [580, 760, 560]},
+  "variants": [
+    {"id": "face_v1", "crop": "face", "mask": [["ellipse", 575, 800, 178, 172]], "prompt": "change his expression only: NO smile. He looks distracted and a little lost in thought, unsure of himself in a natural, spontaneous way: eyes still turned toward the LEFT but slightly unfocused, eyebrows a little uneven (one slightly raised, the other knitted), mouth closed in a relaxed neutral line hidden in the beard, a hint of hesitation."},
+    {"id": "face_v2", "crop": "face", "mask": [["ellipse", 575, 800, 178, 172]], "prompt": "change his expression only: NO smile at all. He looks absent-minded and puzzled, as if he lost his train of thought: gaze drifting to the LEFT, eyelids relaxed, brows slightly pulled together and uneven, lips closed and a little pursed to one side under the moustache. Natural and spontaneous, not exaggerated."}
+  ]
+}

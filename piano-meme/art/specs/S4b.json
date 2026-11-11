@@ -1,0 +1,23 @@
+{
+  "master": "art/masters/S4b.png",
+  "refs": ["art/charsheet.png"],
+  "quality": "medium",
+  "feather": 5,
+  "editPrompt": "The FIRST image is a crop of a hand-drawn ink illustration (rough dip-pen lines, cross-hatching, old grey-beige paper). The second image is the character sheet of the same man (the middle figure, 'the learner': buttoned-up shirt, knitted wool vest, combed hair, round thin metal glasses, short dense black beard, small dark-red dictionary). Edit ONLY the transparent (masked) area of the first image: {CHANGE} Everything outside the mask must stay exactly as it is: same drawing, same lines, same hatching, same lamp light from the right, same framing and scale. Same man, same distracted, unsure mood (no smile). Same ink style and line weight. Only colours: paper and ink greys, plus the dark-red dictionary.",
+  "crops": {
+    "face": [580, 760, 560],
+    "pose": [450, 1170, 900, 1350]
+  },
+  "variants": [
+    {"id": "mouth_A", "crop": "face", "mask": [["ellipse", 565, 880, 88, 50]], "prompt": "his lips are pressed together, as when saying M, B or P."},
+    {"id": "mouth_B", "crop": "face", "mask": [["ellipse", 565, 880, 88, 50]], "prompt": "his lips are slightly parted with the teeth together and just visible, as when saying S or T."},
+    {"id": "mouth_C", "crop": "face", "mask": [["ellipse", 565, 884, 90, 58]], "prompt": "his mouth is open in a medium opening, as when saying 'eh', dark inside the mouth, unsure."},
+    {"id": "mouth_D", "crop": "face", "mask": [["ellipse", 565, 890, 92, 64]], "prompt": "his mouth is open wide, jaw dropped, as when saying 'ah', dark inside, unsure."},
+    {"id": "mouth_E", "crop": "face", "mask": [["ellipse", 565, 884, 90, 58]], "prompt": "his mouth is slightly open and slightly rounded, as when saying 'aw' or 'er'."},
+    {"id": "mouth_F", "crop": "face", "mask": [["ellipse", 565, 880, 88, 50]], "prompt": "his lips are pushed forward into a small round pucker, as when saying 'oo' or 'w'."},
+    {"id": "eyes_closed", "crop": "face", "mask": [["ellipse", 482, 757, 46, 32], ["ellipse", 624, 728, 56, 34]], "prompt": "both of his eyes are closed in a quick blink: each eye is a single curved eyelid line with lashes, behind the same glasses."},
+    {"id": "eyes_down", "crop": "face", "mask": [["ellipse", 482, 757, 46, 32], ["ellipse", 624, 728, 56, 34]], "prompt": "his eyes look DOWN at the open book he is holding (pupils low, upper eyelids lowered), distracted and unsure."},
+    {"id": "scratch_A", "crop": "pose", "mask": [["poly", [[300, 470], [575, 470], [575, 640], [470, 690], [420, 980], [440, 1160], [560, 1450], [730, 1600], [730, 1845], [380, 1845], [210, 1760], [0, 1500], [0, 600], [180, 520]]]], "prompt": "his right hand (on the LEFT side of the picture) has let go of the book and is raised to his head: the elbow points out to the LEFT and up, the forearm comes up beside his head, and his fingers are scratching the top of his head inside the hair, in a natural, anatomically correct pose (shoulder, upper arm, elbow, forearm, wrist and hand clearly connected, shirt sleeve folds). The open dark-red book stays exactly the same, now held only by his other hand on the right. The face does not change."},
+    {"id": "scratch_B", "crop": "pose", "base": "scratch_A", "mask": [["ellipse", 455, 540, 135, 105]], "prompt": "only the scratching fingers in his hair change: they are bent more and moved a little, the next drawing of the scratching motion. Same hand, same arm."}
+  ]
+}
