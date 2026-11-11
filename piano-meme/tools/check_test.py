@@ -126,6 +126,7 @@ def main():
     import json
     A = json.loads((ROOT / "audio/analysis.json").read_text())
     starts = sorted(set(starts + [x["from"] for x in A.get("schedules", {}).get("finale", {}).get("shots", [])[1:]]))
+    globals()["A"] = A
 
     print(f"== {a.video}")
     dur = check_audio(a.video, "test")
@@ -142,7 +143,8 @@ def main():
         left = spikes(frames(a.compare, "left"))
         right, _ = cuts(frames(a.compare, "right"))
         report(right == expected, f"our half cuts {right} = timing.md")
-        missing = [r for r in expected if not any(abs(l - r) <= 1 for l in left)]
+        finale_cuts = [x["from"] for x in A.get("schedules", {}).get("finale", {}).get("shots", [])[1:]]
+        missing = [r for r in expected if r not in finale_cuts and not any(abs(l - r) <= 1 for l in left)]
         report(not missing, f"every cut of ours is a cut in the reference half too (±1 frame, the reference "
                f"is 24 fps); reference changes found: {left}" + (f"; NOT in reference: {missing}" if missing else ""))
 

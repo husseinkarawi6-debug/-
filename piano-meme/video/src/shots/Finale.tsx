@@ -27,9 +27,11 @@ const MIC = {
 };
 
 export const FinaleS7: React.FC<{ shot: Shot }> = ({ shot }) => {
-  const g = twos(useGlobalFrame());
+  const exact = useGlobalFrame();
+  const g = twos(exact);
   const fin = schedules.finale;
-  const view = fin?.shots.find((s) => g >= s.from && g <= s.to)?.view ?? "wide";
+  // cuts on the exact frame (the drawings inside each shot stay on twos)
+  const view = fin?.shots.find((s) => exact >= s.from && exact <= s.to)?.view ?? "wide";
   const sung = mouthAt(lineForShot(shot.shot)?.id, g);
   const mouth: Record<string, number> = sung !== "X" ? { [`mouth_${sung}`]: 1 } : {};
 

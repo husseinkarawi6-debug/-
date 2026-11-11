@@ -42,6 +42,6 @@
 - [x] كل اللقطات (الكادر ثابت، كل سطر لقطة وحدة)
 
 ## 7. الرندر
-- [ ] `out/piano-meme.mp4` و `out/piano-meme-silent.mp4` (الرندر شغّال)
-- [ ] `out/contact-sheet.png`
-- [ ] مشاهدة للآخر وفحص التزامن
+- [x] `out/piano-meme.mp4` و `out/piano-meme-silent.mp4` (1080×1920، 30 فريم، 1056 فريم)
+- [x] `out/contact-sheet.png`
+- [x] الفحص: الصوت من 0، والقطع، والكتابة، والحلگ، والأصابع، والخاتمة (`tools/check_test.py` و `tools/check_sync.py`)
