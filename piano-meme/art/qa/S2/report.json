@@ -1,0 +1,277 @@
+{
+ "mouth_C": {
+  "id": "mouth_C",
+  "x": 479,
+  "y": 1096,
+  "w": 223,
+  "h": 153,
+  "compositeDiffOutsideMask": 0.0,
+  "shiftPx": 0.24,
+  "scaleError": 0.0006,
+  "diffOutsideBeforeAlign": 7.59,
+  "diffOutsideAfterAlign": 8.07,
+  "changeInside": 29.45,
+  "warp": [
+   [
+    0.9998,
+    0.0001,
+    -0.0023
+   ],
+   [
+    0.0007,
+    1.0006,
+    -0.2407
+   ]
+  ]
+ },
+ "eyes_closed": {
+  "id": "eyes_closed",
+  "x": 415,
+  "y": 934,
+  "w": 311,
+  "h": 135,
+  "compositeDiffOutsideMask": 0.0,
+  "shiftPx": 0.18,
+  "scaleError": 0.0002,
+  "diffOutsideBeforeAlign": 8.61,
+  "diffOutsideAfterAlign": 6.39,
+  "changeInside": 25.85,
+  "warp": [
+   [
+    1.0002,
+    0.0,
+    0.1762
+   ],
+   [
+    -0.0002,
+    0.9999,
+    0.1146
+   ]
+  ]
+ },
+ "mouth_A": {
+  "id": "mouth_A",
+  "x": 479,
+  "y": 1098,
+  "w": 223,
+  "h": 141,
+  "compositeDiffOutsideMask": 0.0,
+  "shiftPx": 0.29,
+  "scaleError": 0.0006,
+  "diffOutsideBeforeAlign": 7.61,
+  "diffOutsideAfterAlign": 7.41,
+  "changeInside": 16.83,
+  "warp": [
+   [
+    1.0001,
+    0.0006,
+    0.0011
+   ],
+   [
+    0.0002,
+    0.9994,
+    0.291
+   ]
+  ]
+ },
+ "mouth_B": {
+  "id": "mouth_B",
+  "x": 479,
+  "y": 1098,
+  "w": 223,
+  "h": 141,
+  "compositeDiffOutsideMask": 0.0,
+  "shiftPx": 0.21,
+  "scaleError": 0.0004,
+  "diffOutsideBeforeAlign": 6.59,
+  "diffOutsideAfterAlign": 6.11,
+  "changeInside": 14.45,
+  "warp": [
+   [
+    0.9996,
+    0.0003,
+    0.2054
+   ],
+   [
+    0.0005,
+    1.0003,
+    -0.1431
+   ]
+  ]
+ },
+ "mouth_D": {
+  "id": "mouth_D",
+  "x": 474,
+  "y": 1094,
+  "w": 233,
+  "h": 173,
+  "compositeDiffOutsideMask": 0.0,
+  "shiftPx": 0.32,
+  "scaleError": 0.0008,
+  "diffOutsideBeforeAlign": 8.75,
+  "diffOutsideAfterAlign": 7.61,
+  "changeInside": 32.73,
+  "warp": [
+   [
+    0.9997,
+    0.0002,
+    0.3204
+   ],
+   [
+    0.0004,
+    1.0008,
+    -0.1971
+   ]
+  ]
+ },
+ "mouth_E": {
+  "id": "mouth_E",
+  "x": 479,
+  "y": 1096,
+  "w": 223,
+  "h": 153,
+  "compositeDiffOutsideMask": 0.0,
+  "shiftPx": 0.11,
+  "scaleError": 0.0006,
+  "diffOutsideBeforeAlign": 6.38,
+  "diffOutsideAfterAlign": 6.54,
+  "changeInside": 20.63,
+  "warp": [
+   [
+    0.9994,
+    0.0003,
+    0.1142
+   ],
+   [
+    0.0001,
+    1.0002,
+    0.0525
+   ]
+  ]
+ },
+ "mouth_F": {
+  "id": "mouth_F",
+  "x": 479,
+  "y": 1098,
+  "w": 223,
+  "h": 141,
+  "compositeDiffOutsideMask": 0.0,
+  "shiftPx": 0.19,
+  "scaleError": 0.0005,
+  "diffOutsideBeforeAlign": 7.62,
+  "diffOutsideAfterAlign": 7.4,
+  "changeInside": 24.4,
+  "warp": [
+   [
+    0.9995,
+    0.0004,
+    0.0294
+   ],
+   [
+    0.0007,
+    1.0002,
+    -0.1927
+   ]
+  ]
+ },
+ "eyes_right": {
+  "id": "eyes_right",
+  "x": 415,
+  "y": 934,
+  "w": 311,
+  "h": 135,
+  "compositeDiffOutsideMask": 0.0,
+  "shiftPx": 0.19,
+  "scaleError": 0.0002,
+  "diffOutsideBeforeAlign": 5.92,
+  "diffOutsideAfterAlign": 6.08,
+  "changeInside": 15.39,
+  "warp": [
+   [
+    1.0001,
+    0.0007,
+    -0.0924
+   ],
+   [
+    -0.0002,
+    1.0002,
+    0.1879
+   ]
+  ]
+ },
+ "brow_raise": {
+  "id": "brow_raise",
+  "x": 529,
+  "y": 867,
+  "w": 207,
+  "h": 164,
+  "compositeDiffOutsideMask": 0.0,
+  "shiftPx": 0.32,
+  "scaleError": 0.0003,
+  "diffOutsideBeforeAlign": 6.43,
+  "diffOutsideAfterAlign": 10.36,
+  "changeInside": 26.11,
+  "warp": [
+   [
+    0.9997,
+    0.0001,
+    0.323
+   ],
+   [
+    -0.0002,
+    1.0003,
+    -0.1515
+   ]
+  ]
+ },
+ "thumbs_1": {
+  "id": "thumbs_1",
+  "x": 381,
+  "y": 1453,
+  "w": 155,
+  "h": 125,
+  "compositeDiffOutsideMask": 0.0,
+  "shiftPx": 0.5,
+  "scaleError": 0.0007,
+  "diffOutsideBeforeAlign": 6.83,
+  "diffOutsideAfterAlign": 7.45,
+  "changeInside": 39.47,
+  "warp": [
+   [
+    0.9993,
+    -0.0002,
+    0.498
+   ],
+   [
+    0.0004,
+    1.0003,
+    -0.1084
+   ]
+  ]
+ },
+ "thumbs_2": {
+  "id": "thumbs_2",
+  "x": 623,
+  "y": 1478,
+  "w": 155,
+  "h": 125,
+  "compositeDiffOutsideMask": 0.0,
+  "shiftPx": 0.31,
+  "scaleError": 0.0007,
+  "diffOutsideBeforeAlign": 7.17,
+  "diffOutsideAfterAlign": 8.91,
+  "changeInside": 22.65,
+  "warp": [
+   [
+    1.0001,
+    -0.0004,
+    0.3102
+   ],
+   [
+    -0.0004,
+    1.0007,
+    -0.0663
+   ]
+  ]
+ }
+}

@@ -28,7 +28,7 @@ type Analysis = {
   tempo?: number;
   beats?: number[];
   onsets?: Onset[];
-  pianoLoud?: { threshold: number; runs: [number, number][]; main: [number, number] | null };
+  pianoSection?: { loudWindow: [number, number]; start: number; end: number; shots: number[]; pianistShots: number[] };
 };
 
 export const analysis = analysisJson as unknown as Analysis;

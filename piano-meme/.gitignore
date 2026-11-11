@@ -21,3 +21,9 @@ __pycache__/
 
 # crops of personal photos and of the style clip (local only)
 art/refs/
+
+# raw generations (the chosen ones are copied to art/masters and art/charsheet.png)
+art/gen/*.png
+
+# videos that carry the reference soundtrack stay local (sent through the app)
+out/*.mp4

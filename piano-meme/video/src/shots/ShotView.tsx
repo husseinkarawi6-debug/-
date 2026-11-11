@@ -5,6 +5,9 @@ import { FloatingNotes } from "../ink/Notes";
 import { twos } from "../ink/frame";
 import { beatFrames, beats, Shot } from "../timeline";
 import { Placeholder } from "./Placeholder";
+import { LazyS2 } from "./LazyS2";
+import { PlateShot } from "./PlateShot";
+import { analysis } from "../timeline";
 
 // Camera angle per shot. Shots 5–20 alternate learner / lazy; the loud-piano
 // shots (S5/S6) get filled in after audio/analyze.py finds the loud section.
@@ -19,13 +22,29 @@ const NAMES: Record<string, string> = {
   S7: "finale, both",
 };
 
-export const angleFor = (s: Shot) => ANGLE[s.shot] ?? (s.speaker === "lazy" ? "S2" : s.shot % 4 === 1 ? "S4" : "S3");
+// The loud-piano section (from analysis.json): its lazy shots become the pianist.
+const PIANO = analysis.pianoSection;
+const pianistAngle = (s: Shot) => {
+  if (!PIANO || !PIANO.pianistShots.includes(s.shot)) return null;
+  return PIANO.pianistShots.indexOf(s.shot) === 0 ? "S5" : "S6";
+};
 
-export const ShotView: React.FC<{ shot: Shot }> = ({ shot }) => {
-  const angle = angleFor(shot);
+export const angleFor = (s: Shot) =>
+  pianistAngle(s) ?? ANGLE[s.shot] ?? (s.speaker === "lazy" ? "S2" : s.shot % 4 === 1 ? "S4" : "S3");
+
+export const ShotView: React.FC<{ shot: Shot; forceAngle?: string }> = ({ shot, forceAngle }) => {
+  const angle = forceAngle ?? angleFor(shot);
+  const len = shot.end - shot.start + 1;
+  let body: React.ReactNode;
+  if (angle === "S2") body = <LazyS2 shot={shot} />;
+  else if (angle === "S1")
+    body = <PlateShot angle="S1" length={len} from={{ x: 680, y: 1180, zoom: 1.04 }} to={{ x: 820, y: 900, zoom: 1.22 }} />;
+  else if (angle === "S5")
+    body = <PlateShot angle="S5" length={len} from={{ x: 900, y: 1300, zoom: 1.25 }} to={{ x: 480, y: 1000, zoom: 1.12 }} />;
+  else body = <Placeholder label={`${shot.shot} · ${angle}`} sub={NAMES[angle]} />;
   return (
     <>
-      <Placeholder label={`${shot.shot} · ${angle}`} sub={NAMES[angle]} />
+      {body}
       {angle === "S7" ? <FinaleOverlay shot={shot} /> : null}
     </>
   );

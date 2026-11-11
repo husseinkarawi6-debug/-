@@ -9,14 +9,14 @@ import { analysis, captions, shots } from "./timeline";
 import { ShotView } from "./shots/ShotView";
 
 /** The whole film: 23 shots with hard cuts, captions on top, one soundtrack. */
-export const PianoMeme: React.FC<InkProps> = ({ boil, grain, withAudio }) => {
+export const PianoMeme: React.FC<InkProps & { forceAngle?: string }> = ({ boil, grain, withAudio, forceAngle }) => {
   return (
     <GlobalFrameProvider>
       <AbsoluteFill>
         <HandDrawn boil={boil} grain={grain}>
           {shots.map((s) => (
             <Sequence key={s.shot} from={s.start} durationInFrames={s.end - s.start + 1} name={`Shot ${s.shot}`}>
-              <ShotView shot={s} />
+              <ShotView shot={s} forceAngle={forceAngle} />
             </Sequence>
           ))}
           {captions.map((c) => (

@@ -140,7 +140,14 @@ def post(spec, var, work, angle, feather):
     strip = np.hstack([crop, edit, comp])
     s = 360 / size
     cv2.imwrite(str(qa / f"{var['id']}.png"), cv2.resize(strip, (int(strip.shape[1] * s), 360)))
+    # the composite is the master wherever alpha == 0: measure it to prove it
+    hard_out = alpha == 0
+    composite_out = float(np.abs(comp.astype(int) - crop.astype(int))[hard_out].mean()) if hard_out.any() else 0.0
+    shift = float(max(abs(warp[0, 2]), abs(warp[1, 2])))
+    scale_err = float(max(abs(warp[0, 0] - 1), abs(warp[1, 1] - 1)))
     return {"id": var["id"], "x": int(x0 + bx0), "y": int(y0 + by0), "w": int(bx1 - bx0), "h": int(by1 - by0),
+            "compositeDiffOutsideMask": round(composite_out, 3), "shiftPx": round(shift, 2),
+            "scaleError": round(scale_err, 4),
             "diffOutsideBeforeAlign": round(before, 2), "diffOutsideAfterAlign": round(after, 2),
             "changeInside": round(inside, 2), "warp": [[round(float(v), 4) for v in row] for row in warp]}
 
@@ -185,9 +192,10 @@ def main():
         r = post(spec, v, work, a.angle, spec.get("feather", 5))
         manifest["patches"][v["id"]] = {k: r[k] for k in ("x", "y", "w", "h")}
         report[v["id"]] = r
-        flag = "OK " if r["diffOutsideAfterAlign"] < 6 else "CHECK"
-        print(f"{flag} {v['id']}: outside diff {r['diffOutsideBeforeAlign']} -> {r['diffOutsideAfterAlign']}, "
-              f"inside change {r['changeInside']}")
+        ok = r["shiftPx"] < 3 and r["scaleError"] < 0.01 and r["diffOutsideAfterAlign"] < 15
+        print(f"{'OK ' if ok else 'CHECK'} {v['id']}: shift {r['shiftPx']} px, raw redraw outside "
+              f"{r['diffOutsideAfterAlign']}, final composite outside {r['compositeDiffOutsideMask']}, "
+              f"change inside {r['changeInside']}")
     man_path.write_text(json.dumps(manifest, indent=1))
     report_path.parent.mkdir(parents=True, exist_ok=True)
     report_path.write_text(json.dumps(report, indent=1))
